@@ -74,7 +74,6 @@ function bindStaticEvents() {
     activateTab(tab.dataset.target);
   });
 
-
   els.addMaterialBtn.addEventListener("click", addMaterial);
   els.addPlanRowBtn.addEventListener("click", addPlanRow);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
@@ -94,30 +93,20 @@ function renderAll() {
 }
 
 function renderFactoryNavigation() {
-  const activeTarget = document.querySelector(".panel.active")?.id || "calculator";
-  const fixedTabs = [
-    { target: "calculator", label: "Calculator" },
-    { target: "materials", label: "Materialien" }
-  ];
-  const factoryTabs = Object.entries(FACTORIES).map(([target, label]) => ({ target, label }));
+  const existingFactoryTabs = els.tabs.querySelectorAll(".factory-tab");
+  existingFactoryTabs.forEach((tab) => tab.remove());
 
-  els.tabs.innerHTML = "";
-
-  for (const tabInfo of [...fixedTabs, ...factoryTabs]) {
+  for (const [key, label] of Object.entries(FACTORIES)) {
     const button = document.createElement("button");
-    button.className = "tab";
-    button.dataset.target = tabInfo.target;
+    button.className = "tab factory-tab";
+    button.dataset.target = key;
     button.type = "button";
-    button.textContent = tabInfo.label;
-    if (tabInfo.target === activeTarget) {
-      button.classList.add("active");
-    }
+    button.textContent = label;
     els.tabs.appendChild(button);
   }
 }
 
 function renderFactoryPanels() {
-  const activeTarget = document.querySelector(".panel.active")?.id || document.querySelector(".tab.active")?.dataset.target || "calculator";
   els.factoryPanels.innerHTML = "";
 
   for (const [factory, label] of Object.entries(FACTORIES)) {
@@ -138,6 +127,7 @@ function renderFactoryPanels() {
     els.factoryPanels.appendChild(panel);
   }
 
+  const activeTarget = document.querySelector(".tab.active")?.dataset.target || "calculator";
   activateTab(document.getElementById(activeTarget) ? activeTarget : "calculator");
 }
 

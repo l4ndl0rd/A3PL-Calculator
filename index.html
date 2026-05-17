@@ -9,17 +9,25 @@
 </head>
 <body>
   <header class="app-header">
-    <p class="eyebrow">Arma 3 Project Life</p>
-    <h1>Warenherstellung Calculator</h1>
-    <p class="subtitle">Rezepte pro Fabrik verwalten, Produktionsmengen eintragen und den aggregierten Materialbedarf automatisch berechnen.</p>
+    <div>
+      <p class="eyebrow">Arma 3 Project Life</p>
+      <h1>Warenherstellung Calculator</h1>
+      <p class="subtitle">Rezepte pro Fabrik verwalten, Produktionsmengen eintragen und den aggregierten Materialbedarf automatisch berechnen.</p>
+    </div>
+    <div class="header-actions">
+      <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
+      <label class="button button-secondary file-button">
+        Daten importieren
+        <input id="importDataInput" type="file" accept="application/json" />
+      </label>
+      <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
+    </div>
   </header>
 
   <main class="layout">
-    <nav class="tabs" aria-label="Bereiche">
-      <div id="tabs" class="tab-row">
-        <button class="tab active" data-target="calculator" type="button">Calculator</button>
-        <button class="tab" data-target="materials" type="button">Materialien</button>
-      </div>
+    <nav id="tabs" class="tabs" aria-label="Bereiche">
+      <button class="tab active" data-target="calculator" type="button">Calculator</button>
+      <button class="tab" data-target="materials" type="button">Materialien</button>
     </nav>
 
     <section id="calculator" class="panel active" aria-labelledby="calculator-tab">
@@ -115,15 +123,6 @@
     </section>
 
     <div id="factoryPanels"></div>
-
-    <section class="data-actions" aria-label="Datenverwaltung">
-      <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
-      <label class="button button-secondary file-button">
-        Daten importieren
-        <input id="importDataInput" type="file" accept="application/json" />
-      </label>
-      <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
-    </section>
   </main>
 
   <template id="factoryPanelTemplate">
