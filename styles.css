@@ -68,12 +68,6 @@ h2 {
   font-size: 1.25rem;
 }
 
-h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.1;
-}
-
 .subtitle,
 .card p,
 .hint {
@@ -98,13 +92,10 @@ h3 {
 }
 
 .tabs {
-  position: sticky;
-  top: 10px;
-  z-index: 20;
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 22px;
-  background: rgba(24, 24, 24, 0.92);
+  background: rgba(24, 24, 24, 0.78);
   backdrop-filter: blur(14px);
   margin-bottom: 18px;
 }
@@ -234,15 +225,6 @@ h3 {
 
 .card-header p {
   margin: 8px 0 0;
-}
-
-.subsection-header {
-  margin: 22px 0 12px;
-}
-
-.subsection-header p {
-  margin: 8px 0 0;
-  color: var(--muted);
 }
 
 .table-wrap,
@@ -449,4 +431,43 @@ label {
   .data-actions {
     grid-template-columns: 1fr;
   }
+}
+
+.material-recipe-table {
+  min-width: 980px;
+}
+
+.material-recipe-table td:nth-child(1) {
+  width: 240px;
+}
+
+.material-recipe-table td:nth-child(2) {
+  width: 160px;
+}
+
+.material-recipe-table td:nth-child(4) {
+  width: 54px;
+}
+
+.nested-recipe {
+  display: grid;
+  gap: 10px;
+}
+
+.nested-recipe .empty-state {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.nested-recipe-table {
+  min-width: 460px;
+}
+
+.nested-recipe-table th,
+.nested-recipe-table td {
+  padding: 8px;
+}
+
+.add-material-recipe-row {
+  justify-self: start;
 }

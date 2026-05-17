@@ -18,6 +18,7 @@
     <nav class="tabs" aria-label="Bereiche">
       <div id="tabs" class="tab-row">
         <button class="tab active" data-target="calculator" type="button">Calculator</button>
+        <button class="tab" data-target="materials" type="button">Materialien</button>
       </div>
     </nav>
 
@@ -68,11 +69,11 @@
         </section>
       </div>
 
-      <section class="card">
+      <section class="card requirements-card">
         <div class="card-header">
           <div>
             <h2>Benötigte Materialien</h2>
-            <p>Aggregierter Gesamtbedarf über alle geplanten Waren.</p>
+            <p>Direkter Materialbedarf über alle geplanten Waren.</p>
           </div>
           <button id="copyMaterialsBtn" class="button button-secondary" type="button">Tabelle kopieren</button>
         </div>
@@ -80,20 +81,24 @@
           <table class="data-table" id="requirementsTable">
             <thead>
               <tr>
-                <th>Material / Zwischenprodukt</th>
+                <th>Material</th>
                 <th>Gesamtbedarf</th>
               </tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
+      </section>
 
-        <div class="subsection-header">
+      <section class="card requirements-card">
+        <div class="card-header">
           <div>
-            <h3>Rohmaterialien</h3>
-            <p>Aufgelöster Bedarf inklusive Unterrezepten. Waren mit eigenem Rezept werden rekursiv bis zu den Basis-Rohstoffen zerlegt.</p>
+            <h2>Benötigte Rohmaterialien</h2>
+            <p>Rekursiv aufgelöster Bedarf: Zwischenprodukte werden über ihre Rezepte bis zu Rohmaterialien zurückgerechnet.</p>
           </div>
+          <button id="copyRawMaterialsBtn" class="button button-secondary" type="button">Tabelle kopieren</button>
         </div>
+        <p id="rawRequirementsHint" class="hint warning-hint" hidden></p>
         <div class="table-wrap">
           <table class="data-table" id="rawRequirementsTable">
             <thead>
@@ -117,11 +122,14 @@
           </div>
           <button id="addMaterialBtn" class="button" type="button">Material hinzufügen</button>
         </div>
+        <p class="hint">Materialien ohne Rezept gelten als Rohmaterialien. Für Zwischenprodukte wie Eisenbarren oder Kohlebarren kann hier ein eigenes Unterrezept hinterlegt werden.</p>
         <div class="table-wrap">
-          <table class="data-table" id="materialsTable">
+          <table class="data-table material-recipe-table" id="materialsTable">
             <thead>
               <tr>
-                <th>Materialname</th>
+                <th>Material / Zwischenprodukt</th>
+                <th>Ausstoß / Lauf</th>
+                <th>Unterrezept</th>
                 <th></th>
               </tr>
             </thead>
@@ -149,7 +157,7 @@
         <div class="card-header">
           <div>
             <h2 class="factory-title"></h2>
-            <p>Jede Ware kann beliebig viele Materialwerte verwenden.</p>
+            <p>Jede Ware kann beliebig viele Materialwerte verwenden. Wenn ein Material denselben Namen wie eine Ware trägt, kann es im Calculator rekursiv als Zwischenprodukt aufgelöst werden.</p>
           </div>
           <button class="button add-product-btn" type="button">Ware hinzufügen</button>
         </div>
@@ -192,6 +200,14 @@
       <td><select class="recipe-material"></select></td>
       <td><input class="recipe-amount" type="number" min="0" step="1" value="0" /></td>
       <td><button class="icon-button remove-recipe-row" type="button" aria-label="Materialzeile entfernen">×</button></td>
+    </tr>
+  </template>
+
+  <template id="materialRecipeRowTemplate">
+    <tr>
+      <td><select class="material-recipe-material"></select></td>
+      <td><input class="material-recipe-amount" type="number" min="0" step="1" value="0" /></td>
+      <td><button class="icon-button remove-material-recipe-row" type="button" aria-label="Unterrezept-Zeile entfernen">×</button></td>
     </tr>
   </template>
 
