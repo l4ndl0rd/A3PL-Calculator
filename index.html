@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Warenherstellung Calculator</title>
+  <meta name="description" content="Calculator für Stahlfabrik- und Fahrzeugfabrik-Waren mit Materialbedarf, Rezeptverwaltung und JSON Import/Export." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Arma 3 Project Life</p>
+      <h1>Warenherstellung Calculator</h1>
+      <p class="subtitle">Rezepte verwalten, Produktionsmengen eintragen und Materialbedarf automatisch berechnen.</p>
+    </div>
+    <div class="header-actions">
+      <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
+      <label class="button button-secondary file-button">
+        Daten importieren
+        <input id="importDataInput" type="file" accept="application/json" />
+      </label>
+      <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <nav class="tabs" aria-label="Bereiche">
+      <button class="tab active" data-target="calculator" type="button">Calculator</button>
+      <button class="tab" data-target="steel" type="button">Stahlfabrik</button>
+      <button class="tab" data-target="vehicle" type="button">Fahrzeugfabrik</button>
+      <button class="tab" data-target="materials" type="button">Materialien</button>
+    </nav>
+
+    <section id="calculator" class="panel active" aria-labelledby="calculator-tab">
+      <div class="panel-grid calculator-grid">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <h2>Produktionsplan</h2>
+              <p>Trage ein, was hergestellt werden soll. Der Materialbedarf wird unten aggregiert.</p>
+            </div>
+            <button id="addPlanRowBtn" class="button" type="button">Position hinzufügen</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="planTable">
+              <thead>
+                <tr>
+                  <th>Fabrik</th>
+                  <th>Ware</th>
+                  <th>Zielmenge</th>
+                  <th>Ausstoß / Lauf</th>
+                  <th>Produktionsläufe</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card summary-card">
+          <h2>Zusammenfassung</h2>
+          <div class="kpi-grid">
+            <div class="kpi">
+              <span>Positionen</span>
+              <strong id="kpiPositions">0</strong>
+            </div>
+            <div class="kpi">
+              <span>Produktionsläufe</span>
+              <strong id="kpiRuns">0</strong>
+            </div>
+            <div class="kpi">
+              <span>Materialtypen</span>
+              <strong id="kpiMaterials">0</strong>
+            </div>
+          </div>
+          <p class="hint">Produktionsläufe werden immer aufgerundet. Beispiel: Zielmenge 11 bei Ausstoß 5 ergibt 3 Läufe.</p>
+        </section>
+      </div>
+
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Benötigte Materialien</h2>
+            <p>Aggregierter Gesamtbedarf über alle geplanten Waren.</p>
+          </div>
+          <button id="copyMaterialsBtn" class="button button-secondary" type="button">Tabelle kopieren</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="requirementsTable">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Gesamtbedarf</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section id="steel" class="panel" aria-labelledby="steel-tab">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Stahlfabrik-Rezepte</h2>
+            <p>Jede Ware kann beliebig viele Materialwerte verwenden.</p>
+          </div>
+          <button class="button add-product-btn" data-factory="steel" type="button">Ware hinzufügen</button>
+        </div>
+        <div id="steelProducts" class="product-list"></div>
+      </section>
+    </section>
+
+    <section id="vehicle" class="panel" aria-labelledby="vehicle-tab">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Fahrzeugfabrik-Rezepte</h2>
+            <p>Pflege hier Fahrzeugteile, Fahrzeuge oder sonstige Waren.</p>
+          </div>
+          <button class="button add-product-btn" data-factory="vehicle" type="button">Ware hinzufügen</button>
+        </div>
+        <div id="vehicleProducts" class="product-list"></div>
+      </section>
+    </section>
+
+    <section id="materials" class="panel" aria-labelledby="materials-tab">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Materialstammdaten</h2>
+            <p>Materialien werden in Rezepten verwendet. Neue Materialien können jederzeit ergänzt werden.</p>
+          </div>
+          <button id="addMaterialBtn" class="button" type="button">Material hinzufügen</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="materialsTable">
+            <thead>
+              <tr>
+                <th>Materialname</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <template id="productTemplate">
+    <article class="product-card">
+      <div class="product-main">
+        <label>
+          Warenname
+          <input class="product-name" type="text" placeholder="z. B. Stahlträger" />
+        </label>
+        <label>
+          Ausstoß pro Produktionslauf
+          <input class="product-output" type="number" min="1" step="1" value="1" />
+        </label>
+        <button class="button button-danger remove-product" type="button">Ware entfernen</button>
+      </div>
+      <div class="recipe-table-wrap">
+        <table class="data-table compact recipe-table">
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Menge pro Lauf</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="button button-secondary add-recipe-row" type="button">Materialzeile hinzufügen</button>
+    </article>
+  </template>
+
+  <template id="recipeRowTemplate">
+    <tr>
+      <td><select class="recipe-material"></select></td>
+      <td><input class="recipe-amount" type="number" min="0" step="1" value="0" /></td>
+      <td><button class="icon-button remove-recipe-row" type="button" aria-label="Materialzeile entfernen">×</button></td>
+    </tr>
+  </template>
+
+  <template id="planRowTemplate">
+    <tr>
+      <td><select class="plan-factory"></select></td>
+      <td><select class="plan-product"></select></td>
+      <td><input class="plan-quantity" type="number" min="0" step="1" value="1" /></td>
+      <td class="plan-output">1</td>
+      <td class="plan-runs">1</td>
+      <td><button class="icon-button remove-plan-row" type="button" aria-label="Position entfernen">×</button></td>
+    </tr>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
