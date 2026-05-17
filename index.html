@@ -14,31 +14,21 @@
     <p class="subtitle">Rezepte pro Fabrik verwalten, Produktionsmengen eintragen und den aggregierten Materialbedarf automatisch berechnen.</p>
   </header>
 
-  <button id="menuToggle" class="menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false">Menü</button>
-
   <main class="layout">
-    <aside id="sidebar" class="sidebar">
-      <div class="sidebar-block">
-        <p class="sidebar-title">Navigation</p>
-        <nav id="tabs" class="tabs" aria-label="Bereiche">
-          <button class="tab active" data-target="calculator" type="button">Calculator</button>
-          <button class="tab" data-target="materials" type="button">Materialien</button>
-        </nav>
+    <nav class="tabs" aria-label="Bereiche">
+      <div id="tabs" class="primary-tabs">
+        <button class="tab active" data-target="calculator" type="button">Calculator</button>
+        <button class="tab" data-target="materials" type="button">Materialien</button>
       </div>
+      <label class="factory-nav-label" for="factorySelect">
+        <span>Fabrik</span>
+        <select id="factorySelect" class="factory-select">
+          <option value="">Fabrik auswählen</option>
+        </select>
+      </label>
+    </nav>
 
-      <div class="sidebar-actions">
-        <p class="sidebar-title">Daten</p>
-        <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
-        <label class="button button-secondary file-button">
-          Daten importieren
-          <input id="importDataInput" type="file" accept="application/json" />
-        </label>
-        <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
-      </div>
-    </aside>
-
-    <div class="content">
-      <section id="calculator" class="panel active" aria-labelledby="calculator-tab">
+    <section id="calculator" class="panel active" aria-labelledby="calculator-tab">
       <div class="panel-grid calculator-grid">
         <section class="card">
           <div class="card-header">
@@ -130,8 +120,16 @@
       </section>
     </section>
 
-      <div id="factoryPanels"></div>
-    </div>
+    <div id="factoryPanels"></div>
+
+    <section class="data-actions" aria-label="Datenverwaltung">
+      <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
+      <label class="button button-secondary file-button">
+        Daten importieren
+        <input id="importDataInput" type="file" accept="application/json" />
+      </label>
+      <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
+    </section>
   </main>
 
   <template id="factoryPanelTemplate">

@@ -41,7 +41,7 @@ let state = loadState();
 
 const els = {
   tabs: document.querySelector("#tabs"),
-  menuToggle: document.querySelector("#menuToggle"),
+  factorySelect: document.querySelector("#factorySelect"),
   factoryPanels: document.querySelector("#factoryPanels"),
   materialsTableBody: document.querySelector("#materialsTable tbody"),
   planTableBody: document.querySelector("#planTable tbody"),
@@ -73,13 +73,12 @@ function bindStaticEvents() {
     const tab = event.target.closest(".tab");
     if (!tab) return;
     activateTab(tab.dataset.target);
-    closeMobileMenu();
   });
 
-  els.menuToggle.addEventListener("click", () => {
-    const isOpen = document.body.classList.toggle("menu-open");
-    els.menuToggle.setAttribute("aria-expanded", String(isOpen));
-    els.menuToggle.textContent = isOpen ? "Menü schließen" : "Menü";
+  els.factorySelect.addEventListener("change", () => {
+    if (els.factorySelect.value) {
+      activateTab(els.factorySelect.value);
+    }
   });
 
   els.addMaterialBtn.addEventListener("click", addMaterial);
@@ -101,20 +100,23 @@ function renderAll() {
 }
 
 function renderFactoryNavigation() {
-  const existingFactoryTabs = els.tabs.querySelectorAll(".factory-tab");
-  existingFactoryTabs.forEach((tab) => tab.remove());
+  const currentValue = els.factorySelect.value;
+  els.factorySelect.innerHTML = `<option value="">Fabrik auswählen</option>`;
 
   for (const [key, label] of Object.entries(FACTORIES)) {
-    const button = document.createElement("button");
-    button.className = "tab factory-tab";
-    button.dataset.target = key;
-    button.type = "button";
-    button.textContent = label;
-    els.tabs.appendChild(button);
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = label;
+    els.factorySelect.appendChild(option);
+  }
+
+  if (FACTORIES[currentValue]) {
+    els.factorySelect.value = currentValue;
   }
 }
 
 function renderFactoryPanels() {
+  const activeTarget = document.querySelector(".panel.active")?.id || document.querySelector(".tab.active")?.dataset.target || "calculator";
   els.factoryPanels.innerHTML = "";
 
   for (const [factory, label] of Object.entries(FACTORIES)) {
@@ -135,7 +137,6 @@ function renderFactoryPanels() {
     els.factoryPanels.appendChild(panel);
   }
 
-  const activeTarget = document.querySelector(".tab.active")?.dataset.target || "calculator";
   activateTab(document.getElementById(activeTarget) ? activeTarget : "calculator");
 }
 
@@ -186,12 +187,12 @@ function createProductCard(factory, product) {
 function activateTab(targetId) {
   document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("active", item.dataset.target === targetId));
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === targetId));
-}
 
-function closeMobileMenu() {
-  document.body.classList.remove("menu-open");
-  els.menuToggle.setAttribute("aria-expanded", "false");
-  els.menuToggle.textContent = "Menü";
+  if (FACTORIES[targetId]) {
+    els.factorySelect.value = targetId;
+  } else {
+    els.factorySelect.value = "";
+  }
 }
 
 function renderMaterials() {

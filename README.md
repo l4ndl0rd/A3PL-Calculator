@@ -1,46 +1,39 @@
 # Warenherstellung Calculator
 
-Statisches Webinterface für GitHub Pages. Es benötigt kein Backend, keine Datenbank und keinen Build-Prozess.
+Statisches Webinterface für GitHub Pages zur Verwaltung von Produktionsrezepten und Materialbedarf für Project-Life-Fabriken.
 
-## Enthaltene Fabriken
+## Enthalten
 
-- Stahlfabrik
-- Fahrzeugfabrik
-- Kleidungsfabrik
-- Luftfahrzeugfabrik
-- Bootsfabrik
-- Ölfabrik
-- Warenfabrik
-- Chemiefabrik
-- Illegale Waffenfabrik
+- `index.html`
+- `styles.css`
+- `app.js`
 
 ## Funktionen
 
-- Rezeptverwaltung je Fabrik
-- Navigation über linke Sidebar statt horizontaler Header-Tabs
-- einklappbares Menü auf kleineren Bildschirmen
-- zentral gesetzte Überschrift
-- Daten-Buttons unten in der Sidebar
-- frei erweiterbare Materialstammdaten
-- Produktionsplan mit Fabrik-, Waren- und Mengenauswahl
-- automatische Berechnung der notwendigen Produktionsläufe
-- aggregierte Materialbedarfsliste
-- lokale Speicherung im Browser per `localStorage`
-- JSON Export und Import für Backups oder Umzug auf andere Geräte
+- Calculator für Produktionsplan und aggregierten Materialbedarf
+- Materialstammdaten
+- Rezeptverwaltung für:
+  - Stahlfabrik
+  - Fahrzeugfabrik
+  - Kleidungsfabrik
+  - Luftfahrzeugfabrik
+  - Bootsfabrik
+  - Ölfabrik
+  - Warenfabrik
+  - Chemiefabrik
+  - Illegale Waffenfabrik
+- Kompakte Fabrikauswahl per Dropdown statt überlanger Tab-Leiste
+- Lokale Speicherung im Browser per `localStorage`
+- JSON Export/Import
+- Reset auf Standarddaten
 
 ## GitHub Pages Deployment
 
-1. Dateien in ein GitHub-Repository hochladen.
-2. GitHub Repository öffnen.
-3. `Settings` → `Pages` öffnen.
-4. Source: `Deploy from a branch` wählen.
-5. Branch: `main`, Ordner: `/root` wählen.
+1. Repository erstellen.
+2. Dateien aus diesem Ordner in das Repository kopieren.
+3. In GitHub `Settings -> Pages` öffnen.
+4. Source: `Deploy from a branch`.
+5. Branch: `main`, Ordner: `/root` auswählen.
 6. Speichern.
 
-Danach stellt GitHub Pages die Seite unter der angezeigten Pages-URL bereit.
-
-## Dateien
-
-- `index.html` – Seitenstruktur
-- `styles.css` – Layout und Styling
-- `app.js` – Rezeptverwaltung, Calculator, Import/Export und Speicherung
+Danach ist das Interface über die GitHub-Pages-URL des Repositorys erreichbar.
