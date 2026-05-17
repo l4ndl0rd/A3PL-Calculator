@@ -1,11 +1,11 @@
-const STORAGE_KEY = "fg2_warenherstellung_calculator_v2";
+const STORAGE_KEY = "fg2_warenherstellung_calculator_v3";
 const LEGACY_STORAGE_KEY = "fg2_warenherstellung_calculator_v1";
 
 const FACTORIES = {
   steel: "Stahlfabrik",
   vehicle: "Fahrzeugfabrik",
   clothing: "Kleidungsfabrik",
-  aircraft: "Luftfahrzeugfabrik",
+  aircraft: "Luftfahrzeugsfabrik",
   boat: "Bootsfabrik",
   oil: "Ölfabrik",
   goods: "Warenfabrik",
@@ -74,6 +74,7 @@ function bindStaticEvents() {
     activateTab(tab.dataset.target);
   });
 
+
   els.addMaterialBtn.addEventListener("click", addMaterial);
   els.addPlanRowBtn.addEventListener("click", addPlanRow);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
@@ -93,20 +94,30 @@ function renderAll() {
 }
 
 function renderFactoryNavigation() {
-  const existingFactoryTabs = els.tabs.querySelectorAll(".factory-tab");
-  existingFactoryTabs.forEach((tab) => tab.remove());
+  const activeTarget = document.querySelector(".panel.active")?.id || "calculator";
+  const fixedTabs = [
+    { target: "calculator", label: "Calculator" },
+    { target: "materials", label: "Materialien" }
+  ];
+  const factoryTabs = Object.entries(FACTORIES).map(([target, label]) => ({ target, label }));
 
-  for (const [key, label] of Object.entries(FACTORIES)) {
+  els.tabs.innerHTML = "";
+
+  for (const tabInfo of [...fixedTabs, ...factoryTabs]) {
     const button = document.createElement("button");
-    button.className = "tab factory-tab";
-    button.dataset.target = key;
+    button.className = "tab";
+    button.dataset.target = tabInfo.target;
     button.type = "button";
-    button.textContent = label;
+    button.textContent = tabInfo.label;
+    if (tabInfo.target === activeTarget) {
+      button.classList.add("active");
+    }
     els.tabs.appendChild(button);
   }
 }
 
 function renderFactoryPanels() {
+  const activeTarget = document.querySelector(".panel.active")?.id || document.querySelector(".tab.active")?.dataset.target || "calculator";
   els.factoryPanels.innerHTML = "";
 
   for (const [factory, label] of Object.entries(FACTORIES)) {
@@ -127,7 +138,6 @@ function renderFactoryPanels() {
     els.factoryPanels.appendChild(panel);
   }
 
-  const activeTarget = document.querySelector(".tab.active")?.dataset.target || "calculator";
   activateTab(document.getElementById(activeTarget) ? activeTarget : "calculator");
 }
 
