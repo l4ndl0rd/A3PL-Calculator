@@ -18,7 +18,6 @@
     <nav class="tabs" aria-label="Bereiche">
       <div id="tabs" class="tab-row">
         <button class="tab active" data-target="calculator" type="button">Calculator</button>
-        <button class="tab" data-target="materials" type="button">Materialien</button>
       </div>
     </nav>
 
@@ -81,7 +80,25 @@
           <table class="data-table" id="requirementsTable">
             <thead>
               <tr>
-                <th>Material</th>
+                <th>Material / Zwischenprodukt</th>
+                <th>Gesamtbedarf</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="subsection-header">
+          <div>
+            <h3>Rohmaterialien</h3>
+            <p>Aufgelöster Bedarf inklusive Unterrezepten. Waren mit eigenem Rezept werden rekursiv bis zu den Basis-Rohstoffen zerlegt.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="rawRequirementsTable">
+            <thead>
+              <tr>
+                <th>Rohmaterial</th>
                 <th>Gesamtbedarf</th>
               </tr>
             </thead>

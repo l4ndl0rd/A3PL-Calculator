@@ -68,6 +68,12 @@ h2 {
   font-size: 1.25rem;
 }
 
+h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
 .subtitle,
 .card p,
 .hint {
@@ -92,10 +98,13 @@ h2 {
 }
 
 .tabs {
+  position: sticky;
+  top: 10px;
+  z-index: 20;
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 22px;
-  background: rgba(24, 24, 24, 0.78);
+  background: rgba(24, 24, 24, 0.92);
   backdrop-filter: blur(14px);
   margin-bottom: 18px;
 }
@@ -225,6 +234,15 @@ h2 {
 
 .card-header p {
   margin: 8px 0 0;
+}
+
+.subsection-header {
+  margin: 22px 0 12px;
+}
+
+.subsection-header p {
+  margin: 8px 0 0;
+  color: var(--muted);
 }
 
 .table-wrap,

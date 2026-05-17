@@ -1,5 +1,8 @@
-const STORAGE_KEY = "fg2_warenherstellung_calculator_v3";
-const LEGACY_STORAGE_KEY = "fg2_warenherstellung_calculator_v1";
+const STORAGE_KEY = "fg2_warenherstellung_calculator_v4";
+const LEGACY_STORAGE_KEYS = [
+  "fg2_warenherstellung_calculator_v3",
+  "fg2_warenherstellung_calculator_v1"
+];
 
 const FACTORIES = {
   steel: "Stahlfabrik",
@@ -13,30 +16,6 @@ const FACTORIES = {
   illegalWeapons: "Illegale Waffenfabrik"
 };
 
-const DEFAULT_MATERIALS = [
-  "Eisen",
-  "Kohle",
-  "Kupfer",
-  "Aluminium",
-  "Gummi",
-  "Elektronik",
-  "Glas",
-  "Kunststoff",
-  "Stoff",
-  "Leder",
-  "Fasern",
-  "Rohöl",
-  "Treibstoff",
-  "Chemikalien",
-  "Schwefel",
-  "Werkzeugteile",
-  "Holz",
-  "Lack",
-  "Sprengstoffkomponenten",
-  "Waffenteile"
-];
-
-const defaultState = createDefaultState();
 let state = loadState();
 
 const els = {
@@ -45,6 +24,7 @@ const els = {
   materialsTableBody: document.querySelector("#materialsTable tbody"),
   planTableBody: document.querySelector("#planTable tbody"),
   requirementsTableBody: document.querySelector("#requirementsTable tbody"),
+  rawRequirementsTableBody: document.querySelector("#rawRequirementsTable tbody"),
   addPlanRowBtn: document.querySelector("#addPlanRowBtn"),
   addMaterialBtn: document.querySelector("#addMaterialBtn"),
   copyMaterialsBtn: document.querySelector("#copyMaterialsBtn"),
@@ -74,7 +54,6 @@ function bindStaticEvents() {
     activateTab(tab.dataset.target);
   });
 
-
   els.addMaterialBtn.addEventListener("click", addMaterial);
   els.addPlanRowBtn.addEventListener("click", addPlanRow);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
@@ -95,23 +74,21 @@ function renderAll() {
 
 function renderFactoryNavigation() {
   const activeTarget = document.querySelector(".panel.active")?.id || "calculator";
-  const fixedTabs = [
+  const tabs = [
     { target: "calculator", label: "Calculator" },
+    ...Object.entries(FACTORIES).map(([target, label]) => ({ target, label })),
     { target: "materials", label: "Materialien" }
   ];
-  const factoryTabs = Object.entries(FACTORIES).map(([target, label]) => ({ target, label }));
 
   els.tabs.innerHTML = "";
 
-  for (const tabInfo of [...fixedTabs, ...factoryTabs]) {
+  for (const tabInfo of tabs) {
     const button = document.createElement("button");
     button.className = "tab";
     button.dataset.target = tabInfo.target;
     button.type = "button";
     button.textContent = tabInfo.label;
-    if (tabInfo.target === activeTarget) {
-      button.classList.add("active");
-    }
+    if (tabInfo.target === activeTarget) button.classList.add("active");
     els.tabs.appendChild(button);
   }
 }
@@ -151,13 +128,14 @@ function createProductCard(factory, product) {
   outputInput.value = product.output;
 
   nameInput.addEventListener("change", () => {
+    const oldName = product.name;
     const newName = cleanText(nameInput.value);
     if (!newName) {
       nameInput.value = product.name;
       return;
     }
     product.name = newName;
-    ensureMaterial(newName);
+    renameRecipeMaterialReferences(oldName, newName);
     renderAll();
   });
 
@@ -174,13 +152,20 @@ function createProductCard(factory, product) {
 
   node.querySelector(".add-recipe-row").addEventListener("click", () => {
     ensureMinimumMaterial();
-    product.recipe.push({ material: state.materials[0], amount: 1 });
+    const firstMaterial = getRecipeMaterialOptions()[0]?.value || "Material";
+    product.recipe.unshift({ material: firstMaterial, amount: 1 });
     renderAll();
   });
 
   product.recipe.forEach((recipeItem, index) => {
     recipeBody.appendChild(createRecipeRow(product, index, recipeItem));
   });
+
+  if (!product.recipe.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="3" class="empty-state">Noch keine Materialzeilen vorhanden.</td>`;
+    recipeBody.appendChild(row);
+  }
 
   return node;
 }
@@ -192,6 +177,14 @@ function activateTab(targetId) {
 
 function renderMaterials() {
   els.materialsTableBody.innerHTML = "";
+
+  if (!state.materials.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="2" class="empty-state">Noch keine Materialien vorhanden.</td>`;
+    els.materialsTableBody.appendChild(row);
+    return;
+  }
+
   state.materials.forEach((material, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -228,7 +221,7 @@ function createRecipeRow(product, index, recipeItem) {
   const materialSelect = row.querySelector(".recipe-material");
   const amountInput = row.querySelector(".recipe-amount");
 
-  fillSelect(materialSelect, state.materials.map((material) => ({ value: material, label: material })), recipeItem.material);
+  fillSelect(materialSelect, getRecipeMaterialOptions(), recipeItem.material);
   amountInput.value = recipeItem.amount;
 
   materialSelect.addEventListener("change", () => {
@@ -273,10 +266,10 @@ function renderPlan() {
     const product = findProduct(item.productId);
     const output = product ? positiveInteger(product.output, 1) : 1;
     const quantity = positiveInteger(item.quantity, 0);
-    const runs = quantity > 0 ? Math.ceil(quantity / output) : 0;
+    const runs = product && quantity > 0 ? Math.ceil(quantity / output) : 0;
 
     quantityInput.value = quantity;
-    outputCell.textContent = output.toLocaleString("de-DE");
+    outputCell.textContent = product ? output.toLocaleString("de-DE") : "–";
     runsCell.textContent = runs.toLocaleString("de-DE");
 
     factorySelect.addEventListener("change", () => {
@@ -286,7 +279,7 @@ function renderPlan() {
     });
 
     productSelect.addEventListener("change", () => {
-      item.productId = productSelect.value;
+      item.productId = productSelect.value || null;
       renderAll();
     });
 
@@ -305,21 +298,11 @@ function renderPlan() {
 }
 
 function renderRequirements() {
-  const requirements = calculateRequirements();
-  els.requirementsTableBody.innerHTML = "";
+  const directRequirements = calculateDirectRequirements();
+  const rawRequirements = calculateRawRequirements();
 
-  const entries = Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de"));
-  if (!entries.length) {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="2" class="empty-state">Keine Materialien benötigt.</td>`;
-    els.requirementsTableBody.appendChild(row);
-  } else {
-    entries.forEach(([material, amount]) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${escapeHtml(material)}</td><td>${amount.toLocaleString("de-DE")}</td>`;
-      els.requirementsTableBody.appendChild(row);
-    });
-  }
+  renderRequirementTable(els.requirementsTableBody, directRequirements, "Keine Materialien benötigt.");
+  renderRequirementTable(els.rawRequirementsTableBody, rawRequirements, "Keine Rohmaterialien benötigt.");
 
   const totalRuns = state.plan.reduce((sum, item) => {
     const product = findProduct(item.productId);
@@ -331,10 +314,28 @@ function renderRequirements() {
 
   els.kpiPositions.textContent = state.plan.length.toLocaleString("de-DE");
   els.kpiRuns.textContent = totalRuns.toLocaleString("de-DE");
-  els.kpiMaterials.textContent = entries.length.toLocaleString("de-DE");
+  els.kpiMaterials.textContent = Object.keys(directRequirements).length.toLocaleString("de-DE");
 }
 
-function calculateRequirements() {
+function renderRequirementTable(tbody, data, emptyText) {
+  tbody.innerHTML = "";
+  const entries = Object.entries(data).sort((a, b) => a[0].localeCompare(b[0], "de"));
+
+  if (!entries.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="2" class="empty-state">${emptyText}</td>`;
+    tbody.appendChild(row);
+    return;
+  }
+
+  entries.forEach(([material, amount]) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${escapeHtml(material)}</td><td>${amount.toLocaleString("de-DE")}</td>`;
+    tbody.appendChild(row);
+  });
+}
+
+function calculateDirectRequirements() {
   const totals = {};
 
   for (const item of state.plan) {
@@ -356,30 +357,70 @@ function calculateRequirements() {
   return totals;
 }
 
+function calculateRawRequirements() {
+  const totals = {};
+
+  for (const item of state.plan) {
+    const product = findProduct(item.productId);
+    if (!product) continue;
+
+    const output = positiveInteger(product.output, 1);
+    const quantity = positiveInteger(item.quantity, 0);
+    const runs = quantity > 0 ? Math.ceil(quantity / output) : 0;
+
+    for (const recipeItem of product.recipe) {
+      const material = cleanText(recipeItem.material);
+      const amount = positiveInteger(recipeItem.amount, 0);
+      if (!material || amount <= 0) continue;
+      addRawRequirement(material, amount * runs, totals, new Set([product.id]));
+    }
+  }
+
+  return totals;
+}
+
+function addRawRequirement(materialName, requiredAmount, totals, visitedProductIds) {
+  const material = cleanText(materialName);
+  if (!material || requiredAmount <= 0) return;
+
+  const craftable = findProductByName(material);
+  if (!craftable || !craftable.recipe.length || visitedProductIds.has(craftable.id)) {
+    totals[material] = (totals[material] ?? 0) + requiredAmount;
+    return;
+  }
+
+  const output = positiveInteger(craftable.output, 1);
+  const runs = Math.ceil(requiredAmount / output);
+  const nextVisited = new Set(visitedProductIds);
+  nextVisited.add(craftable.id);
+
+  for (const recipeItem of craftable.recipe) {
+    const childMaterial = cleanText(recipeItem.material);
+    const childAmount = positiveInteger(recipeItem.amount, 0);
+    if (!childMaterial || childAmount <= 0) continue;
+    addRawRequirement(childMaterial, childAmount * runs, totals, nextVisited);
+  }
+}
+
 function addProduct(factory) {
-  ensureMinimumMaterial();
   const product = {
     id: cryptoId(),
-    name: "Neue Ware",
+    name: uniqueProductName("Neue Ware"),
     output: 1,
-    recipe: [{ material: state.materials[0], amount: 1 }]
+    recipe: []
   };
-  state.products[factory].push(product);
-  ensureMaterial(product.name);
+  state.products[factory].unshift(product);
   renderAll();
   activateTab(factory);
+  focusFirstVisible(".product-name");
 }
 
 function addMaterial() {
-  let base = "Neues Material";
-  let name = base;
-  let counter = 2;
-  while (state.materials.includes(name)) {
-    name = `${base} ${counter}`;
-    counter += 1;
-  }
-  state.materials.push(name);
+  const name = uniqueMaterialName("Neues Material");
+  state.materials.unshift(name);
   renderAll();
+  activateTab("materials");
+  focusFirstVisible("#materialsTable tbody input");
 }
 
 function addPlanRow() {
@@ -394,12 +435,15 @@ function addPlanRow() {
 }
 
 async function copyRequirementsTable() {
-  const requirements = calculateRequirements();
-  const lines = [["Material", "Gesamtbedarf"], ...Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de"))]
+  const directRequirements = calculateDirectRequirements();
+  const rawRequirements = calculateRawRequirements();
+  const directLines = [["Material / Zwischenprodukt", "Gesamtbedarf"], ...Object.entries(directRequirements).sort((a, b) => a[0].localeCompare(b[0], "de"))]
+    .map((row) => row.join("\t"));
+  const rawLines = [["Rohmaterial", "Gesamtbedarf"], ...Object.entries(rawRequirements).sort((a, b) => a[0].localeCompare(b[0], "de"))]
     .map((row) => row.join("\t"));
 
   try {
-    await navigator.clipboard.writeText(lines.join("\n"));
+    await navigator.clipboard.writeText([...directLines, "", ...rawLines].join("\n"));
     els.copyMaterialsBtn.textContent = "Kopiert";
     setTimeout(() => (els.copyMaterialsBtn.textContent = "Tabelle kopieren"), 1400);
   } catch {
@@ -438,8 +482,9 @@ function importData(event) {
 }
 
 function resetData() {
-  if (!confirm("Alle lokal gespeicherten Daten werden auf die Beispielwerte zurückgesetzt. Fortfahren?")) return;
+  if (!confirm("Alle lokal gespeicherten Daten werden gelöscht. Du startest danach ohne Beispielwerte. Fortfahren?")) return;
   localStorage.removeItem(STORAGE_KEY);
+  LEGACY_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
   state = createDefaultState();
   renderAll();
 }
@@ -465,18 +510,33 @@ function fillSelect(select, options, selectedValue) {
   }
 }
 
+function getRecipeMaterialOptions() {
+  const productNames = Object.values(state.products)
+    .flat()
+    .map((product) => cleanText(product.name))
+    .filter(Boolean);
+  const names = unique([...state.materials, ...productNames]);
+  if (!names.length) return [{ value: "", label: "Keine Materialien vorhanden" }];
+  return names.map((material) => ({ value: material, label: material }));
+}
+
 function findProduct(productId) {
   if (!productId) return null;
   return Object.values(state.products).flat().find((product) => product.id === productId) ?? null;
 }
 
-function ensureMaterial(name) {
-  const cleaned = cleanText(name);
-  if (cleaned && !state.materials.includes(cleaned)) state.materials.push(cleaned);
+function findProductByName(name) {
+  const cleaned = cleanText(name).toLocaleLowerCase("de-DE");
+  if (!cleaned) return null;
+  return Object.values(state.products).flat().find((product) => cleanText(product.name).toLocaleLowerCase("de-DE") === cleaned) ?? null;
 }
 
 function ensureMinimumMaterial() {
-  if (!state.materials.length) state.materials.push("Material");
+  if (!state.materials.length && !Object.values(state.products).flat().length) {
+    state.materials.unshift("Material");
+  } else if (!state.materials.length) {
+    return;
+  }
 }
 
 function renameMaterial(oldName, newName) {
@@ -488,12 +548,16 @@ function renameMaterial(oldName, newName) {
   }
 
   state.materials = state.materials.map((material) => (material === oldName ? newName : material));
+  renameRecipeMaterialReferences(oldName, newName);
+  renderAll();
+}
+
+function renameRecipeMaterialReferences(oldName, newName) {
   for (const product of Object.values(state.products).flat()) {
     for (const recipeItem of product.recipe) {
       if (recipeItem.material === oldName) recipeItem.material = newName;
     }
   }
-  renderAll();
 }
 
 function isMaterialInUse(materialName) {
@@ -503,29 +567,23 @@ function isMaterialInUse(materialName) {
 }
 
 function normalizeState() {
-  const fallbackState = createDefaultState();
   state.materials = unique((state.materials ?? []).map(cleanText).filter(Boolean));
   state.products ??= {};
   state.plan ??= [];
 
   for (const factory of Object.keys(FACTORIES)) {
-    state.products[factory] ??= fallbackState.products[factory] ?? [];
+    state.products[factory] ??= [];
     state.products[factory] = state.products[factory].map((product) => ({
       id: product.id || cryptoId(),
       name: cleanText(product.name) || "Unbenannte Ware",
       output: positiveInteger(product.output, 1),
       recipe: Array.isArray(product.recipe)
         ? product.recipe.map((item) => ({
-            material: cleanText(item.material) || state.materials[0] || "Material",
+            material: cleanText(item.material),
             amount: positiveInteger(item.amount, 0)
-          }))
+          })).filter((item) => item.material)
         : []
     }));
-  }
-
-  for (const product of Object.values(state.products).flat()) {
-    ensureMaterial(product.name);
-    product.recipe.forEach((item) => ensureMaterial(item.material));
   }
 
   state.plan = state.plan.map((item) => {
@@ -554,7 +612,7 @@ function validateImportedState(value) {
 
 function loadState() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return createDefaultState();
     const parsed = JSON.parse(saved);
     validateImportedState(parsed);
@@ -573,128 +631,36 @@ function firstFactoryWithProduct() {
 }
 
 function createDefaultState() {
-  const products = {
-    steel: [
-      createProduct("Stahlbarren", 1, [
-        ["Eisen", 3],
-        ["Kohle", 2]
-      ]),
-      createProduct("Stahlträger", 1, [
-        ["Stahlbarren", 2],
-        ["Kohle", 1]
-      ])
-    ],
-    vehicle: [
-      createProduct("Karosserie", 1, [
-        ["Stahlbarren", 8],
-        ["Aluminium", 4],
-        ["Glas", 2]
-      ]),
-      createProduct("Fahrzeugreifen", 4, [
-        ["Gummi", 6],
-        ["Stahlbarren", 1]
-      ])
-    ],
-    clothing: [
-      createProduct("Arbeitskleidung", 1, [
-        ["Stoff", 4],
-        ["Leder", 1]
-      ]),
-      createProduct("Schutzweste", 1, [
-        ["Stoff", 3],
-        ["Kunststoff", 2],
-        ["Stahlbarren", 1]
-      ])
-    ],
-    aircraft: [
-      createProduct("Flugzeugrumpf", 1, [
-        ["Aluminium", 12],
-        ["Elektronik", 4],
-        ["Glas", 3]
-      ]),
-      createProduct("Rotorblatt", 2, [
-        ["Aluminium", 6],
-        ["Kunststoff", 3]
-      ])
-    ],
-    boat: [
-      createProduct("Bootsrumpf", 1, [
-        ["Holz", 8],
-        ["Aluminium", 4],
-        ["Lack", 2]
-      ]),
-      createProduct("Bootsmotor", 1, [
-        ["Stahlbarren", 5],
-        ["Elektronik", 2],
-        ["Gummi", 1]
-      ])
-    ],
-    oil: [
-      createProduct("Treibstoff", 5, [
-        ["Rohöl", 10],
-        ["Chemikalien", 1]
-      ]),
-      createProduct("Schmieröl", 3, [
-        ["Rohöl", 6],
-        ["Kunststoff", 1]
-      ])
-    ],
-    goods: [
-      createProduct("Werkzeugkiste", 1, [
-        ["Werkzeugteile", 4],
-        ["Stahlbarren", 2],
-        ["Kunststoff", 1]
-      ]),
-      createProduct("Haushaltswaren", 2, [
-        ["Kunststoff", 4],
-        ["Glas", 2]
-      ])
-    ],
-    chemistry: [
-      createProduct("Chemikalien", 2, [
-        ["Schwefel", 3],
-        ["Rohöl", 2]
-      ]),
-      createProduct("Kunststoff", 3, [
-        ["Rohöl", 4],
-        ["Chemikalien", 1]
-      ])
-    ],
-    illegalWeapons: [
-      createProduct("Waffenteile", 1, [
-        ["Stahlbarren", 3],
-        ["Werkzeugteile", 2]
-      ]),
-      createProduct("Illegale Waffe", 1, [
-        ["Waffenteile", 4],
-        ["Stahlbarren", 2],
-        ["Sprengstoffkomponenten", 1]
-      ])
-    ]
-  };
-
-  const materials = unique([...DEFAULT_MATERIALS]);
-  for (const product of Object.values(products).flat()) {
-    if (!materials.includes(product.name)) materials.push(product.name);
+  const products = {};
+  for (const factory of Object.keys(FACTORIES)) {
+    products[factory] = [];
   }
-
   return {
-    materials,
+    materials: [],
     products,
-    plan: [
-      { id: cryptoId(), factory: "steel", productId: products.steel[0].id, quantity: 1 },
-      { id: cryptoId(), factory: "vehicle", productId: products.vehicle[0].id, quantity: 1 }
-    ]
+    plan: []
   };
 }
 
-function createProduct(name, output, recipePairs) {
-  return {
-    id: cryptoId(),
-    name,
-    output,
-    recipe: recipePairs.map(([material, amount]) => ({ material, amount }))
-  };
+function uniqueMaterialName(base) {
+  let name = base;
+  let counter = 2;
+  while (state.materials.includes(name)) {
+    name = `${base} ${counter}`;
+    counter += 1;
+  }
+  return name;
+}
+
+function uniqueProductName(base) {
+  const existing = Object.values(state.products).flat().map((product) => product.name);
+  let name = base;
+  let counter = 2;
+  while (existing.includes(name)) {
+    name = `${base} ${counter}`;
+    counter += 1;
+  }
+  return name;
 }
 
 function positiveInteger(value, fallback) {
@@ -709,6 +675,16 @@ function cleanText(value) {
 
 function unique(values) {
   return [...new Set(values)];
+}
+
+function focusFirstVisible(selector) {
+  window.setTimeout(() => {
+    const element = document.querySelector(selector);
+    if (!element) return;
+    element.focus();
+    if (typeof element.select === "function") element.select();
+    element.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, 0);
 }
 
 function escapeHtml(value) {
