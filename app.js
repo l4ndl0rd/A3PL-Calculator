@@ -1,74 +1,47 @@
-const STORAGE_KEY = "fg2_warenherstellung_calculator_v1";
+const STORAGE_KEY = "fg2_warenherstellung_calculator_v2";
+const LEGACY_STORAGE_KEY = "fg2_warenherstellung_calculator_v1";
 
 const FACTORIES = {
   steel: "Stahlfabrik",
-  vehicle: "Fahrzeugfabrik"
+  vehicle: "Fahrzeugfabrik",
+  clothing: "Kleidungsfabrik",
+  aircraft: "Luftfahrzeugfabrik",
+  boat: "Bootsfabrik",
+  oil: "Ölfabrik",
+  goods: "Warenfabrik",
+  chemistry: "Chemiefabrik",
+  illegalWeapons: "Illegale Waffenfabrik"
 };
 
-const defaultState = {
-  materials: ["Eisen", "Kohle", "Kupfer", "Aluminium", "Gummi", "Elektronik", "Glas", "Kunststoff"],
-  products: {
-    steel: [
-      {
-        id: cryptoId(),
-        name: "Stahlbarren",
-        output: 1,
-        recipe: [
-          { material: "Eisen", amount: 3 },
-          { material: "Kohle", amount: 2 }
-        ]
-      },
-      {
-        id: cryptoId(),
-        name: "Stahlträger",
-        output: 1,
-        recipe: [
-          { material: "Stahlbarren", amount: 2 },
-          { material: "Kohle", amount: 1 }
-        ]
-      }
-    ],
-    vehicle: [
-      {
-        id: cryptoId(),
-        name: "Karosserie",
-        output: 1,
-        recipe: [
-          { material: "Stahlbarren", amount: 8 },
-          { material: "Aluminium", amount: 4 },
-          { material: "Glas", amount: 2 }
-        ]
-      },
-      {
-        id: cryptoId(),
-        name: "Fahrzeugreifen",
-        output: 4,
-        recipe: [
-          { material: "Gummi", amount: 6 },
-          { material: "Stahlbarren", amount: 1 }
-        ]
-      }
-    ]
-  },
-  plan: [
-    { id: cryptoId(), factory: "steel", productId: null, quantity: 1 },
-    { id: cryptoId(), factory: "vehicle", productId: null, quantity: 1 }
-  ]
-};
+const DEFAULT_MATERIALS = [
+  "Eisen",
+  "Kohle",
+  "Kupfer",
+  "Aluminium",
+  "Gummi",
+  "Elektronik",
+  "Glas",
+  "Kunststoff",
+  "Stoff",
+  "Leder",
+  "Fasern",
+  "Rohöl",
+  "Treibstoff",
+  "Chemikalien",
+  "Schwefel",
+  "Werkzeugteile",
+  "Holz",
+  "Lack",
+  "Sprengstoffkomponenten",
+  "Waffenteile"
+];
 
-defaultState.plan[0].productId = defaultState.products.steel[0].id;
-defaultState.plan[1].productId = defaultState.products.vehicle[0].id;
-for (const product of [...defaultState.products.steel, ...defaultState.products.vehicle]) {
-  if (!defaultState.materials.includes(product.name)) defaultState.materials.push(product.name);
-}
-
+const defaultState = createDefaultState();
 let state = loadState();
 
 const els = {
-  tabs: document.querySelectorAll(".tab"),
-  panels: document.querySelectorAll(".panel"),
-  steelProducts: document.querySelector("#steelProducts"),
-  vehicleProducts: document.querySelector("#vehicleProducts"),
+  tabs: document.querySelector("#tabs"),
+  factoryPanels: document.querySelector("#factoryPanels"),
   materialsTableBody: document.querySelector("#materialsTable tbody"),
   planTableBody: document.querySelector("#planTable tbody"),
   requirementsTableBody: document.querySelector("#requirementsTable tbody"),
@@ -81,6 +54,7 @@ const els = {
   kpiPositions: document.querySelector("#kpiPositions"),
   kpiRuns: document.querySelector("#kpiRuns"),
   kpiMaterials: document.querySelector("#kpiMaterials"),
+  factoryPanelTemplate: document.querySelector("#factoryPanelTemplate"),
   productTemplate: document.querySelector("#productTemplate"),
   recipeRowTemplate: document.querySelector("#recipeRowTemplate"),
   planRowTemplate: document.querySelector("#planRowTemplate")
@@ -94,17 +68,10 @@ function init() {
 }
 
 function bindStaticEvents() {
-  els.tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      els.tabs.forEach((item) => item.classList.remove("active"));
-      els.panels.forEach((panel) => panel.classList.remove("active"));
-      tab.classList.add("active");
-      document.querySelector(`#${tab.dataset.target}`).classList.add("active");
-    });
-  });
-
-  document.querySelectorAll(".add-product-btn").forEach((button) => {
-    button.addEventListener("click", () => addProduct(button.dataset.factory));
+  els.tabs.addEventListener("click", (event) => {
+    const tab = event.target.closest(".tab");
+    if (!tab) return;
+    activateTab(tab.dataset.target);
   });
 
   els.addMaterialBtn.addEventListener("click", addMaterial);
@@ -117,12 +84,100 @@ function bindStaticEvents() {
 
 function renderAll() {
   normalizeState();
+  renderFactoryNavigation();
+  renderFactoryPanels();
   renderMaterials();
-  renderProducts("steel");
-  renderProducts("vehicle");
   renderPlan();
   renderRequirements();
   saveState();
+}
+
+function renderFactoryNavigation() {
+  const existingFactoryTabs = els.tabs.querySelectorAll(".factory-tab");
+  existingFactoryTabs.forEach((tab) => tab.remove());
+
+  for (const [key, label] of Object.entries(FACTORIES)) {
+    const button = document.createElement("button");
+    button.className = "tab factory-tab";
+    button.dataset.target = key;
+    button.type = "button";
+    button.textContent = label;
+    els.tabs.appendChild(button);
+  }
+}
+
+function renderFactoryPanels() {
+  els.factoryPanels.innerHTML = "";
+
+  for (const [factory, label] of Object.entries(FACTORIES)) {
+    const panel = els.factoryPanelTemplate.content.firstElementChild.cloneNode(true);
+    panel.id = factory;
+    panel.querySelector(".factory-title").textContent = `${label}-Rezepte`;
+    panel.querySelector(".add-product-btn").addEventListener("click", () => addProduct(factory));
+
+    const container = panel.querySelector(".product-list");
+    if (!state.products[factory].length) {
+      container.innerHTML = `<div class="empty-state">Noch keine Waren vorhanden.</div>`;
+    } else {
+      state.products[factory].forEach((product) => {
+        container.appendChild(createProductCard(factory, product));
+      });
+    }
+
+    els.factoryPanels.appendChild(panel);
+  }
+
+  const activeTarget = document.querySelector(".tab.active")?.dataset.target || "calculator";
+  activateTab(document.getElementById(activeTarget) ? activeTarget : "calculator");
+}
+
+function createProductCard(factory, product) {
+  const node = els.productTemplate.content.firstElementChild.cloneNode(true);
+  const nameInput = node.querySelector(".product-name");
+  const outputInput = node.querySelector(".product-output");
+  const recipeBody = node.querySelector(".recipe-table tbody");
+
+  nameInput.value = product.name;
+  outputInput.value = product.output;
+
+  nameInput.addEventListener("change", () => {
+    const newName = cleanText(nameInput.value);
+    if (!newName) {
+      nameInput.value = product.name;
+      return;
+    }
+    product.name = newName;
+    ensureMaterial(newName);
+    renderAll();
+  });
+
+  outputInput.addEventListener("change", () => {
+    product.output = positiveInteger(outputInput.value, 1);
+    renderAll();
+  });
+
+  node.querySelector(".remove-product").addEventListener("click", () => {
+    state.products[factory] = state.products[factory].filter((item) => item.id !== product.id);
+    state.plan = state.plan.filter((item) => item.productId !== product.id);
+    renderAll();
+  });
+
+  node.querySelector(".add-recipe-row").addEventListener("click", () => {
+    ensureMinimumMaterial();
+    product.recipe.push({ material: state.materials[0], amount: 1 });
+    renderAll();
+  });
+
+  product.recipe.forEach((recipeItem, index) => {
+    recipeBody.appendChild(createRecipeRow(product, index, recipeItem));
+  });
+
+  return node;
+}
+
+function activateTab(targetId) {
+  document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("active", item.dataset.target === targetId));
+  document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === targetId));
 }
 
 function renderMaterials() {
@@ -155,61 +210,6 @@ function renderMaterials() {
     });
 
     els.materialsTableBody.appendChild(row);
-  });
-}
-
-function renderProducts(factory) {
-  const container = factory === "steel" ? els.steelProducts : els.vehicleProducts;
-  container.innerHTML = "";
-
-  if (!state.products[factory].length) {
-    container.innerHTML = `<div class="empty-state">Noch keine Waren vorhanden.</div>`;
-    return;
-  }
-
-  state.products[factory].forEach((product) => {
-    const node = els.productTemplate.content.firstElementChild.cloneNode(true);
-    const nameInput = node.querySelector(".product-name");
-    const outputInput = node.querySelector(".product-output");
-    const recipeBody = node.querySelector(".recipe-table tbody");
-
-    nameInput.value = product.name;
-    outputInput.value = product.output;
-
-    nameInput.addEventListener("change", () => {
-      const newName = cleanText(nameInput.value);
-      if (!newName) {
-        nameInput.value = product.name;
-        return;
-      }
-      product.name = newName;
-      ensureMaterial(newName);
-      renderAll();
-    });
-
-    outputInput.addEventListener("change", () => {
-      product.output = positiveInteger(outputInput.value, 1);
-      renderAll();
-    });
-
-    node.querySelector(".remove-product").addEventListener("click", () => {
-      state.products[factory] = state.products[factory].filter((item) => item.id !== product.id);
-      state.plan = state.plan.filter((item) => item.productId !== product.id);
-      renderAll();
-    });
-
-    node.querySelector(".add-recipe-row").addEventListener("click", () => {
-      ensureMinimumMaterial();
-      product.recipe.push({ material: state.materials[0], amount: 1 });
-      renderAll();
-    });
-
-    product.recipe.forEach((recipeItem, index) => {
-      const row = createRecipeRow(product, index, recipeItem);
-      recipeBody.appendChild(row);
-    });
-
-    container.appendChild(node);
   });
 }
 
@@ -357,6 +357,7 @@ function addProduct(factory) {
   state.products[factory].push(product);
   ensureMaterial(product.name);
   renderAll();
+  activateTab(factory);
 }
 
 function addMaterial() {
@@ -372,7 +373,7 @@ function addMaterial() {
 }
 
 function addPlanRow() {
-  const factory = "steel";
+  const factory = firstFactoryWithProduct() || Object.keys(FACTORIES)[0];
   state.plan.push({
     id: cryptoId(),
     factory,
@@ -429,12 +430,15 @@ function importData(event) {
 function resetData() {
   if (!confirm("Alle lokal gespeicherten Daten werden auf die Beispielwerte zurückgesetzt. Fortfahren?")) return;
   localStorage.removeItem(STORAGE_KEY);
-  state = structuredClone(defaultState);
+  state = createDefaultState();
   renderAll();
 }
 
 function updatePlanProductOptions(select, factory, selectedProductId) {
-  const options = state.products[factory].map((product) => ({ value: product.id, label: product.name }));
+  const products = state.products[factory] ?? [];
+  const options = products.length
+    ? products.map((product) => ({ value: product.id, label: product.name }))
+    : [{ value: "", label: "Keine Ware vorhanden" }];
   fillSelect(select, options, selectedProductId);
 }
 
@@ -452,7 +456,8 @@ function fillSelect(select, options, selectedValue) {
 }
 
 function findProduct(productId) {
-  return [...state.products.steel, ...state.products.vehicle].find((product) => product.id === productId) ?? null;
+  if (!productId) return null;
+  return Object.values(state.products).flat().find((product) => product.id === productId) ?? null;
 }
 
 function ensureMaterial(name) {
@@ -473,7 +478,7 @@ function renameMaterial(oldName, newName) {
   }
 
   state.materials = state.materials.map((material) => (material === oldName ? newName : material));
-  for (const product of [...state.products.steel, ...state.products.vehicle]) {
+  for (const product of Object.values(state.products).flat()) {
     for (const recipeItem of product.recipe) {
       if (recipeItem.material === oldName) recipeItem.material = newName;
     }
@@ -482,19 +487,19 @@ function renameMaterial(oldName, newName) {
 }
 
 function isMaterialInUse(materialName) {
-  return [...state.products.steel, ...state.products.vehicle].some((product) =>
+  return Object.values(state.products).flat().some((product) =>
     product.recipe.some((recipeItem) => recipeItem.material === materialName)
   );
 }
 
 function normalizeState() {
+  const fallbackState = createDefaultState();
   state.materials = unique((state.materials ?? []).map(cleanText).filter(Boolean));
-  state.products ??= { steel: [], vehicle: [] };
-  state.products.steel ??= [];
-  state.products.vehicle ??= [];
+  state.products ??= {};
   state.plan ??= [];
 
   for (const factory of Object.keys(FACTORIES)) {
+    state.products[factory] ??= fallbackState.products[factory] ?? [];
     state.products[factory] = state.products[factory].map((product) => ({
       id: product.id || cryptoId(),
       name: cleanText(product.name) || "Unbenannte Ware",
@@ -508,13 +513,13 @@ function normalizeState() {
     }));
   }
 
-  for (const product of [...state.products.steel, ...state.products.vehicle]) {
+  for (const product of Object.values(state.products).flat()) {
     ensureMaterial(product.name);
     product.recipe.forEach((item) => ensureMaterial(item.material));
   }
 
   state.plan = state.plan.map((item) => {
-    const factory = FACTORIES[item.factory] ? item.factory : "steel";
+    const factory = FACTORIES[item.factory] ? item.factory : Object.keys(FACTORIES)[0];
     const validProduct = state.products[factory].some((product) => product.id === item.productId);
     return {
       id: item.id || cryptoId(),
@@ -528,26 +533,158 @@ function normalizeState() {
 function validateImportedState(value) {
   if (!value || typeof value !== "object") throw new Error("Datei enthält kein gültiges Objekt.");
   if (!Array.isArray(value.materials)) throw new Error("Feld 'materials' fehlt oder ist ungültig.");
-  if (!value.products || !Array.isArray(value.products.steel) || !Array.isArray(value.products.vehicle)) {
-    throw new Error("Feld 'products.steel' oder 'products.vehicle' fehlt oder ist ungültig.");
+  if (!value.products || typeof value.products !== "object") throw new Error("Feld 'products' fehlt oder ist ungültig.");
+  for (const factory of Object.keys(FACTORIES)) {
+    if (value.products[factory] !== undefined && !Array.isArray(value.products[factory])) {
+      throw new Error(`Feld 'products.${factory}' ist ungültig.`);
+    }
   }
   if (!Array.isArray(value.plan)) throw new Error("Feld 'plan' fehlt oder ist ungültig.");
 }
 
 function loadState() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return structuredClone(defaultState);
+    const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (!saved) return createDefaultState();
     const parsed = JSON.parse(saved);
     validateImportedState(parsed);
     return parsed;
   } catch {
-    return structuredClone(defaultState);
+    return createDefaultState();
   }
 }
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function firstFactoryWithProduct() {
+  return Object.keys(FACTORIES).find((factory) => state.products[factory]?.length);
+}
+
+function createDefaultState() {
+  const products = {
+    steel: [
+      createProduct("Stahlbarren", 1, [
+        ["Eisen", 3],
+        ["Kohle", 2]
+      ]),
+      createProduct("Stahlträger", 1, [
+        ["Stahlbarren", 2],
+        ["Kohle", 1]
+      ])
+    ],
+    vehicle: [
+      createProduct("Karosserie", 1, [
+        ["Stahlbarren", 8],
+        ["Aluminium", 4],
+        ["Glas", 2]
+      ]),
+      createProduct("Fahrzeugreifen", 4, [
+        ["Gummi", 6],
+        ["Stahlbarren", 1]
+      ])
+    ],
+    clothing: [
+      createProduct("Arbeitskleidung", 1, [
+        ["Stoff", 4],
+        ["Leder", 1]
+      ]),
+      createProduct("Schutzweste", 1, [
+        ["Stoff", 3],
+        ["Kunststoff", 2],
+        ["Stahlbarren", 1]
+      ])
+    ],
+    aircraft: [
+      createProduct("Flugzeugrumpf", 1, [
+        ["Aluminium", 12],
+        ["Elektronik", 4],
+        ["Glas", 3]
+      ]),
+      createProduct("Rotorblatt", 2, [
+        ["Aluminium", 6],
+        ["Kunststoff", 3]
+      ])
+    ],
+    boat: [
+      createProduct("Bootsrumpf", 1, [
+        ["Holz", 8],
+        ["Aluminium", 4],
+        ["Lack", 2]
+      ]),
+      createProduct("Bootsmotor", 1, [
+        ["Stahlbarren", 5],
+        ["Elektronik", 2],
+        ["Gummi", 1]
+      ])
+    ],
+    oil: [
+      createProduct("Treibstoff", 5, [
+        ["Rohöl", 10],
+        ["Chemikalien", 1]
+      ]),
+      createProduct("Schmieröl", 3, [
+        ["Rohöl", 6],
+        ["Kunststoff", 1]
+      ])
+    ],
+    goods: [
+      createProduct("Werkzeugkiste", 1, [
+        ["Werkzeugteile", 4],
+        ["Stahlbarren", 2],
+        ["Kunststoff", 1]
+      ]),
+      createProduct("Haushaltswaren", 2, [
+        ["Kunststoff", 4],
+        ["Glas", 2]
+      ])
+    ],
+    chemistry: [
+      createProduct("Chemikalien", 2, [
+        ["Schwefel", 3],
+        ["Rohöl", 2]
+      ]),
+      createProduct("Kunststoff", 3, [
+        ["Rohöl", 4],
+        ["Chemikalien", 1]
+      ])
+    ],
+    illegalWeapons: [
+      createProduct("Waffenteile", 1, [
+        ["Stahlbarren", 3],
+        ["Werkzeugteile", 2]
+      ]),
+      createProduct("Illegale Waffe", 1, [
+        ["Waffenteile", 4],
+        ["Stahlbarren", 2],
+        ["Sprengstoffkomponenten", 1]
+      ])
+    ]
+  };
+
+  const materials = unique([...DEFAULT_MATERIALS]);
+  for (const product of Object.values(products).flat()) {
+    if (!materials.includes(product.name)) materials.push(product.name);
+  }
+
+  return {
+    materials,
+    products,
+    plan: [
+      { id: cryptoId(), factory: "steel", productId: products.steel[0].id, quantity: 1 },
+      { id: cryptoId(), factory: "vehicle", productId: products.vehicle[0].id, quantity: 1 }
+    ]
+  };
+}
+
+function createProduct(name, output, recipePairs) {
+  return {
+    id: cryptoId(),
+    name,
+    output,
+    recipe: recipePairs.map(([material, amount]) => ({ material, amount }))
+  };
 }
 
 function positiveInteger(value, fallback) {

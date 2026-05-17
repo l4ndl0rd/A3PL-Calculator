@@ -1,35 +1,42 @@
 # Warenherstellung Calculator
 
-Statisches Webinterface für die Warenherstellung in einem Arma-3-/Project-Life-Kontext.
+Statisches Webinterface für GitHub Pages. Es benötigt kein Backend, keine Datenbank und keinen Build-Prozess.
+
+## Enthaltene Fabriken
+
+- Stahlfabrik
+- Fahrzeugfabrik
+- Kleidungsfabrik
+- Luftfahrzeugfabrik
+- Bootsfabrik
+- Ölfabrik
+- Warenfabrik
+- Chemiefabrik
+- Illegale Waffenfabrik
 
 ## Funktionen
 
-- getrennte Rezeptverwaltung für Stahlfabrik und Fahrzeugfabrik
-- Materialstammdaten frei bearbeitbar
-- Produktionsplan mit Zielmenge je Ware
+- Rezeptverwaltung je Fabrik
+- frei erweiterbare Materialstammdaten
+- Produktionsplan mit Fabrik-, Waren- und Mengenauswahl
 - automatische Berechnung der notwendigen Produktionsläufe
-- aggregierter Materialbedarf über alle geplanten Waren
-- Speicherung im Browser per localStorage
-- JSON Export/Import für Backups oder Weitergabe
-- vollständig statisch, daher kompatibel mit GitHub Pages
+- aggregierte Materialbedarfsliste
+- lokale Speicherung im Browser per `localStorage`
+- JSON Export und Import für Backups oder Umzug auf andere Geräte
 
-## Lokale Nutzung
+## GitHub Pages Deployment
 
-`index.html` im Browser öffnen. Es ist kein Build-Schritt notwendig.
+1. Dateien in ein GitHub-Repository hochladen.
+2. GitHub Repository öffnen.
+3. `Settings` → `Pages` öffnen.
+4. Source: `Deploy from a branch` wählen.
+5. Branch: `main`, Ordner: `/root` wählen.
+6. Speichern.
 
-## GitHub Pages Hosting
+Danach stellt GitHub Pages die Seite unter der angezeigten Pages-URL bereit.
 
-1. Neues GitHub-Repository erstellen.
-2. Diese Dateien in das Repository kopieren:
-   - `index.html`
-   - `styles.css`
-   - `app.js`
-   - `README.md`
-3. Änderungen committen und pushen.
-4. In GitHub unter `Settings -> Pages` als Source `Deploy from a branch` wählen.
-5. Branch `main` und Ordner `/root` auswählen.
-6. Speichern. Danach ist die Seite über die GitHub-Pages-URL erreichbar.
+## Dateien
 
-## Datenmodell
-
-Die App speichert Daten lokal im Browser. Für Serverbetrieb oder gemeinsame Bearbeitung wäre später ein Backend nötig, z. B. Supabase, Firebase oder eine eigene API.
+- `index.html` – Seitenstruktur
+- `styles.css` – Layout und Styling
+- `app.js` – Rezeptverwaltung, Calculator, Import/Export und Speicherung

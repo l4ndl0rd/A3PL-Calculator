@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Warenherstellung Calculator</title>
-  <meta name="description" content="Calculator für Stahlfabrik- und Fahrzeugfabrik-Waren mit Materialbedarf, Rezeptverwaltung und JSON Import/Export." />
+  <meta name="description" content="Calculator für Project-Life-Fabriken mit Materialbedarf, Rezeptverwaltung und JSON Import/Export." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,7 +12,7 @@
     <div>
       <p class="eyebrow">Arma 3 Project Life</p>
       <h1>Warenherstellung Calculator</h1>
-      <p class="subtitle">Rezepte verwalten, Produktionsmengen eintragen und Materialbedarf automatisch berechnen.</p>
+      <p class="subtitle">Rezepte pro Fabrik verwalten, Produktionsmengen eintragen und den aggregierten Materialbedarf automatisch berechnen.</p>
     </div>
     <div class="header-actions">
       <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
@@ -25,10 +25,8 @@
   </header>
 
   <main class="layout">
-    <nav class="tabs" aria-label="Bereiche">
+    <nav id="tabs" class="tabs" aria-label="Bereiche">
       <button class="tab active" data-target="calculator" type="button">Calculator</button>
-      <button class="tab" data-target="steel" type="button">Stahlfabrik</button>
-      <button class="tab" data-target="vehicle" type="button">Fahrzeugfabrik</button>
       <button class="tab" data-target="materials" type="button">Materialien</button>
     </nav>
 
@@ -38,7 +36,7 @@
           <div class="card-header">
             <div>
               <h2>Produktionsplan</h2>
-              <p>Trage ein, was hergestellt werden soll. Der Materialbedarf wird unten aggregiert.</p>
+              <p>Trage ein, welche Waren hergestellt werden sollen. Der Materialbedarf wird unten aggregiert.</p>
             </div>
             <button id="addPlanRowBtn" class="button" type="button">Position hinzufügen</button>
           </div>
@@ -101,32 +99,6 @@
       </section>
     </section>
 
-    <section id="steel" class="panel" aria-labelledby="steel-tab">
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <h2>Stahlfabrik-Rezepte</h2>
-            <p>Jede Ware kann beliebig viele Materialwerte verwenden.</p>
-          </div>
-          <button class="button add-product-btn" data-factory="steel" type="button">Ware hinzufügen</button>
-        </div>
-        <div id="steelProducts" class="product-list"></div>
-      </section>
-    </section>
-
-    <section id="vehicle" class="panel" aria-labelledby="vehicle-tab">
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <h2>Fahrzeugfabrik-Rezepte</h2>
-            <p>Pflege hier Fahrzeugteile, Fahrzeuge oder sonstige Waren.</p>
-          </div>
-          <button class="button add-product-btn" data-factory="vehicle" type="button">Ware hinzufügen</button>
-        </div>
-        <div id="vehicleProducts" class="product-list"></div>
-      </section>
-    </section>
-
     <section id="materials" class="panel" aria-labelledby="materials-tab">
       <section class="card">
         <div class="card-header">
@@ -149,7 +121,24 @@
         </div>
       </section>
     </section>
+
+    <div id="factoryPanels"></div>
   </main>
+
+  <template id="factoryPanelTemplate">
+    <section class="panel factory-panel">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="factory-title"></h2>
+            <p>Jede Ware kann beliebig viele Materialwerte verwenden.</p>
+          </div>
+          <button class="button add-product-btn" type="button">Ware hinzufügen</button>
+        </div>
+        <div class="product-list"></div>
+      </section>
+    </section>
+  </template>
 
   <template id="productTemplate">
     <article class="product-card">
