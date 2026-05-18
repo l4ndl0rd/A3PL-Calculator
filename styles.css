@@ -2680,12 +2680,32 @@ body.admin-locked .factory-panel .card > .card-header::after {
 }
 
 .product-card .recipe-table {
-  min-width: 420px;
+  width: 100%;
+  min-width: 520px;
+  table-layout: fixed;
 }
 
 .product-card .recipe-table th,
 .product-card .recipe-table td {
   padding-block: 8px;
+}
+
+.product-card .recipe-table th:first-child,
+.product-card .recipe-table td:first-child {
+  width: auto;
+}
+
+.product-card .recipe-table th:last-child,
+.product-card .recipe-table td:last-child {
+  width: 260px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-card .recipe-table td:last-child {
+  color: var(--text);
+  font-weight: 750;
 }
 
 .field-caption {

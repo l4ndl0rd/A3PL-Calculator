@@ -297,3 +297,10 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Auswahl eines Inventar-Items schreibt erst nach Eingabe einer Menge > 0 in den Datenbestand.
 - Daten-Reset entfernt zusätzlich alte Legacy-LocalStorage-Daten und leert offene Inventar-Draft-Zeilen.
 - Doppeltes Datalist-Element für Inventarvorschläge entfernt.
+
+
+### v48 - Rezeptmengen-Alignment
+
+- Mengen-Spalte in den Rezepttabellen der Fabrik-Waren vereinheitlicht.
+- Benötigte Mengen sind jetzt rechtsbündig mit tabellarischen Ziffern ausgerichtet.
+- Materialspalte und Mengenspalte verwenden eine feste Tabellenstruktur, damit Karten mit unterschiedlich langen Materialnamen nicht mehr unruhig wirken.
