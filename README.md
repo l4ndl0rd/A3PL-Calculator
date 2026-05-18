@@ -1,26 +1,36 @@
 # Warenherstellung Calculator
 
-Statisches Webinterface für den Warenherstellungs-Workflow von **Arma 3 Fishers Life DE**. Die Anwendung dient zur Pflege von Fabriken, Waren, Materialien, Rezepten und Produktionsplänen. Aus den eingegebenen Rezeptdaten berechnet sie automatisch Produktionsläufe, direkten Materialbedarf, rekursiv aufgelöste Rohmaterialien und eine optionale Wirtschaftlichkeitsauswertung.
+Statisches Webinterface für den Warenherstellungs-Workflow von **Arma 3 Fishers Life DE**.
 
-Die Seite ist für GitHub Pages ausgelegt und benötigt keinen Build-Prozess, kein Backend und keine Serverdatenbank.
+Die Anwendung verwaltet Fabriken, Waren, Materialien, Rezepte, Produktionsplan, eigenes Inventar und optionale Preisfelder. Daraus berechnet sie Produktionsläufe, Materialbedarf, Rohmaterialbedarf und Wirtschaftlichkeit.
 
-## Funktionsumfang
+## Einsatzbereich
+
+- statische Webseite für GitHub Pages
+- keine Serverkomponente erforderlich
+- lokale Speicherung im Browser über `localStorage`
+- Import und Export über JSON
+- mitgelieferter Standarddatenbestand über `waren-daten.json`
+
+## Hauptfunktionen
 
 ### Calculator
 
-- Produktionspositionen mit Fabrik, Ware und Zielmenge anlegen
-- Produktionsläufe automatisch anhand von Ausstoß pro Lauf berechnen
-- direkten Materialbedarf über alle Positionen aggregieren
-- Rohmaterialbedarf rekursiv aus Zwischenprodukt-Rezepten auflösen
-- Material- und Rohmaterialtabellen in die Zwischenablage kopieren
-- Wirtschaftlichkeit je Ware berechnen
+- Produktionsplan mit Fabrik, Ware und Zielmenge
+- Plan leeren
+- eigenes Inventar erfassen und zurücksetzen
+- Inventar wird vom Zukaufbedarf abgezogen
+- direkter Materialbedarf
+- rekursiv aufgelöster Rohmaterialbedarf
+- Wirtschaftlichkeitsberechnung je Ware
+- Standardmarge konfigurierbar
 
 ### Fabriken und Waren
 
-- Waren pro Fabrik verwalten
-- Ausstoß pro Produktionslauf definieren
+- Waren je Fabrik verwalten
+- Produktion pro Lauf festlegen
 - Rezept je Ware hinterlegen
-- optionale Preisfelder je Ware pflegen:
+- optionale Preisfelder:
   - Importpreis
   - Exportpreis
   - Marktwert
@@ -29,351 +39,87 @@ Die Seite ist für GitHub Pages ausgelegt und benötigt keinen Build-Prozess, ke
 ### Materialien
 
 - Materialstammdaten verwalten
-- Materialien als Rohmaterial oder verarbeitetes Zwischenprodukt behandeln
-- optionalen Wert pro Einheit hinterlegen
-- optionale Import- und Exportpreise für handelbare Rohstoffe hinterlegen
-- Unterrezepte für Zwischenprodukte definieren
+- Rohmaterialien und Zwischenprodukte abbilden
+- Produktion pro Lauf definieren
+- optionaler Wert pro Einheit
+- optionale Import- und Exportpreise
+- Unterrezepte für Zwischenprodukte
+- Suche im Bearbeitungsmodus
 
 ### Datenverwaltung
 
-- lokale Daten als JSON exportieren
-- JSON-Daten wieder importieren
-- lokal gespeicherte Daten zurücksetzen
-- alle Daten werden browserseitig gespeichert
+- Standarddaten aus `waren-daten.json` laden
+- JSON importieren
+- JSON exportieren
+- lokale Browserdaten zurücksetzen
+- Bearbeitungsmodus per Bestätigung aktivieren
 
 ## Wirtschaftlichkeitslogik
 
-Die Preisberechnung ist hybrid aufgebaut, damit sie auch funktioniert, wenn nicht für jede Ware Händlerpreise vorhanden sind.
+Materialkosten werden bevorzugt aus dem Importpreis berechnet. Wenn kein Importpreis vorhanden ist, wird der Wert pro Einheit genutzt. Hat ein Material ein Unterrezept, kann es rekursiv bis auf Rohmaterialien aufgelöst werden.
 
-### Materialkosten
+Für den Verkaufspreis gilt folgende Priorität:
 
-Für jedes benötigte Material wird ein hinterlegter Materialwert verwendet. Wenn ein **Importpreis** vorhanden ist, wird dieser als Kostenbasis bevorzugt. Andernfalls nutzt die Anwendung den **Wert pro Einheit**. Wenn ein Material ein eigenes Unterrezept besitzt, wird es rekursiv bis zu seinen Rohmaterialien aufgelöst.
+1. Exportpreis
+2. Marktwert
+3. Herstellungskosten plus Standardmarge
 
-Fehlen notwendige Materialpreise, wird die Kalkulation nicht künstlich mit `0` gerechnet, sondern als unvollständig markiert.
+Inventar senkt die persönlichen Zukaufkosten, nicht aber die grundsätzliche Preisempfehlung auf Basis normaler Herstellungskosten.
 
-### Verkaufspreis einer Ware
+## Datenmodell
 
-Die Anwendung verwendet folgende Priorität:
+Die JSON-Datei enthält im Kern:
 
-1. **Exportpreis**, wenn vorhanden  
-   Der Exportpreis gilt als belastbarster Händlerwert.
-2. **Marktwert**, wenn kein Exportpreis vorhanden ist  
-   Der Marktwert kann als interner RP-, Markt- oder Schätzpreis genutzt werden.
-3. **Herstellungskosten + Standardmarge**, wenn weder Exportpreis noch Marktwert vorhanden sind  
-   Die Standardmarge kann im Calculator angepasst werden.
-4. **Unvollständig**, wenn die Herstellungskosten wegen fehlender Materialpreise nicht berechnet werden können
+```json
+{
+  "materials": [],
+  "materialRecipes": {},
+  "products": {},
+  "plan": [],
+  "inventory": {},
+  "materialPrices": {},
+  "materialImportPrices": {},
+  "materialExportPrices": {},
+  "pricing": {
+    "standardMarginPercent": 30
+  }
+}
+```
 
-### Importvergleich
+Ältere JSON-Dateien ohne neuere optionale Felder können importiert werden, solange `materials`, `products` und `plan` strukturell korrekt vorhanden sind.
 
-Wenn für eine Ware ein Importpreis vorhanden ist, kann die Herstellung gegen den Import verglichen werden. Dadurch wird sichtbar, ob Eigenproduktion wirtschaftlicher ist als Einkauf/Import.
+## Bearbeitungsmodus
 
-## Datenmodell, vereinfacht
+Der Bearbeitungsmodus ist nur ein UI-Schutz. Er verhindert versehentliche Änderungen, ist aber keine echte Zugriffskontrolle. GitHub Pages bietet ohne Backend keine Benutzerverwaltung und keine geschützte zentrale Datenbank.
 
-Die Anwendung arbeitet intern mit:
-
-- Fabriken
-- Waren je Fabrik
-- Materialien
-- Rezepten
-- optionalen Preisfeldern
-- globaler Standardmarge
-- Produktionsplan im Calculator
-
-Die gespeicherten Daten liegen im Browser in `localStorage`. Export und Import verwenden JSON.
-
-## Datenspeicherung
-
-Diese Anwendung ist rein clientseitig. Dadurch gilt:
-
-- jeder User hat eigene lokale Browserdaten
-- Daten werden nicht automatisch zwischen Usern synchronisiert
-- ein anderer Browser oder ein anderer PC hat eine eigene Datenbasis
-- gelöschte Browserdaten entfernen auch die gespeicherten Calculator-Daten
-- gemeinsamer Austausch erfolgt über JSON Export/Import
-
-Für zentrale gemeinsame Daten wäre ein Backend mit Datenbank nötig, zum Beispiel eine kleine API mit SQLite. GitHub Pages allein kann keine zentrale schreibbare Datenbank betreiben.
+Für echte zentrale Datenhaltung wäre ein Backend mit API und Datenbank erforderlich, zum Beispiel SQLite.
 
 ## GitHub-Pages-Deployment
 
-1. Repository auf GitHub erstellen oder vorhandenes Repository öffnen.
-2. Dateien aus diesem Projekt in das Repository hochladen:
-   - `index.html`
-   - `styles.css`
-   - `app.js`
-   - `fishers-life-logo.png`
-   - `README.md`
-3. In GitHub öffnen: `Settings -> Pages`.
-4. Unter **Build and deployment** auswählen:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/root`
+1. Dateien in ein GitHub-Repository hochladen.
+2. In GitHub `Settings -> Pages` öffnen.
+3. `Deploy from a branch` auswählen.
+4. Branch `main` und Ordner `/root` wählen.
 5. Speichern.
-6. Nach kurzer Zeit ist die Seite über die GitHub-Pages-URL erreichbar.
 
-Es werden keine Node.js-Abhängigkeiten, kein Build-Befehl und keine Serverkonfiguration benötigt.
+Es sind keine Node.js-Abhängigkeiten und kein Build-Prozess nötig.
 
 ## Projektstruktur
 
 ```text
 waren-calculator-web/
-├── index.html              # Seitenstruktur und Dialoge
-├── styles.css              # Layout, Farben, Navigation, Responsive Design
-├── app.js                  # Calculator-, Rezept-, Material- und Datenlogik
-├── fishers-life-logo.png   # Logo im Header
-└── README.md               # Projektdokumentation
+├── index.html
+├── styles.css
+├── app.js
+├── waren-daten.json
+├── fishers-life-logo.png
+├── favicon.ico
+├── favicon.png
+└── README.md
 ```
 
-## Bedienhinweise
-
-### Neue Ware anlegen
-
-1. In der Navigation eine Fabrik auswählen.
-2. `Ware hinzufügen` klicken.
-3. Warenname und Ausstoß pro Produktionslauf eintragen.
-4. Optional Importpreis, Exportpreis, Marktwert und Laufkosten eintragen.
-5. Rezeptmaterialien hinzufügen.
-6. Ware speichern.
-
-### Neues Material anlegen
-
-1. Bereich `Materialien` öffnen.
-2. `Material hinzufügen` klicken.
-3. Materialname eintragen.
-4. Optional Wert pro Einheit sowie Import- und Exportpreis setzen.
-5. Falls das Material selbst hergestellt wird, `Verarbeitetes Material` aktivieren und ein Unterrezept eintragen.
-6. Material speichern.
-
-### Produktionsbedarf berechnen
-
-1. Bereich `Calculator` öffnen.
-2. `Position hinzufügen` klicken.
-3. Fabrik, Ware und Zielmenge auswählen.
-4. Die Anwendung berechnet automatisch:
-   - Produktionsläufe
-   - benötigte Materialien
-   - benötigte Rohmaterialien
-   - Wirtschaftlichkeit
-
-## Backup und Austausch
-
-Für Backups oder gemeinsame Datenpflege sollte regelmäßig ein JSON-Export erstellt werden.
-
-Empfohlener Ablauf:
-
-1. Daten pflegen.
-2. Über `Daten -> Daten exportieren` sichern.
-3. Exportdatei versionieren oder im Team teilen.
-4. Andere User können die Datei über `Daten -> Daten importieren` übernehmen.
-
-## Hinweise zur Weiterentwicklung
-
-Sinnvolle nächste Ausbaustufen wären:
-
-- zentrale Datenhaltung über kleines Backend mit SQLite
-- bestätigungspflichtiger Bearbeitungsmodus für Datenpflege
-- öffentlich lesbare, zentral gepflegte Stammdaten
-- Lesemodus als Standard, Bearbeitung erst nach ausdrücklicher Bestätigung
-- optionaler Preisvergleich zwischen Händlerimport, Eigenproduktion und Export
-- weitere Auswertungen für Gewinn pro Produktionslauf oder pro Rohmaterialeinsatz
-
-## Aktueller Stand
-
-Diese Version enthält:
-
-- vier gleichberechtigte Navbar-Punkte: Calculator, Fabriken, Materialien, Daten
-- klassisches Dropdown für Fabriken und Daten
-- Fishers-Life-Logo im Header
-- Copyright mit Discord-Link
-- lokale JSON-Datenverwaltung
-- hybride Wirtschaftlichkeitskalkulation mit optionalen Händler-/Marktpreisen
-- responsive Oberfläche für Desktop und kleinere Viewports
-
-## Lizenz / Rechte
-
-© 2026 l4ndl0rd · Warenherstellung Calculator · Fishers Life DE · Alle Rechte vorbehalten.
-
-
-
-## v42: Handelbare Rohstoffe ergänzt
-
-Diese Version erweitert Materialien um optionale Import- und Exportpreise. Importpreise werden bei der Herstellungskostenrechnung als Materialkosten bevorzugt, wenn sie gepflegt sind.
-
-Als Standard-Rohstoffe sind jetzt enthalten:
-
-- Aluminiumerz
-- Kohleerz
-- Rohöl
-- Smaragderz
-- Eisenerz
-- Saphirerz
-- Vivianiterz
-
-## v41: Essensfabrik ergänzt
-
-Diese Version ergänzt die **Essensfabrik** als weitere Fabrik-Kategorie.
-
-- neuer Fabrik-Key: `food`
-- neue Anzeige: `Essensfabrik`
-- `waren-daten.json` enthält jetzt `products.food` als leere Rezeptliste
-- bestehende lokale Daten werden beim Laden automatisch um die fehlende Fabrik ergänzt
-
-## v40: Mitscrollende Hinzufügen-Aktionen
-
-- Zusätzlicher schwebender Button für `Material hinzufügen` im Bereich Materialien
-- Zusätzlicher schwebender Button für `Ware hinzufügen` in aktiven Fabrikbereichen
-- Abschnittsköpfe mit Add-Button bleiben auch auf kleineren Viewports sticky statt wieder statisch zu werden
-- Die schwebenden Add-Buttons erscheinen nur im freigeschalteten Bearbeitungsmodus
-
-## v39: Bearbeitungsmodus ohne Passwort
-
-- Admin-Code entfernt
-- `Daten > Bearbeitung aktivieren` schaltet die Bearbeitung nach Bestätigung frei
-- Bestätigungsdialog weist auf lokale Speicherung, Risiko und empfohlenen vorherigen Export hin
-- UI-Texte von Bearbeitungsmodus auf Bearbeitungsmodus umgestellt
-
-## v38: Bedienbarkeit bei vielen Datensätzen
-
-Diese Version ergänzt mehrere Komfortfunktionen für größere Datenbestände:
-
-- Die Hauptnavigation bleibt beim Scrollen sichtbar.
-- In langen Material- und Fabriklisten bleibt der jeweilige Abschnittskopf mit dem Hinzufügen-Button oben sichtbar.
-- Ein schwebender Nach-oben-Button erscheint nach längerem Scrollen.
-- Tabellen und Warenkarten wurden kompakter und besser lesbar gestaltet.
-
-## Mitgelieferte Datensätze
-
-Die Datei `waren-daten.json` dient als mitgelieferter Standarddatenbestand. Beim ersten Öffnen ohne lokale Browserdaten lädt die Seite diese Datei automatisch. Über `Daten > Standarddaten laden` kann der lokale Bestand durch diese Datei ersetzt werden.
-
-Wichtig: Für GitHub Pages wird die Datei nur gelesen. Änderungen an `waren-daten.json` müssen im Repository committed werden. Der Browser kann diese Datei nicht direkt auf GitHub Pages zurückschreiben.
-
-## Bearbeitungsschutz / Bearbeitungsmodus
-
-Die Stammdatenbereiche Materialien und Fabriken sind standardmäßig im Lesemodus. Bearbeiten, Import, Reset und Standarddaten-Neuladen sind erst nach `Daten > Bearbeitung aktivieren` verfügbar.
-
-Es gibt kein Admin-Passwort mehr. Stattdessen muss der Bearbeitungsmodus per Bestätigungsdialog freigeschaltet werden. Der Hinweis macht klar, dass Änderungen lokal im Browser gespeichert werden und vor größeren Anpassungen ein Export empfohlen ist.
-
-Das ist für ein statisches GitHub-Pages-Projekt weiterhin kein echter Zugriffsschutz, sondern nur ein Schutz gegen versehentliche Bearbeitung. Echte Zugriffskontrolle benötigt später ein Backend/API mit Benutzerverwaltung und zentraler Datenhaltung, zum Beispiel SQLite.
-
-Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine API mit Login und SQLite-Datenbank auf einem Server.
-
-## v43 - Inventar im Calculator
-
-- Neuer Bereich **Eigenes Inventar** im Calculator.
-- Erfarmte Items/Materialien können mit vorhandener Menge eingetragen werden.
-- Inventar wird vom Materialbedarf abgezogen und als **Aus Inventar** / **Zukaufbedarf** angezeigt.
-- Die Wirtschaftlichkeitsberechnung berücksichtigt Inventar als kostenlose Eigenbestände und berechnet dadurch reduzierte effektive Herstellungskosten für den aktuellen Produktionsplan.
-- Das neue JSON-Feld `inventory` ist optional. Alte JSON-Dateien ohne dieses Feld bleiben importierbar; beim nächsten Export wird `inventory` ergänzt.
-
-## v44 - Suche im Bearbeitungsmodus und neutrales Projektnaming
-
-- Im Bearbeitungsmodus gibt es jetzt eine Suche für **Materialien**.
-- In jeder Fabrik gibt es im Bearbeitungsmodus eine Suche für **Waren**.
-- Die Suche filtert nach Name, Preisfeldern und verwendeten Rezeptmaterialien.
-- Das interne LocalStorage-Naming wurde von einem alten projektspezifischen Präfix auf neutrales `warenherstellung_*` umgestellt.
-
-
-## Version v45
-
-- Mitgelieferte `waren-daten.json` durch die aktuelle Datenbank ersetzt.
-- Preisempfehlung über `Kosten + Marge` nutzt wieder die normalen Herstellungskosten, auch wenn alle benötigten Materialien aus dem eigenen Inventar kommen.
-- Inventar-Auswahl nutzt jetzt ein Textfeld mit Vorschlägen aller bekannten Materialien und Waren.
-- Neue Inventar- und Produktionsplan-Einträge werden zunächst unten angefügt.
-- Nach Auswahl/Änderung werden Inventar und Produktionsplan alphabetisch sortiert.
-
-
-## Version v46
-
-- Im Produktionsplan gibt es jetzt einen Button **Plan leeren**.
-- Der Produktionsplan wird ohne weitere Rückfrage geleert, da er nur die aktuelle Kalkulation betrifft.
-- Im Inventarbereich gibt es jetzt einen Button **Inventar zurücksetzen**.
-- Der Inventar-Reset fragt vor dem Löschen ausdrücklich nach Bestätigung.
-- Beim Inventar-Reset bleiben Produktionsplan, Materialien, Waren und Preise erhalten.
-
-
-## v47 - Inventar-Reset-Korrektur
-
-- Inventar-Draft-Zeilen starten ohne automatische Menge.
-- Auswahl eines Inventar-Items schreibt erst nach Eingabe einer Menge > 0 in den Datenbestand.
-- Daten-Reset leert offene Inventar-Draft-Zeilen.
-- Doppeltes Datalist-Element für Inventarvorschläge entfernt.
-
-
-### v48 - Rezeptmengen-Alignment
-
-- Mengen-Spalte in den Rezepttabellen der Fabrik-Waren vereinheitlicht.
-- Benötigte Mengen sind jetzt rechtsbündig mit tabellarischen Ziffern ausgerichtet.
-- Materialspalte und Mengenspalte verwenden eine feste Tabellenstruktur, damit Karten mit unterschiedlich langen Materialnamen nicht mehr unruhig wirken.
-
-
-### v49 - Materialliste ohne horizontale Scrollbar
-
-- Die Materialstammdaten-Tabelle erzeugt keine eigene horizontale Scrollbar mehr.
-- Die Materialspalte hat jetzt eine feste Breite.
-- Preis-, Ausstoß- und Aktionsspalten sind fest definiert und bleiben ausgerichtet.
-- Lange Materialnamen und Unterrezept-Einträge umbrechen kontrolliert innerhalb der vorhandenen Spalten.
-
-## v50 - Fabrik-Rezepttabellen ohne horizontale Scrollbar
-
-- Horizontale Scrollbar in den Rezepttabellen der Fabrik-Warenkarten entfernt.
-- Material- und Mengenspalten in den Fabrik-Rezepten haben feste Breiten.
-- Lange Materialnamen werden kontrolliert gekürzt oder auf kleinen Viewports umbrochen.
-
-
-
-## v51 - Fabrik-Rezeptlayout und Legacy-Bereinigung
-
-- Die Mengenangabe in Fabrik-Rezepten steht nicht mehr rechtsbündig am Kartenrand, sondern in einer festen Spalte direkt rechts neben dem Material.
-- Materialnamen werden nicht mehr per Ellipsis abgeschnitten, sondern umbrechen innerhalb der Materialspalte.
-- Alte Legacy-Migration für das frühere projektspezifische LocalStorage-Präfix wurde aus dem Code entfernt.
-
-## v52 - Fabrik-/Materiallisten-Layout
-
-- Fabrik-Rezeptmengen stehen jetzt in einem festen Abstand direkt rechts neben dem Materialnamen statt weit am rechten Kartenrand.
-- Die Rezepttabelle in Fabrik-Warenkarten erzeugt weiterhin keine horizontale Scrollbar.
-- Materialstammdaten nutzen wieder die gesamte verfügbare Tabellenbreite.
-- Die Spalten der Materialliste wurden auf prozentuale Breiten umgestellt, damit die Einträge nicht mehr zusammengedrückt wirken.
-
-### v53 – Tabellenbreite und Mengenspalten korrigiert
-
-- Fabrik-Rezepttabellen laufen wieder bis zum Ende der Warenkarte.
-- Die Spalte „Benötigte Menge pro Produktionszyklus“ sitzt weiter links in festem Abstand neben dem Material.
-- Materialstammdaten nutzen wieder die volle Tabellenbreite, ohne die Spalten optisch zu stauchen.
-- Horizontale Scrollbars bleiben entfernt.
-
-### v54 - Tabellenbreiten nach UI-Feedback
-
-- Fabrik-Rezepttabellen enden wieder nach der Mengenspalte und laufen nicht mehr leer bis zum rechten Kartenrand.
-- Mengenspalte in Fabrik-Rezepten bleibt in festem Abstand rechts neben dem Material.
-- Materialstammdaten nutzen die volle Tabellenbox ohne gestauchte Spalten.
-- Tabellenhintergruende und Zeilen laufen wieder sauber bis zum rechten Rand der jeweiligen Box.
-
-### v55 - Symmetrische Tabellenkanten
-
-- Fabrik-Rezepttabellen laufen optisch wieder bis zur rechten Innenkante der Box, passend zur linken Seite.
-- Die Mengenspalte bleibt in festem Abstand neben dem Material, ohne leere Restfläche rechts.
-- In der Materialliste wird die versteckte Aktionsspalte im Nur-Lesen-Modus vollständig entfernt.
-- Materialstammdaten verteilen die sichtbaren Spalten wieder über die volle Tabellenbreite.
-
-
-## v56 - Fabrik-/Materialtabellen optisch nachjustiert
-
-- Fabrik-Rezeptcontainer wieder kompakt mit rechtem Rounded-Edge eingefasst statt bis zum Kartenrand zu laufen.
-- Mengenspalte bleibt in festem Abstand neben dem Material.
-- Materialstammdaten behalten volle Tabellenbreite, aber mit mehr Abstand zwischen Exportpreis und Unterrezept.
-- Unterrezept-Spalte wirkt weniger gestaucht.
-
-## v57 - Tabellenabstände nachjustiert
-
-- Fabrik-Rezeptboxen behalten wieder die oberen und unteren Abstände innerhalb der Warenkarte.
-- Rezeptboxen laufen links und rechts mit gleichem Innenabstand bis zum Kartenende und behalten ihren Rounded-Edge.
-- Die Mengenspalte in Fabrik-Rezepten steht weiter rechts, bleibt aber linksbündig und nicht am Kartenrand ausgerichtet.
-- Auf der Materialseite wurde die Spalte Unterrezept um 20 px nach rechts gesetzt.
-- Zwischen den Materialtabellen-Spalten wurde der horizontale Abstand erhöht.
-
-### v58 – Materialtabellenbreite und Calculator-Box-Abschluss
-
-- Materialstammdaten nutzen die volle innere Boxbreite.
-- Spalte „Ausstoß / Lauf“ wurde zu „Produktionsmenge“ umbenannt.
-- Spaltenbreiten der Materialtabelle wurden neu verteilt, damit Header und Werte nicht abgeschnitten werden.
-- Unterrezept-Spalte bleibt weiter rechts und erhält ausreichend Breite.
-- Leere Calculator-Tabellen zeigen keine zusätzliche innere Box mit Rounded Edges mehr.
+## Hinweise
+
+- Daten bleiben im jeweiligen Browser des Users.
+- Andere Browser, Geräte oder gelöschte Browserdaten bedeuten eigene beziehungsweise verlorene lokale Datenstände.
+- Für gemeinsame Pflege sollte regelmäßig eine gepflegte `waren-daten.json` verteilt oder später eine zentrale API genutzt werden.

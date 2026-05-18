@@ -4052,3 +4052,122 @@ body:not(.admin-locked) #materials .material-recipe-table td:nth-child(7) {
     min-width: 920px !important;
   }
 }
+
+/* v59: Materialtabelle im Bearbeitungsmodus an Nur-Lesen-Layout angeglichen. */
+#materials .material-recipe-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#materials .material-recipe-table th,
+#materials .material-recipe-table td {
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  line-height: 1.25 !important;
+}
+
+#materials .material-recipe-table th:nth-child(2),
+#materials .material-recipe-table td:nth-child(2) {
+  text-align: center !important;
+  font-variant-numeric: tabular-nums;
+}
+
+#materials .material-recipe-table th:nth-child(3),
+#materials .material-recipe-table td:nth-child(3),
+#materials .material-recipe-table th:nth-child(4),
+#materials .material-recipe-table td:nth-child(4),
+#materials .material-recipe-table th:nth-child(5),
+#materials .material-recipe-table td:nth-child(5) {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(7),
+body.admin-locked #materials .material-recipe-table td:nth-child(7) {
+  display: none !important;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(1),
+body.admin-locked #materials .material-recipe-table td:nth-child(1) { width: 28% !important; }
+body.admin-locked #materials .material-recipe-table th:nth-child(2),
+body.admin-locked #materials .material-recipe-table td:nth-child(2) { width: 12% !important; }
+body.admin-locked #materials .material-recipe-table th:nth-child(3),
+body.admin-locked #materials .material-recipe-table td:nth-child(3),
+body.admin-locked #materials .material-recipe-table th:nth-child(4),
+body.admin-locked #materials .material-recipe-table td:nth-child(4),
+body.admin-locked #materials .material-recipe-table th:nth-child(5),
+body.admin-locked #materials .material-recipe-table td:nth-child(5) { width: 12% !important; }
+body.admin-locked #materials .material-recipe-table th:nth-child(6),
+body.admin-locked #materials .material-recipe-table td:nth-child(6) {
+  width: 24% !important;
+  padding-left: 36px !important;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(1),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(1) { width: 21% !important; }
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(2),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(2) { width: 11% !important; }
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(3),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(3),
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(4),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(4),
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(5),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(5) { width: 9% !important; }
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(6),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(6) {
+  width: 23% !important;
+  padding-left: 36px !important;
+}
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(7),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(7) { width: 18% !important; }
+
+#materials .material-recipe-table td.row-actions {
+  display: table-cell !important;
+  text-align: right !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+
+#materials .material-recipe-table td.row-actions .button {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 78px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 10px !important;
+  margin-left: 6px;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+#materials .material-recipe-table td.row-actions .remove-material {
+  min-width: 82px;
+}
+
+#materials .nested-recipe-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#materials .nested-recipe-table th:first-child,
+#materials .nested-recipe-table td:first-child { width: 64% !important; }
+#materials .nested-recipe-table th:last-child,
+#materials .nested-recipe-table td:last-child {
+  width: 36% !important;
+  text-align: left !important;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  #materials .table-wrap { overflow-x: auto !important; }
+  #materials .material-recipe-table { min-width: 980px !important; }
+}
