@@ -105,7 +105,6 @@ const els = {
   newProductImportPrice: document.querySelector("#newProductImportPrice"),
   newProductExportPrice: document.querySelector("#newProductExportPrice"),
   newProductMarketValue: document.querySelector("#newProductMarketValue"),
-  newProductRunCost: document.querySelector("#newProductRunCost"),
   addProductDialogRecipeRowBtn: document.querySelector("#addProductDialogRecipeRowBtn"),
   productDialogRecipeTableBody: document.querySelector("#productDialogRecipeTable tbody"),
   kpiPositions: document.querySelector("#kpiPositions"),
@@ -356,7 +355,6 @@ function productMatchesSearch(factory, product, query) {
     product.importPrice,
     product.exportPrice,
     product.marketValue,
-    product.runCost,
     ...(product.recipe ?? []).flatMap((item) => [item.material, item.amount])
   ].map((value) => cleanText(value)).join(" ").toLocaleLowerCase("de-DE");
   return haystack.includes(cleanText(query).toLocaleLowerCase("de-DE"));
@@ -652,18 +650,20 @@ function renderEconomy() {
     const cost = calculateProductBatchCostWithInventory(product, runs, inventoryRemaining, new Set());
     const unitCost = cost.complete ? cost.totalCost / produced : null;
     const baseCost = calculateProductUnitCost(product, new Set());
-    const recommendationCost = baseCost.complete ? baseCost.unitCost : (unitCost !== null && unitCost > 0 ? unitCost : null);
+    const craftUnitCost = baseCost.complete ? baseCost.unitCost : null;
+    const buyUnitCost = getBuyUnitCost(product);
+    const recommendationCost = craftUnitCost ?? (unitCost !== null && unitCost > 0 ? unitCost : null);
     const sale = getSalePrice(product, recommendationCost);
     const unitProfit = unitCost !== null && sale.price !== null ? sale.price - unitCost : null;
     const totalProfit = unitProfit !== null ? unitProfit * produced : null;
     const totalCost = unitCost !== null ? unitCost * produced : null;
     const totalRevenue = sale.price !== null ? sale.price * produced : null;
-    const assessment = getEconomyAssessment(product, unitCost, sale.price);
+    const assessment = getProcurementAssessment(craftUnitCost, buyUnitCost);
 
     if (!cost.complete) warnings.push(`${product.name}: ${cost.missing.length ? `fehlende Materialpreise für persönliche Kosten (${cost.missing.join(", ")})` : "Kosten unvollständig"}.`);
     if (sale.price === null && !baseCost.complete) warnings.push(`${product.name}: keine Preisempfehlung möglich, da normale Herstellungskosten unvollständig sind (${baseCost.missing.join(", ")}).`);
 
-    rows.push({ product, quantity, produced, runs, unitCost, sale, unitProfit, totalProfit, totalCost, totalRevenue, assessment });
+    rows.push({ product, quantity, produced, runs, unitCost, craftUnitCost, buyUnitCost, sale, unitProfit, totalProfit, totalCost, totalRevenue, assessment });
   }
 
   if (!rows.length) {
@@ -677,7 +677,7 @@ function renderEconomy() {
   for (const item of rows) {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${escapeHtml(item.product.name)}</td>
+      <td>${escapeHtml(item.product.name)}<br><span class="muted-inline">Craft: ${formatOptionalMoney(item.craftUnitCost)} · Kauf: ${formatOptionalMoney(item.buyUnitCost)}</span></td>
       <td>${item.produced.toLocaleString("de-DE")} <span class="muted-inline">(${item.runs.toLocaleString("de-DE")} Läufe)</span></td>
       <td>${formatOptionalMoney(item.unitCost)}</td>
       <td>${formatOptionalMoney(item.sale.price)}</td>
@@ -722,7 +722,7 @@ function calculateProductBatchCostWithInventory(product, runs, inventoryPool, st
   const nextStack = new Set(stack);
   nextStack.add(productKey);
 
-  let totalCost = (optionalNumber(product.runCost) ?? 0) * positiveInteger(runs, 0);
+  let totalCost = 0;
   const missing = [];
   for (const item of product.recipe ?? []) {
     const requiredAmount = positiveInteger(item.amount, 0) * positiveInteger(runs, 0);
@@ -1189,7 +1189,6 @@ function openProductDialogCreate(factory) {
   els.newProductImportPrice.value = "";
   els.newProductExportPrice.value = "";
   els.newProductMarketValue.value = "";
-  els.newProductRunCost.value = "";
   renderProductDialogRecipeRows();
   showDialog(els.productDialog, "#newProductName");
 }
@@ -1212,7 +1211,6 @@ function openProductDialogEdit(factory, productId) {
   els.newProductImportPrice.value = formatInputNumber(product.importPrice);
   els.newProductExportPrice.value = formatInputNumber(product.exportPrice);
   els.newProductMarketValue.value = formatInputNumber(product.marketValue);
-  els.newProductRunCost.value = formatInputNumber(product.runCost);
   renderProductDialogRecipeRows();
   showDialog(els.productDialog, "#newProductName");
 }
@@ -1229,7 +1227,6 @@ function saveProductFromDialog(event) {
   const importPrice = optionalNumber(els.newProductImportPrice.value);
   const exportPrice = optionalNumber(els.newProductExportPrice.value);
   const marketValue = optionalNumber(els.newProductMarketValue.value);
-  const runCost = optionalNumber(els.newProductRunCost.value);
   const recipe = productDialogRecipe
     .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
     .filter((item) => item.material && item.amount > 0);
@@ -1260,7 +1257,7 @@ function saveProductFromDialog(event) {
   }
 
   if (productDialogMode === "create") {
-    const product = { id: cryptoId(), name, output, importPrice, exportPrice, marketValue, runCost, recipe };
+    const product = { id: cryptoId(), name, output, importPrice, exportPrice, marketValue, recipe };
     factoryProducts.unshift(product);
     ensureMaterial(name);
     recipe.forEach((item) => ensureMaterial(item.material));
@@ -1280,7 +1277,6 @@ function saveProductFromDialog(event) {
   product.importPrice = importPrice;
   product.exportPrice = exportPrice;
   product.marketValue = marketValue;
-  product.runCost = runCost;
   product.recipe = recipe;
   ensureMaterial(name);
   recipe.forEach((item) => ensureMaterial(item.material));
@@ -1764,7 +1760,6 @@ function normalizeState() {
       importPrice: optionalNumber(product.importPrice),
       exportPrice: optionalNumber(product.exportPrice),
       marketValue: optionalNumber(product.marketValue),
-      runCost: optionalNumber(product.runCost),
       recipe: Array.isArray(product.recipe)
         ? product.recipe.map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) })).filter((item) => item.material)
         : []
@@ -1981,15 +1976,15 @@ function calculateProductUnitCost(product, stack = new Set()) {
   const nextStack = new Set(stack);
   nextStack.add(productKey);
 
-  let runCost = optionalNumber(product.runCost) ?? 0;
+  let totalCost = 0;
   const missing = [];
   for (const item of product.recipe ?? []) {
     const materialCost = calculateMaterialUnitCost(item.material, nextStack);
     if (!materialCost.complete) missing.push(...materialCost.missing);
-    else runCost += materialCost.unitCost * positiveInteger(item.amount, 0);
+    else totalCost += materialCost.unitCost * positiveInteger(item.amount, 0);
   }
   if (missing.length) return { complete: false, unitCost: null, missing: unique(missing) };
-  return { complete: true, unitCost: runCost / positiveInteger(product.output, 1), missing: [] };
+  return { complete: true, unitCost: totalCost / positiveInteger(product.output, 1), missing: [] };
 }
 
 function getSalePrice(product, unitCost) {
@@ -2004,14 +1999,21 @@ function getSalePrice(product, unitCost) {
   return { price: null, source: "Unvollständig" };
 }
 
-function getEconomyAssessment(product, unitCost, salePrice) {
-  if (unitCost === null || salePrice === null) return { text: "Unvollständig", className: "assessment-neutral" };
-  const profit = salePrice - unitCost;
-  const importPrice = optionalNumber(product.importPrice);
-  if (profit < 0) return { text: "Nicht profitabel", className: "assessment-bad" };
-  if (importPrice !== null && importPrice < unitCost) return { text: "Import günstiger", className: "assessment-warning" };
-  if (profit === 0) return { text: "Break-even", className: "assessment-neutral" };
-  return { text: "Profitabel", className: "assessment-good" };
+function getBuyUnitCost(product) {
+  const productImport = optionalNumber(product.importPrice);
+  if (productImport !== null) return productImport;
+  return getMaterialImportPrice(product.name);
+}
+
+function getProcurementAssessment(craftUnitCost, buyUnitCost) {
+  if (craftUnitCost === null && buyUnitCost === null) return { text: "Keine Daten", className: "assessment-neutral" };
+  if (craftUnitCost === null) return { text: "Einkaufen", className: "assessment-warning" };
+  if (buyUnitCost === null) return { text: "Farmen/Craften", className: "assessment-good" };
+
+  const delta = buyUnitCost - craftUnitCost;
+  if (Math.abs(delta) <= 0.01) return { text: "Gleichstand", className: "assessment-neutral" };
+  if (delta > 0) return { text: `Craften spart ${formatMoney(delta)}`, className: "assessment-good" };
+  return { text: `Einkaufen spart ${formatMoney(Math.abs(delta))}`, className: "assessment-warning" };
 }
 
 function formatMoney(value) {

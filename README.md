@@ -1,74 +1,60 @@
 # Warenherstellung Calculator
 
-Statisches Webinterface für den Warenherstellungs-Workflow von **Arma 3 Fishers Life DE**.
+Statischer Warenherstellung-Calculator für Arma 3 Fishers Life DE.
 
-Die Anwendung verwaltet Fabriken, Waren, Materialien, Rezepte, Produktionsplan, eigenes Inventar und optionale Preisfelder. Daraus berechnet sie Produktionsläufe, Materialbedarf, Rohmaterialbedarf und Wirtschaftlichkeit.
+## Zweck
 
-## Einsatzbereich
+Die Webseite berechnet aus einem Produktionsplan den Materialbedarf, den rekursiv aufgelösten Rohmaterialbedarf, Inventarverbrauch und eine Wirtschaftlichkeitsbewertung.
 
-- statische Webseite für GitHub Pages
-- keine Serverkomponente erforderlich
-- lokale Speicherung im Browser über `localStorage`
-- Import und Export über JSON
-- mitgelieferter Standarddatenbestand über `waren-daten.json`
+Der Calculator läuft vollständig statisch und ist für GitHub Pages geeignet. Es gibt kein Backend und keine echte Zugriffskontrolle.
 
-## Hauptfunktionen
+## Funktionen
 
-### Calculator
+- Produktionsplan mit Fabrik, Ware, Zielmenge und Produktionsläufen
+- Eigenes Inventar zur Verrechnung erfarmter Items
+- Direkter Materialbedarf und rekursiver Rohmaterialbedarf
+- Wirtschaftlichkeitsberechnung mit Preisempfehlung
+- Vergleich, ob Kaufen oder Farmen/Craften günstiger ist
+- Materialien mit optionalem Wert, Importpreis und Exportpreis
+- Waren mit Importpreis, Exportpreis und Marktwert
+- Bearbeitungsmodus mit Bestätigungsdialog als UI-Sperre
+- Suche in Material- und Warenlisten
+- JSON Import, Export und Zurücksetzen
+- Standarddatenbestand über `waren-daten.json`
 
-- Produktionsplan mit Fabrik, Ware und Zielmenge
-- Plan leeren
-- eigenes Inventar erfassen und zurücksetzen
-- Inventar wird vom Zukaufbedarf abgezogen
-- direkter Materialbedarf
-- rekursiv aufgelöster Rohmaterialbedarf
-- Wirtschaftlichkeitsberechnung je Ware
-- Standardmarge konfigurierbar
+## Preislogik
 
-### Fabriken und Waren
+Für Materialkosten gilt:
 
-- Waren je Fabrik verwalten
-- Produktion pro Lauf festlegen
-- Rezept je Ware hinterlegen
-- optionale Preisfelder:
-  - Importpreis
-  - Exportpreis
-  - Marktwert
-  - Laufkosten pro Produktionslauf
+1. Importpreis des Materials
+2. sonst Wert pro Einheit
+3. sonst rekursiv berechnete Herstellungskosten, wenn ein Rezept vorhanden ist
 
-### Materialien
+Für Verkaufspreise gilt:
 
-- Materialstammdaten verwalten
-- Rohmaterialien und Zwischenprodukte abbilden
-- Produktion pro Lauf definieren
-- optionaler Wert pro Einheit
-- optionale Import- und Exportpreise
-- Unterrezepte für Zwischenprodukte
-- Suche im Bearbeitungsmodus
+1. Exportpreis der Ware
+2. sonst Marktwert
+3. sonst Herstellungskosten plus Standardmarge
 
-### Datenverwaltung
+Inventar senkt die persönlichen Herstellungskosten für die aktuelle Kalkulation. Die Preisempfehlung auf Basis von `Kosten + Marge` verwendet weiterhin die normalen Herstellungskosten, damit auch bei vollständig vorhandenem Inventar ein sinnvoller Verkaufspreis angezeigt wird.
 
-- Standarddaten aus `waren-daten.json` laden
-- JSON importieren
-- JSON exportieren
-- lokale Browserdaten zurücksetzen
-- Bearbeitungsmodus per Bestätigung aktivieren
+## Kaufen oder Craften
 
-## Wirtschaftlichkeitslogik
+Die Bewertung in der Wirtschaftlichkeit vergleicht die normalen Herstellungskosten pro Stück mit einem vorhandenen Einkaufspreis. Als Einkaufspreis wird zuerst der Importpreis der Ware verwendet, andernfalls ein gleichnamiger Material-Importpreis.
 
-Materialkosten werden bevorzugt aus dem Importpreis berechnet. Wenn kein Importpreis vorhanden ist, wird der Wert pro Einheit genutzt. Hat ein Material ein Unterrezept, kann es rekursiv bis auf Rohmaterialien aufgelöst werden.
+## Marktwert
 
-Für den Verkaufspreis gilt folgende Priorität:
-
-1. Exportpreis
-2. Marktwert
-3. Herstellungskosten plus Standardmarge
-
-Inventar senkt die persönlichen Zukaufkosten, nicht aber die grundsätzliche Preisempfehlung auf Basis normaler Herstellungskosten.
+Der Marktwert ist ein manuelles Preisfeld. Er sollte nicht automatisch dauerhaft aus Importpreis, Exportpreis oder Herstellungskosten überschrieben werden. Für berechnete Empfehlungen nutzt der Calculator bereits `Kosten + Marge`, wenn kein Exportpreis oder Marktwert gesetzt ist.
 
 ## Datenmodell
 
-Die JSON-Datei enthält im Kern:
+Die Standarddaten liegen in:
+
+```text
+waren-daten.json
+```
+
+Wichtige Felder:
 
 ```json
 {
@@ -86,40 +72,18 @@ Die JSON-Datei enthält im Kern:
 }
 ```
 
-Ältere JSON-Dateien ohne neuere optionale Felder können importiert werden, solange `materials`, `products` und `plan` strukturell korrekt vorhanden sind.
+## GitHub Pages
 
-## Bearbeitungsmodus
-
-Der Bearbeitungsmodus ist nur ein UI-Schutz. Er verhindert versehentliche Änderungen, ist aber keine echte Zugriffskontrolle. GitHub Pages bietet ohne Backend keine Benutzerverwaltung und keine geschützte zentrale Datenbank.
-
-Für echte zentrale Datenhaltung wäre ein Backend mit API und Datenbank erforderlich, zum Beispiel SQLite.
-
-## GitHub-Pages-Deployment
-
-1. Dateien in ein GitHub-Repository hochladen.
-2. In GitHub `Settings -> Pages` öffnen.
-3. `Deploy from a branch` auswählen.
-4. Branch `main` und Ordner `/root` wählen.
-5. Speichern.
-
-Es sind keine Node.js-Abhängigkeiten und kein Build-Prozess nötig.
-
-## Projektstruktur
+Die Dateien können direkt als statische Webseite veröffentlicht werden:
 
 ```text
-waren-calculator-web/
-├── index.html
-├── styles.css
-├── app.js
-├── waren-daten.json
-├── fishers-life-logo.png
-├── favicon.ico
-├── favicon.png
-└── README.md
+index.html
+styles.css
+app.js
+waren-daten.json
+fishers-life-logo.png
+favicon.ico
+favicon.png
 ```
 
-## Hinweise
-
-- Daten bleiben im jeweiligen Browser des Users.
-- Andere Browser, Geräte oder gelöschte Browserdaten bedeuten eigene beziehungsweise verlorene lokale Datenstände.
-- Für gemeinsame Pflege sollte regelmäßig eine gepflegte `waren-daten.json` verteilt oder später eine zentrale API genutzt werden.
+Lokale Änderungen werden im Browser gespeichert. Für eine zentrale Datenhaltung wäre später ein Backend mit API und Datenbank erforderlich, zum Beispiel SQLite.

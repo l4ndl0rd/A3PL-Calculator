@@ -990,7 +990,6 @@
         "importPrice": 18400,
         "exportPrice": 20000,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Amethystbarren",
@@ -1005,7 +1004,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Goldbarren",
@@ -1020,7 +1018,6 @@
         "importPrice": 150000,
         "exportPrice": 102500,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Smaragdbarren",
@@ -1035,7 +1032,6 @@
         "importPrice": 100000,
         "exportPrice": 55000,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Vivianitbarren",
@@ -1050,7 +1046,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Saphirbarren",
@@ -1065,7 +1060,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Titanbarren",
@@ -1080,7 +1074,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumbarren",
@@ -1095,7 +1088,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kohlebarren",
@@ -1110,7 +1102,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Eisenbarren",
@@ -1125,7 +1116,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Titanpalette",
@@ -1140,7 +1130,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Titanplatten",
@@ -1155,7 +1144,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1170,7 +1158,6 @@
         "importPrice": 550,
         "exportPrice": 4000,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumplatten",
@@ -1185,7 +1172,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Stahlpalette",
@@ -1200,7 +1186,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Stahlplatten",
@@ -1215,7 +1200,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Titanbarren",
@@ -1234,7 +1218,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Goldbarren",
@@ -1253,7 +1236,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumbarren",
@@ -1276,7 +1258,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Amethysterz",
@@ -1291,7 +1272,6 @@
         "importPrice": 1000,
         "exportPrice": 70,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Golderz",
@@ -1306,7 +1286,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Smaragderz",
@@ -1321,7 +1300,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Vivianiterz",
@@ -1336,7 +1314,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Saphirerz",
@@ -1351,7 +1328,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Titanerz",
@@ -1366,7 +1342,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kohleerz",
@@ -1381,7 +1356,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Eisenerz",
@@ -1396,7 +1370,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Stahlplatten",
@@ -1411,7 +1384,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Stahlplatten",
@@ -1426,7 +1398,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Eisenbarren",
@@ -1447,7 +1418,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Gummi",
@@ -1462,7 +1432,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Glas",
@@ -1480,7 +1449,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Polyester",
@@ -1503,7 +1471,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1522,7 +1489,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1553,7 +1519,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1584,7 +1549,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1615,7 +1579,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumbarrenpalette",
@@ -1646,7 +1609,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1677,7 +1639,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1704,7 +1665,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumpalette",
@@ -1730,7 +1690,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Benzin",
@@ -1749,7 +1708,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kerosin",
@@ -1768,7 +1726,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kerosin",
@@ -1787,7 +1744,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Rohöl",
@@ -1802,7 +1758,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Rohöl",
@@ -1817,7 +1772,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Stahlplatten",
@@ -1836,7 +1790,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Stahlplatten",
@@ -1851,7 +1804,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Rohöl",
@@ -1866,7 +1818,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": []
       }
     ],
@@ -1879,7 +1830,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Amethystbarrenpalette",
@@ -1894,7 +1844,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Goldbarrenpalette",
@@ -1909,7 +1858,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Smaragdbarrenpalette",
@@ -1924,7 +1872,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Vivianitbarrenpalette",
@@ -1939,7 +1886,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Saphirbarrenpalette",
@@ -1954,7 +1900,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumbarrenpalette",
@@ -1969,7 +1914,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kohlebarrenpalette",
@@ -1984,7 +1928,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Eisenbarrenpalette",
@@ -1999,7 +1942,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Titanbarrenpalette",
@@ -2014,7 +1956,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": []
       },
       {
@@ -2024,7 +1965,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Glasfaser",
@@ -2039,7 +1979,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kunststoff",
@@ -2054,7 +1993,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kunstfaser",
@@ -2069,7 +2007,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Sand",
@@ -2084,7 +2021,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Rohöl",
@@ -2099,7 +2035,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Kunstfaser",
@@ -2114,7 +2049,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Glasfaser",
@@ -2129,7 +2063,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Rohöl",
@@ -2144,7 +2077,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Schwefelbarren",
@@ -2163,7 +2095,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Schwefelerz",
@@ -2178,7 +2109,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Sand",
@@ -2193,7 +2123,6 @@
         "importPrice": null,
         "exportPrice": null,
         "marketValue": null,
-        "runCost": null,
         "recipe": [
           {
             "material": "Aluminiumerz",
