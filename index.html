@@ -168,16 +168,19 @@
 
   <template id="productTemplate">
     <article class="product-card">
-      <div class="product-main">
-        <label>
-          Warenname
-          <input class="product-name" type="text" placeholder="z. B. Stahlträger" />
-        </label>
-        <label>
-          Ausstoß pro Produktionslauf
-          <input class="product-output" type="number" min="1" step="1" value="1" />
-        </label>
-        <button class="button button-danger remove-product" type="button">Ware entfernen</button>
+      <div class="product-main product-readonly-main">
+        <div>
+          <span class="field-caption">Ware</span>
+          <strong class="product-name-display"></strong>
+        </div>
+        <div>
+          <span class="field-caption">Ausstoß / Lauf</span>
+          <strong class="product-output-display"></strong>
+        </div>
+        <div class="row-actions product-actions">
+          <button class="button button-secondary edit-product" type="button">Bearbeiten</button>
+          <button class="button button-danger remove-product" type="button">Entfernen</button>
+        </div>
       </div>
       <div class="recipe-table-wrap">
         <table class="data-table compact recipe-table">
@@ -185,30 +188,12 @@
             <tr>
               <th>Material</th>
               <th>Menge pro Lauf</th>
-              <th></th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-      <button class="button button-secondary add-recipe-row" type="button">Materialzeile hinzufügen</button>
     </article>
-  </template>
-
-  <template id="recipeRowTemplate">
-    <tr>
-      <td><select class="recipe-material"></select></td>
-      <td><input class="recipe-amount" type="number" min="0" step="1" value="0" /></td>
-      <td><button class="icon-button remove-recipe-row" type="button" aria-label="Materialzeile entfernen">×</button></td>
-    </tr>
-  </template>
-
-  <template id="materialRecipeRowTemplate">
-    <tr>
-      <td><select class="material-recipe-material"></select></td>
-      <td><input class="material-recipe-amount" type="number" min="0" step="1" value="0" /></td>
-      <td><button class="icon-button remove-material-recipe-row" type="button" aria-label="Unterrezept-Zeile entfernen">×</button></td>
-    </tr>
   </template>
 
   <template id="planRowTemplate">
@@ -227,9 +212,9 @@
     <form id="addMaterialForm" class="modal-card" method="dialog">
       <div class="modal-header">
         <div>
-          <p class="eyebrow modal-eyebrow">Material</p>
-          <h2>Material hinzufügen</h2>
-          <p>Materialien ohne Unterrezept werden im Calculator als Rohmaterial behandelt.</p>
+          <p id="materialDialogEyebrow" class="eyebrow modal-eyebrow">Material</p>
+          <h2 id="materialDialogTitle">Material hinzufügen</h2>
+          <p id="materialDialogIntro">Materialien ohne Unterrezept werden im Calculator als Rohmaterial behandelt.</p>
         </div>
         <button id="closeMaterialDialogBtn" class="icon-button" type="button" aria-label="Fenster schließen">×</button>
       </div>
@@ -269,10 +254,74 @@
 
       <div class="modal-actions">
         <button class="button button-secondary" type="button" id="cancelMaterialDialogBtn">Abbrechen</button>
-        <button class="button" type="submit">Material speichern</button>
+        <button id="materialDialogSubmitBtn" class="button" type="submit">Material speichern</button>
       </div>
     </form>
   </dialog>
+
+
+  <dialog id="productDialog" class="modal-dialog">
+    <form id="productForm" class="modal-card" method="dialog">
+      <div class="modal-header">
+        <div>
+          <p id="productDialogEyebrow" class="eyebrow modal-eyebrow">Ware</p>
+          <h2 id="productDialogTitle">Ware hinzufügen</h2>
+          <p id="productDialogIntro">Die Ware wird automatisch als Material/Zwischenprodukt übernommen.</p>
+        </div>
+        <button id="closeProductDialogBtn" class="icon-button" type="button" aria-label="Fenster schließen">×</button>
+      </div>
+
+      <div class="modal-fields three-fields">
+        <label>
+          Fabrik
+          <input id="productFactoryLabel" type="text" readonly />
+        </label>
+        <label>
+          Warenname
+          <input id="newProductName" type="text" placeholder="z. B. Stahlträger" autocomplete="off" />
+        </label>
+        <label>
+          Ausstoß pro Produktionslauf
+          <input id="newProductOutput" type="number" min="1" step="1" value="1" />
+        </label>
+      </div>
+
+      <div class="modal-section">
+        <div class="card-header compact-header">
+          <div>
+            <h3>Rezept</h3>
+            <p>Materialien werden alphabetisch im Auswahlfeld geführt.</p>
+          </div>
+          <button id="addProductDialogRecipeRowBtn" class="button button-secondary" type="button">Materialzeile hinzufügen</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table compact" id="productDialogRecipeTable">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Menge pro Lauf</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-secondary" type="button" id="cancelProductDialogBtn">Abbrechen</button>
+        <button id="productDialogSubmitBtn" class="button" type="submit">Ware speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="productDialogRecipeRowTemplate">
+    <tr>
+      <td><select class="product-dialog-recipe-material"></select></td>
+      <td><input class="product-dialog-recipe-amount" type="number" min="0" step="1" value="1" /></td>
+      <td><button class="icon-button remove-product-dialog-recipe-row" type="button" aria-label="Rezeptzeile entfernen">×</button></td>
+    </tr>
+  </template>
 
   <template id="materialDialogRecipeRowTemplate">
     <tr>

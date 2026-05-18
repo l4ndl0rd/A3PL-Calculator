@@ -13,7 +13,13 @@ const FACTORIES = {
 };
 
 let state = loadState();
+let materialDialogMode = "create";
+let materialDialogOriginalName = null;
 let materialDialogRecipe = [];
+let productDialogMode = "create";
+let productDialogFactory = null;
+let productDialogProductId = null;
+let productDialogRecipe = [];
 
 const els = {
   tabs: document.querySelector("#tabs"),
@@ -34,19 +40,35 @@ const els = {
   addMaterialForm: document.querySelector("#addMaterialForm"),
   closeMaterialDialogBtn: document.querySelector("#closeMaterialDialogBtn"),
   cancelMaterialDialogBtn: document.querySelector("#cancelMaterialDialogBtn"),
+  materialDialogTitle: document.querySelector("#materialDialogTitle"),
+  materialDialogEyebrow: document.querySelector("#materialDialogEyebrow"),
+  materialDialogIntro: document.querySelector("#materialDialogIntro"),
+  materialDialogSubmitBtn: document.querySelector("#materialDialogSubmitBtn"),
   newMaterialName: document.querySelector("#newMaterialName"),
   newMaterialOutput: document.querySelector("#newMaterialOutput"),
   addMaterialDialogRecipeRowBtn: document.querySelector("#addMaterialDialogRecipeRowBtn"),
   materialDialogRecipeTableBody: document.querySelector("#materialDialogRecipeTable tbody"),
+  productDialog: document.querySelector("#productDialog"),
+  productForm: document.querySelector("#productForm"),
+  closeProductDialogBtn: document.querySelector("#closeProductDialogBtn"),
+  cancelProductDialogBtn: document.querySelector("#cancelProductDialogBtn"),
+  productDialogTitle: document.querySelector("#productDialogTitle"),
+  productDialogEyebrow: document.querySelector("#productDialogEyebrow"),
+  productDialogIntro: document.querySelector("#productDialogIntro"),
+  productDialogSubmitBtn: document.querySelector("#productDialogSubmitBtn"),
+  productFactoryLabel: document.querySelector("#productFactoryLabel"),
+  newProductName: document.querySelector("#newProductName"),
+  newProductOutput: document.querySelector("#newProductOutput"),
+  addProductDialogRecipeRowBtn: document.querySelector("#addProductDialogRecipeRowBtn"),
+  productDialogRecipeTableBody: document.querySelector("#productDialogRecipeTable tbody"),
   kpiPositions: document.querySelector("#kpiPositions"),
   kpiRuns: document.querySelector("#kpiRuns"),
   kpiMaterials: document.querySelector("#kpiMaterials"),
   factoryPanelTemplate: document.querySelector("#factoryPanelTemplate"),
   productTemplate: document.querySelector("#productTemplate"),
-  recipeRowTemplate: document.querySelector("#recipeRowTemplate"),
-  materialRecipeRowTemplate: document.querySelector("#materialRecipeRowTemplate"),
   planRowTemplate: document.querySelector("#planRowTemplate"),
-  materialDialogRecipeRowTemplate: document.querySelector("#materialDialogRecipeRowTemplate")
+  materialDialogRecipeRowTemplate: document.querySelector("#materialDialogRecipeRowTemplate"),
+  productDialogRecipeRowTemplate: document.querySelector("#productDialogRecipeRowTemplate")
 };
 
 init();
@@ -63,19 +85,28 @@ function bindStaticEvents() {
     activateTab(tab.dataset.target);
   });
 
-  els.addMaterialBtn.addEventListener("click", openAddMaterialDialog);
+  els.addMaterialBtn.addEventListener("click", () => openMaterialDialogCreate());
   els.addPlanRowBtn.addEventListener("click", addPlanRow);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
   els.copyRawMaterialsBtn.addEventListener("click", copyRawRequirementsTable);
   els.exportDataBtn.addEventListener("click", exportData);
   els.importDataInput.addEventListener("change", importData);
   els.resetDataBtn.addEventListener("click", resetData);
+
   els.addMaterialForm.addEventListener("submit", saveMaterialFromDialog);
-  els.closeMaterialDialogBtn.addEventListener("click", closeAddMaterialDialog);
-  els.cancelMaterialDialogBtn.addEventListener("click", closeAddMaterialDialog);
+  els.closeMaterialDialogBtn.addEventListener("click", closeMaterialDialog);
+  els.cancelMaterialDialogBtn.addEventListener("click", closeMaterialDialog);
   els.addMaterialDialogRecipeRowBtn.addEventListener("click", addMaterialDialogRecipeRow);
   els.addMaterialDialog.addEventListener("click", (event) => {
-    if (event.target === els.addMaterialDialog) closeAddMaterialDialog();
+    if (event.target === els.addMaterialDialog) closeMaterialDialog();
+  });
+
+  els.productForm.addEventListener("submit", saveProductFromDialog);
+  els.closeProductDialogBtn.addEventListener("click", closeProductDialog);
+  els.cancelProductDialogBtn.addEventListener("click", closeProductDialog);
+  els.addProductDialogRecipeRowBtn.addEventListener("click", addProductDialogRecipeRow);
+  els.productDialog.addEventListener("click", (event) => {
+    if (event.target === els.productDialog) closeProductDialog();
   });
 }
 
@@ -105,9 +136,7 @@ function renderFactoryNavigation() {
     button.dataset.target = tabInfo.target;
     button.type = "button";
     button.textContent = tabInfo.label;
-    if (tabInfo.target === activeTarget) {
-      button.classList.add("active");
-    }
+    if (tabInfo.target === activeTarget) button.classList.add("active");
     els.tabs.appendChild(button);
   }
 }
@@ -120,15 +149,13 @@ function renderFactoryPanels() {
     const panel = els.factoryPanelTemplate.content.firstElementChild.cloneNode(true);
     panel.id = factory;
     panel.querySelector(".factory-title").textContent = `${label}-Rezepte`;
-    panel.querySelector(".add-product-btn").addEventListener("click", () => addProduct(factory));
+    panel.querySelector(".add-product-btn").addEventListener("click", () => openProductDialogCreate(factory));
 
     const container = panel.querySelector(".product-list");
     if (!state.products[factory].length) {
       container.innerHTML = `<div class="empty-state">Noch keine Waren vorhanden.</div>`;
     } else {
-      state.products[factory].forEach((product) => {
-        container.appendChild(createProductCard(factory, product));
-      });
+      state.products[factory].forEach((product) => container.appendChild(createProductCard(factory, product)));
     }
 
     els.factoryPanels.appendChild(panel);
@@ -140,48 +167,31 @@ function renderFactoryPanels() {
 function createProductCard(factory, product) {
   const node = els.productTemplate.content.firstElementChild.cloneNode(true);
   node.dataset.productId = product.id;
+  node.querySelector(".product-name-display").textContent = product.name;
+  node.querySelector(".product-output-display").textContent = positiveInteger(product.output, 1).toLocaleString("de-DE");
 
-  const nameInput = node.querySelector(".product-name");
-  const outputInput = node.querySelector(".product-output");
   const recipeBody = node.querySelector(".recipe-table tbody");
+  if (!product.recipe.length) {
+    recipeBody.innerHTML = `<tr><td colspan="2" class="empty-state">Kein Rezept hinterlegt.</td></tr>`;
+  } else {
+    product.recipe
+      .slice()
+      .sort((a, b) => cleanText(a.material).localeCompare(cleanText(b.material), "de", { sensitivity: "base" }))
+      .forEach((recipeItem) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${escapeHtml(recipeItem.material)}</td><td>${positiveInteger(recipeItem.amount, 0).toLocaleString("de-DE")}</td>`;
+        recipeBody.appendChild(row);
+      });
+  }
 
-  nameInput.value = product.name;
-  outputInput.value = product.output;
-
-  nameInput.addEventListener("change", () => {
-    const oldName = product.name;
-    const newName = cleanText(nameInput.value);
-    if (!newName) {
-      nameInput.value = product.name;
-      return;
-    }
-    product.name = newName;
-    ensureMaterial(newName);
-    replaceRecipeMaterialReferences(oldName, newName);
-    renderAll();
-  });
-
-  outputInput.addEventListener("change", () => {
-    product.output = positiveInteger(outputInput.value, 1);
-    renderAll();
-  });
-
+  node.querySelector(".edit-product").addEventListener("click", () => openProductDialogEdit(factory, product.id));
   node.querySelector(".remove-product").addEventListener("click", () => {
+    if (!confirm(`Ware "${product.name}" wirklich entfernen?`)) return;
     state.products[factory] = state.products[factory].filter((item) => item.id !== product.id);
     state.plan = state.plan.filter((item) => item.productId !== product.id);
-    renderAll();
-  });
-
-  node.querySelector(".add-recipe-row").addEventListener("click", () => {
-    ensureMinimumMaterial();
-    product.recipe.unshift({ material: state.materials[0], amount: 1 });
+    removeAutoRecipeForProduct(product.id);
     renderAll();
     activateTab(factory);
-    queueFocus(`#${factory} .product-card[data-product-id="${cssEscape(product.id)}"] .recipe-table tbody tr:first-child .recipe-material`);
-  });
-
-  product.recipe.forEach((recipeItem, index) => {
-    recipeBody.appendChild(createRecipeRow(product, index, recipeItem));
   });
 
   return node;
@@ -202,140 +212,57 @@ function renderMaterials() {
     return;
   }
 
-  state.materials.forEach((material, index) => {
+  state.materials.forEach((material) => {
     const recipeDef = getMaterialRecipe(material);
     const row = document.createElement("tr");
     row.className = "material-row";
     row.innerHTML = `
-      <td><input class="material-name" type="text" value="${escapeHtml(material)}" aria-label="Materialname" /></td>
-      <td><input class="material-output" type="number" min="1" step="1" value="${recipeDef.output}" aria-label="Ausstoß pro Unterrezept-Lauf" /></td>
-      <td>
-        <div class="nested-recipe">
-          <table class="data-table compact nested-recipe-table">
-            <thead>
-              <tr>
-                <th>Material</th>
-                <th>Menge pro Lauf</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <button class="button button-secondary add-material-recipe-row" type="button">Unterrezept-Zeile hinzufügen</button>
-        </div>
+      <td><strong>${escapeHtml(material)}</strong></td>
+      <td>${positiveInteger(recipeDef.output, 1).toLocaleString("de-DE")}</td>
+      <td><div class="nested-recipe"></div></td>
+      <td class="row-actions">
+        <button class="button button-secondary edit-material" type="button">Bearbeiten</button>
+        <button class="icon-button remove-material" type="button" aria-label="Material entfernen">×</button>
       </td>
-      <td><button class="icon-button remove-material" type="button" aria-label="Material entfernen">×</button></td>
     `;
 
-    row.querySelector(".material-name").addEventListener("change", (event) => {
-      const oldName = state.materials[index];
-      const newName = cleanText(event.target.value);
-      if (!newName) {
-        event.target.value = oldName;
-        return;
-      }
-      renameMaterial(oldName, newName);
-    });
-
-    row.querySelector(".material-output").addEventListener("change", (event) => {
-      clearAutoRecipeFlag(material);
-      getMaterialRecipe(material).output = positiveInteger(event.target.value, 1);
-      renderAll();
-      activateTab("materials");
-    });
-
-    const nestedBody = row.querySelector(".nested-recipe-table tbody");
+    const nested = row.querySelector(".nested-recipe");
     if (!recipeDef.recipe.length) {
-      const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = `<td colspan="3" class="empty-state">Kein Unterrezept. Wird als Rohmaterial behandelt.</td>`;
-      nestedBody.appendChild(emptyRow);
+      nested.innerHTML = `<span class="raw-material-badge">Rohmaterial</span>`;
     } else {
-      recipeDef.recipe.forEach((recipeItem, recipeIndex) => {
-        nestedBody.appendChild(createMaterialRecipeRow(material, recipeIndex, recipeItem));
-      });
+      const table = document.createElement("table");
+      table.className = "data-table compact nested-recipe-table";
+      table.innerHTML = `
+        <thead><tr><th>Material</th><th>Menge pro Lauf</th></tr></thead>
+        <tbody></tbody>
+      `;
+      const body = table.querySelector("tbody");
+      recipeDef.recipe
+        .slice()
+        .sort((a, b) => cleanText(a.material).localeCompare(cleanText(b.material), "de", { sensitivity: "base" }))
+        .forEach((recipeItem) => {
+          const itemRow = document.createElement("tr");
+          itemRow.innerHTML = `<td>${escapeHtml(recipeItem.material)}</td><td>${positiveInteger(recipeItem.amount, 0).toLocaleString("de-DE")}</td>`;
+          body.appendChild(itemRow);
+        });
+      nested.appendChild(table);
     }
 
-    row.querySelector(".add-material-recipe-row").addEventListener("click", () => {
-      ensureMinimumMaterial();
-      const defaultMaterial = state.materials.find((item) => item !== material) || state.materials[0];
-      clearAutoRecipeFlag(material);
-      getMaterialRecipe(material).recipe.unshift({ material: defaultMaterial, amount: 1 });
-      renderAll();
-      activateTab("materials");
-      queueFocus(`#materialsTable tbody tr:nth-child(${index + 1}) .nested-recipe-table tbody tr:first-child .material-recipe-material`);
-    });
-
+    row.querySelector(".edit-material").addEventListener("click", () => openMaterialDialogEdit(material));
     row.querySelector(".remove-material").addEventListener("click", () => {
-      const name = state.materials[index];
-      if (isMaterialInUse(name)) {
-        alert(`Das Material "${name}" wird noch in Rezepten verwendet und kann nicht gelöscht werden.`);
+      if (isMaterialInUse(material)) {
+        alert(`Das Material "${material}" wird noch in Rezepten verwendet und kann nicht gelöscht werden.`);
         return;
       }
-      state.materials.splice(index, 1);
-      delete state.materialRecipes[name];
+      if (!confirm(`Material "${material}" wirklich entfernen?`)) return;
+      state.materials = state.materials.filter((item) => item !== material);
+      delete state.materialRecipes[material];
       renderAll();
+      activateTab("materials");
     });
 
     els.materialsTableBody.appendChild(row);
   });
-}
-
-function createMaterialRecipeRow(materialName, index, recipeItem) {
-  const row = els.materialRecipeRowTemplate.content.firstElementChild.cloneNode(true);
-  const materialSelect = row.querySelector(".material-recipe-material");
-  const amountInput = row.querySelector(".material-recipe-amount");
-
-  fillSelect(materialSelect, state.materials.map((material) => ({ value: material, label: material })), recipeItem.material);
-  amountInput.value = recipeItem.amount;
-
-  materialSelect.addEventListener("change", () => {
-    clearAutoRecipeFlag(materialName);
-    getMaterialRecipe(materialName).recipe[index].material = materialSelect.value;
-    renderAll();
-    activateTab("materials");
-  });
-
-  amountInput.addEventListener("change", () => {
-    clearAutoRecipeFlag(materialName);
-    getMaterialRecipe(materialName).recipe[index].amount = positiveInteger(amountInput.value, 0);
-    renderAll();
-    activateTab("materials");
-  });
-
-  row.querySelector(".remove-material-recipe-row").addEventListener("click", () => {
-    clearAutoRecipeFlag(materialName);
-    getMaterialRecipe(materialName).recipe.splice(index, 1);
-    renderAll();
-    activateTab("materials");
-  });
-
-  return row;
-}
-
-function createRecipeRow(product, index, recipeItem) {
-  const row = els.recipeRowTemplate.content.firstElementChild.cloneNode(true);
-  const materialSelect = row.querySelector(".recipe-material");
-  const amountInput = row.querySelector(".recipe-amount");
-
-  fillSelect(materialSelect, state.materials.map((material) => ({ value: material, label: material })), recipeItem.material);
-  amountInput.value = recipeItem.amount;
-
-  materialSelect.addEventListener("change", () => {
-    product.recipe[index].material = materialSelect.value;
-    renderAll();
-  });
-
-  amountInput.addEventListener("change", () => {
-    product.recipe[index].amount = positiveInteger(amountInput.value, 0);
-    renderAll();
-  });
-
-  row.querySelector(".remove-recipe-row").addEventListener("click", () => {
-    product.recipe.splice(index, 1);
-    renderAll();
-  });
-
-  return row;
 }
 
 function renderPlan() {
@@ -422,7 +349,7 @@ function renderRequirements() {
 
 function renderRequirementTable(tbody, requirements, emptyText) {
   tbody.innerHTML = "";
-  const entries = Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de"));
+  const entries = Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" }));
   if (!entries.length) {
     const row = document.createElement("tr");
     row.innerHTML = `<td colspan="2" class="empty-state">${escapeHtml(emptyText)}</td>`;
@@ -439,15 +366,12 @@ function renderRequirementTable(tbody, requirements, emptyText) {
 
 function calculateRequirements() {
   const totals = {};
-
   for (const item of state.plan) {
     const product = findProduct(item.productId);
     if (!product) continue;
-
     const output = positiveInteger(product.output, 1);
     const quantity = positiveInteger(item.quantity, 0);
     const runs = quantity > 0 ? Math.ceil(quantity / output) : 0;
-
     for (const recipeItem of product.recipe) {
       const material = cleanText(recipeItem.material);
       const amount = positiveInteger(recipeItem.amount, 0);
@@ -455,49 +379,41 @@ function calculateRequirements() {
       totals[material] = (totals[material] ?? 0) + amount * runs;
     }
   }
-
   return totals;
 }
 
 function calculateRawRequirements() {
   const totals = {};
   const warnings = [];
-
   for (const item of state.plan) {
     const product = findProduct(item.productId);
     if (!product) continue;
-
     const output = positiveInteger(product.output, 1);
     const quantity = positiveInteger(item.quantity, 0);
     const runs = quantity > 0 ? Math.ceil(quantity / output) : 0;
-
     for (const recipeItem of product.recipe) {
       const material = cleanText(recipeItem.material);
       const amount = positiveInteger(recipeItem.amount, 0) * runs;
       if (!material || amount <= 0) continue;
-      expandRawMaterial(material, amount, totals, warnings, new Set([product.id]));
+      expandRawMaterial(material, amount, totals, warnings, new Set([`product:${product.id}`]));
     }
   }
-
   return { totals, warnings };
 }
 
-function expandRawMaterial(material, requiredAmount, totals, warnings, productStack) {
+function expandRawMaterial(material, requiredAmount, totals, warnings, stack) {
   const materialRecipe = getExistingMaterialRecipe(material);
-
   if (materialRecipe?.recipe?.length) {
     const materialKey = `material:${material.toLocaleLowerCase("de-DE")}`;
-    if (productStack.has(materialKey)) {
+    if (stack.has(materialKey)) {
       addTotal(totals, material, requiredAmount);
       warnings.push(`Zyklisches Unterrezept bei "${material}" erkannt; dieser Eintrag wurde als Rohmaterial behandelt.`);
       return;
     }
-
     const output = positiveInteger(materialRecipe.output, 1);
     const runs = Math.ceil(requiredAmount / output);
-    const nextStack = new Set(productStack);
+    const nextStack = new Set(stack);
     nextStack.add(materialKey);
-
     for (const recipeItem of materialRecipe.recipe) {
       const childMaterial = cleanText(recipeItem.material);
       const amount = positiveInteger(recipeItem.amount, 0) * runs;
@@ -508,13 +424,13 @@ function expandRawMaterial(material, requiredAmount, totals, warnings, productSt
   }
 
   const craftableProduct = findProductByName(material);
-
   if (!craftableProduct || !craftableProduct.recipe.length) {
     addTotal(totals, material, requiredAmount);
     return;
   }
 
-  if (productStack.has(craftableProduct.id)) {
+  const productKey = `product:${craftableProduct.id}`;
+  if (stack.has(productKey)) {
     addTotal(totals, material, requiredAmount);
     warnings.push(`Zyklisches Warenrezept bei "${material}" erkannt; dieser Eintrag wurde als Rohmaterial behandelt.`);
     return;
@@ -522,9 +438,8 @@ function expandRawMaterial(material, requiredAmount, totals, warnings, productSt
 
   const output = positiveInteger(craftableProduct.output, 1);
   const runs = Math.ceil(requiredAmount / output);
-  const nextStack = new Set(productStack);
-  nextStack.add(craftableProduct.id);
-
+  const nextStack = new Set(stack);
+  nextStack.add(productKey);
   for (const recipeItem of craftableProduct.recipe) {
     const childMaterial = cleanText(recipeItem.material);
     const amount = positiveInteger(recipeItem.amount, 0) * runs;
@@ -537,36 +452,36 @@ function addTotal(totals, material, amount) {
   totals[material] = (totals[material] ?? 0) + amount;
 }
 
-function addProduct(factory) {
-  const product = {
-    id: cryptoId(),
-    name: nextUniqueProductName(factory),
-    output: 1,
-    recipe: []
-  };
-  state.products[factory].unshift(product);
-  ensureMaterial(product.name);
-  renderAll();
-  activateTab(factory);
-  queueFocus(`#${factory} .product-card[data-product-id="${cssEscape(product.id)}"] .product-name`);
-}
-
-function openAddMaterialDialog() {
+function openMaterialDialogCreate() {
+  materialDialogMode = "create";
+  materialDialogOriginalName = null;
   materialDialogRecipe = [];
+  els.materialDialogEyebrow.textContent = "Material";
+  els.materialDialogTitle.textContent = "Material hinzufügen";
+  els.materialDialogIntro.textContent = "Materialien ohne Unterrezept werden im Calculator als Rohmaterial behandelt.";
+  els.materialDialogSubmitBtn.textContent = "Material speichern";
   els.newMaterialName.value = "";
   els.newMaterialOutput.value = 1;
   renderMaterialDialogRecipeRows();
-  if (typeof els.addMaterialDialog.showModal === "function") {
-    els.addMaterialDialog.showModal();
-    queueFocus("#newMaterialName");
-  } else {
-    const name = prompt("Materialname eingeben:");
-    if (!name) return;
-    createMaterialFromDialogData(name, 1, []);
-  }
+  showDialog(els.addMaterialDialog, "#newMaterialName");
 }
 
-function closeAddMaterialDialog() {
+function openMaterialDialogEdit(materialName) {
+  materialDialogMode = "edit";
+  materialDialogOriginalName = materialName;
+  const recipeDef = getMaterialRecipe(materialName);
+  materialDialogRecipe = (recipeDef.recipe ?? []).map((item) => ({ material: item.material, amount: item.amount }));
+  els.materialDialogEyebrow.textContent = "Material bearbeiten";
+  els.materialDialogTitle.textContent = materialName;
+  els.materialDialogIntro.textContent = "Änderungen werden auf alle Rezeptreferenzen übertragen.";
+  els.materialDialogSubmitBtn.textContent = "Änderungen speichern";
+  els.newMaterialName.value = materialName;
+  els.newMaterialOutput.value = positiveInteger(recipeDef.output, 1);
+  renderMaterialDialogRecipeRows();
+  showDialog(els.addMaterialDialog, "#newMaterialName");
+}
+
+function closeMaterialDialog() {
   els.addMaterialDialog.close();
 }
 
@@ -584,24 +499,31 @@ function saveMaterialFromDialog(event) {
     return;
   }
 
-  if (state.materials.some((material) => material.toLocaleLowerCase("de-DE") === name.toLocaleLowerCase("de-DE"))) {
+  const existing = state.materials.find((material) => material.toLocaleLowerCase("de-DE") === name.toLocaleLowerCase("de-DE"));
+  if (materialDialogMode === "create" && existing) {
+    alert(`Das Material "${name}" existiert bereits.`);
+    queueFocus("#newMaterialName");
+    return;
+  }
+  if (materialDialogMode === "edit" && existing && existing !== materialDialogOriginalName) {
     alert(`Das Material "${name}" existiert bereits.`);
     queueFocus("#newMaterialName");
     return;
   }
 
-  createMaterialFromDialogData(name, output, recipe);
-  closeAddMaterialDialog();
-}
-
-function createMaterialFromDialogData(name, output, recipe) {
-  state.materials.push(name);
-  if (recipe.length) {
+  if (materialDialogMode === "create") {
+    ensureMaterial(name);
+    if (recipe.length) state.materialRecipes[name] = { output, recipe };
+  } else {
+    if (materialDialogOriginalName !== name) renameMaterial(materialDialogOriginalName, name, false);
     state.materialRecipes[name] = { output, recipe };
   }
+
+  clearAutoRecipeFlag(name);
+  closeMaterialDialog();
   renderAll();
   activateTab("materials");
-  queueFocusMaterialName(name);
+  queueFocusMaterialRow(name);
 }
 
 function addMaterialDialogRecipeRow() {
@@ -609,43 +531,171 @@ function addMaterialDialogRecipeRow() {
     alert("Lege zuerst mindestens ein Basismaterial an, bevor du ein Unterrezept erstellst.");
     return;
   }
-  materialDialogRecipe.unshift({ material: state.materials[0], amount: 1 });
+  const fallback = state.materials.find((material) => material !== materialDialogOriginalName) || state.materials[0];
+  materialDialogRecipe.push({ material: fallback, amount: 1 });
   renderMaterialDialogRecipeRows();
 }
 
 function renderMaterialDialogRecipeRows() {
-  els.materialDialogRecipeTableBody.innerHTML = "";
+  renderDialogRecipeRows({
+    tbody: els.materialDialogRecipeTableBody,
+    template: els.materialDialogRecipeRowTemplate,
+    recipe: materialDialogRecipe,
+    materialSelector: ".material-dialog-recipe-material",
+    amountSelector: ".material-dialog-recipe-amount",
+    removeSelector: ".remove-material-dialog-recipe-row",
+    emptyText: "Kein Unterrezept. Das Material wird als Rohmaterial behandelt."
+  });
+}
 
-  if (!materialDialogRecipe.length) {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="3" class="empty-state">Kein Unterrezept. Das neue Material wird als Rohmaterial behandelt.</td>`;
-    els.materialDialogRecipeTableBody.appendChild(row);
+function openProductDialogCreate(factory) {
+  productDialogMode = "create";
+  productDialogFactory = factory;
+  productDialogProductId = null;
+  productDialogRecipe = [];
+  els.productDialogEyebrow.textContent = "Ware";
+  els.productDialogTitle.textContent = "Ware hinzufügen";
+  els.productDialogIntro.textContent = "Die Ware wird automatisch als Material/Zwischenprodukt übernommen.";
+  els.productDialogSubmitBtn.textContent = "Ware speichern";
+  els.productFactoryLabel.value = FACTORIES[factory];
+  els.newProductName.value = "";
+  els.newProductOutput.value = 1;
+  renderProductDialogRecipeRows();
+  showDialog(els.productDialog, "#newProductName");
+}
+
+function openProductDialogEdit(factory, productId) {
+  const product = state.products[factory].find((item) => item.id === productId);
+  if (!product) return;
+  productDialogMode = "edit";
+  productDialogFactory = factory;
+  productDialogProductId = productId;
+  productDialogRecipe = (product.recipe ?? []).map((item) => ({ material: item.material, amount: item.amount }));
+  els.productDialogEyebrow.textContent = "Ware bearbeiten";
+  els.productDialogTitle.textContent = product.name;
+  els.productDialogIntro.textContent = "Änderungen werden im Calculator und im automatischen Material-Unterrezept berücksichtigt.";
+  els.productDialogSubmitBtn.textContent = "Änderungen speichern";
+  els.productFactoryLabel.value = FACTORIES[factory];
+  els.newProductName.value = product.name;
+  els.newProductOutput.value = positiveInteger(product.output, 1);
+  renderProductDialogRecipeRows();
+  showDialog(els.productDialog, "#newProductName");
+}
+
+function closeProductDialog() {
+  els.productDialog.close();
+}
+
+function saveProductFromDialog(event) {
+  event.preventDefault();
+  const name = cleanText(els.newProductName.value);
+  const output = positiveInteger(els.newProductOutput.value, 1);
+  const recipe = productDialogRecipe
+    .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
+    .filter((item) => item.material && item.amount > 0);
+
+  if (!name) {
+    alert("Bitte einen Warennamen eintragen.");
+    queueFocus("#newProductName");
     return;
   }
 
-  materialDialogRecipe.forEach((item, index) => {
-    const row = els.materialDialogRecipeRowTemplate.content.firstElementChild.cloneNode(true);
-    const materialSelect = row.querySelector(".material-dialog-recipe-material");
-    const amountInput = row.querySelector(".material-dialog-recipe-amount");
+  const factoryProducts = state.products[productDialogFactory];
+  const duplicate = factoryProducts.find((product) => product.name.toLocaleLowerCase("de-DE") === name.toLocaleLowerCase("de-DE") && product.id !== productDialogProductId);
+  if (duplicate) {
+    alert(`In dieser Fabrik existiert bereits eine Ware namens "${name}".`);
+    queueFocus("#newProductName");
+    return;
+  }
 
-    fillSelect(materialSelect, state.materials.map((material) => ({ value: material, label: material })), item.material);
-    amountInput.value = item.amount;
+  if (productDialogMode === "create") {
+    const product = { id: cryptoId(), name, output, recipe };
+    factoryProducts.unshift(product);
+    ensureMaterial(name);
+    recipe.forEach((item) => ensureMaterial(item.material));
+    syncSingleProductRecipeToMaterial(product);
+    closeProductDialog();
+    renderAll();
+    activateTab(productDialogFactory);
+    queueFocusProductCard(product.id);
+    return;
+  }
 
-    materialSelect.addEventListener("change", () => {
-      materialDialogRecipe[index].material = materialSelect.value;
-    });
+  const product = factoryProducts.find((item) => item.id === productDialogProductId);
+  if (!product) return;
+  const oldName = product.name;
+  product.name = name;
+  product.output = output;
+  product.recipe = recipe;
+  ensureMaterial(name);
+  recipe.forEach((item) => ensureMaterial(item.material));
+  if (oldName !== name) replaceProductMaterialName(oldName, name, product.id);
+  syncSingleProductRecipeToMaterial(product);
+  closeProductDialog();
+  renderAll();
+  activateTab(productDialogFactory);
+  queueFocusProductCard(product.id);
+}
 
-    amountInput.addEventListener("change", () => {
-      materialDialogRecipe[index].amount = positiveInteger(amountInput.value, 0);
-    });
+function addProductDialogRecipeRow() {
+  if (!state.materials.length) {
+    alert("Lege zuerst mindestens ein Material an, bevor du eine Rezeptzeile erstellst.");
+    return;
+  }
+  productDialogRecipe.push({ material: state.materials[0], amount: 1 });
+  renderProductDialogRecipeRows();
+}
 
-    row.querySelector(".remove-material-dialog-recipe-row").addEventListener("click", () => {
-      materialDialogRecipe.splice(index, 1);
-      renderMaterialDialogRecipeRows();
-    });
-
-    els.materialDialogRecipeTableBody.appendChild(row);
+function renderProductDialogRecipeRows() {
+  renderDialogRecipeRows({
+    tbody: els.productDialogRecipeTableBody,
+    template: els.productDialogRecipeRowTemplate,
+    recipe: productDialogRecipe,
+    materialSelector: ".product-dialog-recipe-material",
+    amountSelector: ".product-dialog-recipe-amount",
+    removeSelector: ".remove-product-dialog-recipe-row",
+    emptyText: "Noch keine Materialien im Rezept."
   });
+}
+
+function renderDialogRecipeRows(config) {
+  const { tbody, template, recipe, materialSelector, amountSelector, removeSelector, emptyText } = config;
+  tbody.innerHTML = "";
+  if (!recipe.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="3" class="empty-state">${escapeHtml(emptyText)}</td>`;
+    tbody.appendChild(row);
+    return;
+  }
+
+  recipe.forEach((item, index) => {
+    const row = template.content.firstElementChild.cloneNode(true);
+    const materialSelect = row.querySelector(materialSelector);
+    const amountInput = row.querySelector(amountSelector);
+    fillSelect(materialSelect, state.materials.map((material) => ({ value: material, label: material })), item.material);
+    amountInput.value = positiveInteger(item.amount, 1);
+    materialSelect.addEventListener("change", () => {
+      recipe[index].material = materialSelect.value;
+    });
+    amountInput.addEventListener("change", () => {
+      recipe[index].amount = positiveInteger(amountInput.value, 0);
+    });
+    row.querySelector(removeSelector).addEventListener("click", () => {
+      recipe.splice(index, 1);
+      if (recipe === materialDialogRecipe) renderMaterialDialogRecipeRows();
+      if (recipe === productDialogRecipe) renderProductDialogRecipeRows();
+    });
+    tbody.appendChild(row);
+  });
+}
+
+function showDialog(dialog, focusSelector) {
+  if (typeof dialog.showModal === "function") {
+    dialog.showModal();
+    queueFocus(focusSelector);
+  } else {
+    alert("Dein Browser unterstützt Dialogfenster nicht vollständig.");
+  }
 }
 
 function addPlanRow() {
@@ -663,9 +713,7 @@ function addPlanRow() {
 
 async function copyRequirementsTable() {
   const requirements = calculateRequirements();
-  const lines = [["Material", "Gesamtbedarf"], ...Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de"))]
-    .map((row) => row.join("\t"));
-
+  const lines = [["Material", "Gesamtbedarf"], ...Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" }))].map((row) => row.join("\t"));
   try {
     await navigator.clipboard.writeText(lines.join("\n"));
     temporaryButtonText(els.copyMaterialsBtn, "Kopiert", "Tabelle kopieren");
@@ -676,9 +724,7 @@ async function copyRequirementsTable() {
 
 async function copyRawRequirementsTable() {
   const rawRequirements = calculateRawRequirements().totals;
-  const lines = [["Rohmaterial", "Gesamtbedarf"], ...Object.entries(rawRequirements).sort((a, b) => a[0].localeCompare(b[0], "de"))]
-    .map((row) => row.join("\t"));
-
+  const lines = [["Rohmaterial", "Gesamtbedarf"], ...Object.entries(rawRequirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" }))].map((row) => row.join("\t"));
   try {
     await navigator.clipboard.writeText(lines.join("\n"));
     temporaryButtonText(els.copyRawMaterialsBtn, "Kopiert", "Tabelle kopieren");
@@ -705,7 +751,6 @@ function exportData() {
 function importData(event) {
   const file = event.target.files?.[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = () => {
     try {
@@ -730,24 +775,23 @@ function resetData() {
 }
 
 function updatePlanProductOptions(select, factory, selectedProductId) {
-  const products = state.products[factory] ?? [];
-  const options = products.length
-    ? products.map((product) => ({ value: product.id, label: product.name }))
-    : [{ value: "", label: "Keine Ware vorhanden" }];
+  const products = (state.products[factory] ?? []).slice().sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }));
+  const options = products.length ? products.map((product) => ({ value: product.id, label: product.name })) : [{ value: "", label: "Keine Ware vorhanden" }];
   fillSelect(select, options, selectedProductId);
 }
 
 function fillSelect(select, options, selectedValue) {
   select.innerHTML = "";
-  options.forEach((option) => {
-    const node = document.createElement("option");
-    node.value = option.value;
-    node.textContent = option.label;
-    select.appendChild(node);
-  });
-  if (selectedValue && options.some((option) => option.value === selectedValue)) {
-    select.value = selectedValue;
-  }
+  options
+    .slice()
+    .sort((a, b) => a.label.localeCompare(b.label, "de", { sensitivity: "base" }))
+    .forEach((option) => {
+      const node = document.createElement("option");
+      node.value = option.value;
+      node.textContent = option.label;
+      select.appendChild(node);
+    });
+  if (selectedValue && options.some((option) => option.value === selectedValue)) select.value = selectedValue;
 }
 
 function findProduct(productId) {
@@ -760,7 +804,6 @@ function findProductByName(productName) {
   if (!normalizedName) return null;
   return Object.values(state.products).flat().find((product) => product.name.toLocaleLowerCase("de-DE") === normalizedName) ?? null;
 }
-
 
 function getMaterialRecipe(materialName) {
   const name = cleanText(materialName);
@@ -776,30 +819,39 @@ function getExistingMaterialRecipe(materialName) {
   if (!name || !state.materialRecipes) return null;
   return state.materialRecipes[name] ?? null;
 }
+
 function ensureMaterial(name) {
   const cleaned = cleanText(name);
-  if (cleaned && !state.materials.includes(cleaned)) state.materials.push(cleaned);
+  if (!cleaned) return;
+  const exists = state.materials.some((material) => material.toLocaleLowerCase("de-DE") === cleaned.toLocaleLowerCase("de-DE"));
+  if (!exists) state.materials.push(cleaned);
 }
 
-function ensureMinimumMaterial() {
-  if (!state.materials.length) state.materials.push("Neues Material");
-}
-
-function renameMaterial(oldName, newName) {
+function renameMaterial(oldName, newName, shouldRender = true) {
   if (oldName === newName) return;
-  if (state.materials.includes(newName)) {
+  if (state.materials.some((material) => material === newName)) {
     alert(`Das Material "${newName}" existiert bereits.`);
-    renderAll();
+    if (shouldRender) renderAll();
     return;
   }
-
   state.materials = state.materials.map((material) => (material === oldName ? newName : material));
   if (state.materialRecipes?.[oldName]) {
     state.materialRecipes[newName] = state.materialRecipes[oldName];
     delete state.materialRecipes[oldName];
   }
   replaceRecipeMaterialReferences(oldName, newName);
-  renderAll();
+  if (shouldRender) renderAll();
+}
+
+function replaceProductMaterialName(oldName, newName, productId) {
+  if (state.materials.includes(oldName)) renameMaterial(oldName, newName, false);
+  else ensureMaterial(newName);
+
+  for (const [materialName, recipeDef] of Object.entries(state.materialRecipes ?? {})) {
+    if (recipeDef.autoProductId === productId && materialName !== newName) {
+      delete state.materialRecipes[materialName];
+    }
+  }
 }
 
 function replaceRecipeMaterialReferences(oldName, newName) {
@@ -808,7 +860,6 @@ function replaceRecipeMaterialReferences(oldName, newName) {
       if (recipeItem.material === oldName) recipeItem.material = newName;
     }
   }
-
   for (const recipeDef of Object.values(state.materialRecipes ?? {})) {
     for (const recipeItem of recipeDef.recipe ?? []) {
       if (recipeItem.material === oldName) recipeItem.material = newName;
@@ -817,13 +868,10 @@ function replaceRecipeMaterialReferences(oldName, newName) {
 }
 
 function isMaterialInUse(materialName) {
-  const usedInProducts = Object.values(state.products).flat().some((product) =>
-    product.recipe.some((recipeItem) => recipeItem.material === materialName)
-  );
-  const usedInMaterialRecipes = Object.entries(state.materialRecipes ?? {}).some(([owner, recipeDef]) =>
-    owner !== materialName && (recipeDef.recipe ?? []).some((recipeItem) => recipeItem.material === materialName)
-  );
-  return usedInProducts || usedInMaterialRecipes;
+  const usedInProducts = Object.values(state.products).flat().some((product) => product.recipe.some((recipeItem) => recipeItem.material === materialName));
+  const usedInMaterialRecipes = Object.entries(state.materialRecipes ?? {}).some(([name, recipeDef]) => name !== materialName && (recipeDef.recipe ?? []).some((recipeItem) => recipeItem.material === materialName));
+  const matchingProduct = Object.values(state.products).flat().some((product) => product.name === materialName);
+  return usedInProducts || usedInMaterialRecipes || matchingProduct;
 }
 
 function clearAutoRecipeFlag(materialName) {
@@ -831,39 +879,29 @@ function clearAutoRecipeFlag(materialName) {
   if (recipeDef?.autoProductId) delete recipeDef.autoProductId;
 }
 
-function syncProductRecipesToMaterials() {
-  const validAutoKeys = new Set();
-
-  for (const product of Object.values(state.products).flat()) {
-    const productName = cleanText(product.name);
-    if (!productName) continue;
-
-    ensureMaterial(productName);
-
-    if (!product.recipe.length) continue;
-
-    const existing = getExistingMaterialRecipe(productName);
-    const shouldSync = !existing || existing.autoProductId === product.id || !existing.recipe?.length;
-
-    if (shouldSync) {
-      state.materialRecipes[productName] = {
-        output: positiveInteger(product.output, 1),
-        recipe: product.recipe
-          .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
-          .filter((item) => item.material && item.amount > 0),
-        autoProductId: product.id
-      };
-    }
-
-    validAutoKeys.add(`${product.id}|${productName}`);
+function syncSingleProductRecipeToMaterial(product) {
+  ensureMaterial(product.name);
+  const existing = getExistingMaterialRecipe(product.name);
+  if (!existing || existing.autoProductId === product.id || !existing.recipe?.length) {
+    state.materialRecipes[product.name] = {
+      output: positiveInteger(product.output, 1),
+      autoProductId: product.id,
+      recipe: (product.recipe ?? []).map((item) => ({ material: item.material, amount: positiveInteger(item.amount, 0) }))
+    };
   }
+}
 
+function syncProductRecipesToMaterials() {
+  const validProductIds = new Set(Object.values(state.products).flat().map((product) => product.id));
   for (const [materialName, recipeDef] of Object.entries(state.materialRecipes ?? {})) {
-    if (!recipeDef?.autoProductId) continue;
-    const key = `${recipeDef.autoProductId}|${materialName}`;
-    if (!validAutoKeys.has(key)) {
-      delete state.materialRecipes[materialName];
-    }
+    if (recipeDef.autoProductId && !validProductIds.has(recipeDef.autoProductId)) delete state.materialRecipes[materialName];
+  }
+  for (const product of Object.values(state.products).flat()) syncSingleProductRecipeToMaterial(product);
+}
+
+function removeAutoRecipeForProduct(productId) {
+  for (const [materialName, recipeDef] of Object.entries(state.materialRecipes ?? {})) {
+    if (recipeDef.autoProductId === productId) delete state.materialRecipes[materialName];
   }
 }
 
@@ -884,10 +922,7 @@ function normalizeState() {
       name: cleanText(product.name) || "Unbenannte Ware",
       output: positiveInteger(product.output, 1),
       recipe: Array.isArray(product.recipe)
-        ? product.recipe.map((item) => ({
-            material: cleanText(item.material) || state.materials[0] || "Neues Material",
-            amount: positiveInteger(item.amount, 0)
-          }))
+        ? product.recipe.map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) })).filter((item) => item.material)
         : []
     }));
   }
@@ -900,15 +935,13 @@ function normalizeState() {
   const normalizedMaterialRecipes = {};
   for (const [materialName, recipeDef] of Object.entries(state.materialRecipes ?? {})) {
     const name = cleanText(materialName);
-    if (!name || !state.materials.includes(name)) continue;
+    if (!name) continue;
+    ensureMaterial(name);
     normalizedMaterialRecipes[name] = {
       output: positiveInteger(recipeDef?.output, 1),
       autoProductId: cleanText(recipeDef?.autoProductId) || undefined,
       recipe: Array.isArray(recipeDef?.recipe)
-        ? recipeDef.recipe.map((item) => ({
-            material: cleanText(item.material) || state.materials[0] || "Neues Material",
-            amount: positiveInteger(item.amount, 0)
-          }))
+        ? recipeDef.recipe.map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) })).filter((item) => item.material)
         : []
     };
     normalizedMaterialRecipes[name].recipe.forEach((item) => ensureMaterial(item.material));
@@ -934,14 +967,10 @@ function validateImportedState(value) {
   if (!Array.isArray(value.materials)) throw new Error("Feld 'materials' fehlt oder ist ungültig.");
   if (!value.products || typeof value.products !== "object") throw new Error("Feld 'products' fehlt oder ist ungültig.");
   for (const factory of Object.keys(FACTORIES)) {
-    if (value.products[factory] !== undefined && !Array.isArray(value.products[factory])) {
-      throw new Error(`Feld 'products.${factory}' ist ungültig.`);
-    }
+    if (value.products[factory] !== undefined && !Array.isArray(value.products[factory])) throw new Error(`Feld 'products.${factory}' ist ungültig.`);
   }
   if (!Array.isArray(value.plan)) throw new Error("Feld 'plan' fehlt oder ist ungültig.");
-  if (value.materialRecipes !== undefined && (typeof value.materialRecipes !== "object" || Array.isArray(value.materialRecipes))) {
-    throw new Error("Feld 'materialRecipes' ist ungültig.");
-  }
+  if (value.materialRecipes !== undefined && (typeof value.materialRecipes !== "object" || Array.isArray(value.materialRecipes))) throw new Error("Feld 'materialRecipes' ist ungültig.");
 }
 
 function loadState() {
@@ -966,28 +995,8 @@ function firstFactoryWithProduct() {
 
 function createDefaultState() {
   const products = {};
-  for (const factory of Object.keys(FACTORIES)) {
-    products[factory] = [];
-  }
-
-  return {
-    materials: [],
-    materialRecipes: {},
-    products,
-    plan: []
-  };
-}
-
-function nextUniqueProductName(factory) {
-  const base = "Neue Ware";
-  let name = base;
-  let counter = 2;
-  const existingNames = new Set(state.products[factory].map((product) => product.name));
-  while (existingNames.has(name)) {
-    name = `${base} ${counter}`;
-    counter += 1;
-  }
-  return name;
+  for (const factory of Object.keys(FACTORIES)) products[factory] = [];
+  return { materials: [], materialRecipes: {}, products, plan: [] };
 }
 
 function positiveInteger(value, fallback) {
@@ -1013,9 +1022,9 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function cssEscape(value) {
-  if (window.CSS?.escape) return CSS.escape(value);
-  return String(value).replace(/[^a-zA-Z0-9_-]/g, "\\$&");
+function cryptoId() {
+  if (window.crypto?.randomUUID) return crypto.randomUUID();
+  return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function queueFocus(selector) {
@@ -1028,18 +1037,24 @@ function queueFocus(selector) {
   }, 0);
 }
 
-function queueFocusMaterialName(materialName) {
+function queueFocusMaterialRow(materialName) {
   window.setTimeout(() => {
-    const inputs = [...document.querySelectorAll("#materialsTable .material-name")];
-    const element = inputs.find((input) => input.value === materialName);
-    if (!element) return;
-    element.scrollIntoView({ block: "center", behavior: "smooth" });
-    element.focus();
-    element.select();
+    const rows = [...document.querySelectorAll("#materialsTable tbody tr")];
+    const row = rows.find((item) => item.querySelector("td")?.textContent?.trim() === materialName);
+    if (!row) return;
+    row.scrollIntoView({ block: "center", behavior: "smooth" });
   }, 0);
 }
 
-function cryptoId() {
-  if (window.crypto?.randomUUID) return window.crypto.randomUUID();
-  return `id_${Math.random().toString(36).slice(2)}_${Date.now().toString(36)}`;
+function queueFocusProductCard(productId) {
+  window.setTimeout(() => {
+    const element = document.querySelector(`.product-card[data-product-id="${cssEscape(productId)}"]`);
+    if (!element) return;
+    element.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, 0);
+}
+
+function cssEscape(value) {
+  if (window.CSS?.escape) return CSS.escape(value);
+  return String(value).replace(/[^a-zA-Z0-9_-]/g, "\\$&");
 }
