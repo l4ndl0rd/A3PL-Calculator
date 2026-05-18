@@ -369,3 +369,11 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Die Mengenspalte in Fabrik-Rezepten steht weiter rechts, bleibt aber linksbündig und nicht am Kartenrand ausgerichtet.
 - Auf der Materialseite wurde die Spalte Unterrezept um 20 px nach rechts gesetzt.
 - Zwischen den Materialtabellen-Spalten wurde der horizontale Abstand erhöht.
+
+### v58 – Materialtabellenbreite und Calculator-Box-Abschluss
+
+- Materialstammdaten nutzen die volle innere Boxbreite.
+- Spalte „Ausstoß / Lauf“ wurde zu „Produktionsmenge“ umbenannt.
+- Spaltenbreiten der Materialtabelle wurden neu verteilt, damit Header und Werte nicht abgeschnitten werden.
+- Unterrezept-Spalte bleibt weiter rechts und erhält ausreichend Breite.
+- Leere Calculator-Tabellen zeigen keine zusätzliche innere Box mit Rounded Edges mehr.

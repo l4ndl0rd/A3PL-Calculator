@@ -3901,3 +3901,154 @@ body:not(.admin-locked) #materials .material-recipe-table td:nth-child(6) {
     max-width: 48% !important;
   }
 }
+
+/* v58: Materialstammdaten vollbreit und Calculator-Tabellen ohne zusätzliche Innen-Rundungen. */
+#materials .table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+#materials .material-recipe-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#materials .material-recipe-table th,
+#materials .material-recipe-table td {
+  box-sizing: border-box !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+#materials .material-recipe-table th {
+  line-height: 1.25;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(7),
+body.admin-locked #materials .material-recipe-table td:nth-child(7) {
+  display: none !important;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(1),
+body.admin-locked #materials .material-recipe-table td:nth-child(1) {
+  width: 28% !important;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(2),
+body.admin-locked #materials .material-recipe-table td:nth-child(2) {
+  width: 12% !important;
+  text-align: center !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(3),
+body.admin-locked #materials .material-recipe-table td:nth-child(3),
+body.admin-locked #materials .material-recipe-table th:nth-child(4),
+body.admin-locked #materials .material-recipe-table td:nth-child(4),
+body.admin-locked #materials .material-recipe-table th:nth-child(5),
+body.admin-locked #materials .material-recipe-table td:nth-child(5) {
+  width: 12% !important;
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(6),
+body.admin-locked #materials .material-recipe-table td:nth-child(6) {
+  width: 24% !important;
+  padding-left: 36px !important;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(1),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(1) {
+  width: 23% !important;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(2),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(2) {
+  width: 11% !important;
+  text-align: center !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(3),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(3),
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(4),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(4),
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(5),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(5) {
+  width: 10% !important;
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(6),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(6) {
+  width: 25% !important;
+  padding-left: 36px !important;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(7),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(7) {
+  width: 11% !important;
+}
+
+#materials .nested-recipe-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#materials .nested-recipe-table th,
+#materials .nested-recipe-table td {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  white-space: normal !important;
+}
+
+#materials .nested-recipe-table th:first-child,
+#materials .nested-recipe-table td:first-child {
+  width: 62% !important;
+}
+
+#materials .nested-recipe-table th:last-child,
+#materials .nested-recipe-table td:last-child {
+  width: 38% !important;
+  text-align: left !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Empty states inside tables should not render as a second rounded/dashed box. */
+.data-table td.empty-state,
+.data-table .empty-state {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+#planTable td.empty-state,
+#inventoryTable td.empty-state,
+#requirementsTable td.empty-state,
+#rawRequirementsTable td.empty-state,
+#economyTable td.empty-state {
+  padding: 18px 14px !important;
+}
+
+@media (max-width: 760px) {
+  #materials .table-wrap {
+    overflow-x: auto !important;
+  }
+
+  #materials .material-recipe-table {
+    min-width: 920px !important;
+  }
+}
