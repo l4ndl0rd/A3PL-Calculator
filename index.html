@@ -29,11 +29,13 @@
         <summary>Daten</summary>
         <div class="data-actions-menu">
           <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
-          <label class="button button-secondary file-button">
+          <label class="button button-secondary file-button admin-only">
             Daten importieren
             <input id="importDataInput" type="file" accept="application/json" />
           </label>
-          <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
+          <button id="loadBundledDataBtn" class="button button-secondary admin-only" type="button">Standarddaten laden</button>
+          <button id="adminAccessBtn" class="button button-secondary" type="button">Bearbeitung aktivieren</button>
+          <button id="resetDataBtn" class="button button-danger admin-only" type="button">Zurücksetzen</button>
         </div>
       </details>
     </nav>
@@ -191,6 +193,8 @@
     <div id="factoryPanels"></div>
 
   </main>
+
+  <button id="backToTopBtn" class="back-to-top" type="button" aria-label="Nach oben scrollen">↑</button>
 
   <footer class="app-footer" aria-label="Copyright">
     <p>© 2026 l4ndl0rd · Warenherstellung Calculator · <a href="https://discord.gg/arma3fisherslifede" target="_blank" rel="noopener noreferrer">Fishers Life DE</a> · Alle Rechte vorbehalten.</p>

@@ -1,4 +1,14 @@
 const STORAGE_KEY = "fg2_warenherstellung_calculator_v4_empty";
+const ADMIN_FLAG_KEY = "fg2_warenherstellung_calculator_admin_unlocked";
+const BUNDLED_DATA_URL = "waren-daten.json";
+const EDIT_CONFIRMATION_TEXT = [
+  "Bearbeitung auf eigene Gefahr freischalten?",
+  "",
+  "Änderungen werden lokal im Browser gespeichert und können bestehende Material-, Rezept- und Preisdaten überschreiben.",
+  "Vor größeren Änderungen sollte vorher über Daten > Daten exportieren eine Sicherung erstellt werden.",
+  "",
+  "Dieser Schalter ist kein echter Zugriffsschutz, sondern verhindert nur versehentliche Bearbeitung auf einer statischen GitHub-Pages-Seite."
+].join("\n");
 
 const FACTORIES = {
   steel: "Stahlfabrik",
@@ -13,6 +23,7 @@ const FACTORIES = {
 };
 
 let state = loadState();
+let adminUnlocked = localStorage.getItem(ADMIN_FLAG_KEY) === "1";
 let materialDialogMode = "create";
 let materialDialogOriginalName = null;
 let materialDialogRecipe = [];
@@ -39,6 +50,9 @@ const els = {
   exportDataBtn: document.querySelector("#exportDataBtn"),
   importDataInput: document.querySelector("#importDataInput"),
   resetDataBtn: document.querySelector("#resetDataBtn"),
+  loadBundledDataBtn: document.querySelector("#loadBundledDataBtn"),
+  adminAccessBtn: document.querySelector("#adminAccessBtn"),
+  backToTopBtn: document.querySelector("#backToTopBtn"),
   addMaterialDialog: document.querySelector("#addMaterialDialog"),
   addMaterialForm: document.querySelector("#addMaterialForm"),
   closeMaterialDialogBtn: document.querySelector("#closeMaterialDialogBtn"),
@@ -83,8 +97,9 @@ const els = {
 
 init();
 
-function init() {
+async function init() {
   bindStaticEvents();
+  await bootstrapBundledData(false);
   renderAll();
 }
 
@@ -110,14 +125,28 @@ function bindStaticEvents() {
     if (dataActions && !dataActions.contains(event.target)) dataActions.removeAttribute("open");
   });
 
-  els.addMaterialBtn.addEventListener("click", () => openMaterialDialogCreate());
+  els.addMaterialBtn.addEventListener("click", () => {
+    if (!requireAdminAccess()) return;
+    openMaterialDialogCreate();
+  });
   els.addPlanRowBtn.addEventListener("click", addPlanRow);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
   els.copyRawMaterialsBtn.addEventListener("click", copyRawRequirementsTable);
   els.exportDataBtn.addEventListener("click", exportData);
   els.importDataInput.addEventListener("change", importData);
   els.resetDataBtn.addEventListener("click", resetData);
+  if (els.loadBundledDataBtn) els.loadBundledDataBtn.addEventListener("click", loadBundledDataFromMenu);
+  if (els.adminAccessBtn) els.adminAccessBtn.addEventListener("click", toggleAdminAccess);
+  if (els.backToTopBtn) {
+    els.backToTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+    updateBackToTopVisibility();
+  }
   els.standardMarginInput.addEventListener("change", () => {
+    if (!requireAdminAccess()) {
+      els.standardMarginInput.value = formatInputNumber(state.pricing.standardMarginPercent);
+      return;
+    }
     state.pricing.standardMarginPercent = positiveNumber(els.standardMarginInput.value, 0);
     renderAll();
   });
@@ -143,6 +172,7 @@ function bindStaticEvents() {
 
 function renderAll() {
   normalizeState();
+  updateAdminUi();
   renderFactoryNavigation();
   renderFactoryPanels();
   renderMaterials();
@@ -229,7 +259,12 @@ function renderFactoryPanels() {
     const panel = els.factoryPanelTemplate.content.firstElementChild.cloneNode(true);
     panel.id = factory;
     panel.querySelector(".factory-title").textContent = `${label}-Rezepte`;
-    panel.querySelector(".add-product-btn").addEventListener("click", () => openProductDialogCreate(factory));
+    const addButton = panel.querySelector(".add-product-btn");
+    addButton.addEventListener("click", () => {
+      if (!requireAdminAccess()) return;
+      openProductDialogCreate(factory);
+    });
+    addButton.hidden = !adminUnlocked;
 
     const container = panel.querySelector(".product-list");
     if (!state.products[factory].length) {
@@ -250,6 +285,7 @@ function renderFactoryPanels() {
 function createProductCard(factory, product) {
   const node = els.productTemplate.content.firstElementChild.cloneNode(true);
   node.dataset.productId = product.id;
+  node.classList.toggle("locked-entry", !adminUnlocked);
   node.querySelector(".product-name-display").textContent = product.name;
   node.querySelector(".product-output-display").textContent = positiveInteger(product.output, 1).toLocaleString("de-DE");
   const sale = getSalePrice(product, null);
@@ -270,8 +306,14 @@ function createProductCard(factory, product) {
       });
   }
 
-  node.querySelector(".edit-product").addEventListener("click", () => openProductDialogEdit(factory, product.id));
+  const productActions = node.querySelector(".product-actions");
+  if (productActions) productActions.hidden = !adminUnlocked;
+  node.querySelector(".edit-product").addEventListener("click", () => {
+    if (!requireAdminAccess()) return;
+    openProductDialogEdit(factory, product.id);
+  });
   node.querySelector(".remove-product").addEventListener("click", () => {
+    if (!requireAdminAccess()) return;
     if (!confirm(`Ware "${product.name}" wirklich entfernen?`)) return;
     state.products[factory] = state.products[factory].filter((item) => item.id !== product.id);
     state.plan = state.plan.filter((item) => item.productId !== product.id);
@@ -341,8 +383,14 @@ function renderMaterials() {
       nested.appendChild(table);
     }
 
-    row.querySelector(".edit-material").addEventListener("click", () => openMaterialDialogEdit(material));
+    const rowActions = row.querySelector(".row-actions");
+    if (rowActions) rowActions.hidden = !adminUnlocked;
+    row.querySelector(".edit-material").addEventListener("click", () => {
+      if (!requireAdminAccess()) return;
+      openMaterialDialogEdit(material);
+    });
     row.querySelector(".remove-material").addEventListener("click", () => {
+      if (!requireAdminAccess()) return;
       if (isMaterialInUse(material)) {
         alert(`Das Material "${material}" wird noch in Rezepten verwendet und kann nicht gelöscht werden.`);
         return;
@@ -624,6 +672,7 @@ function addTotal(totals, material, amount) {
 }
 
 function openMaterialDialogCreate() {
+  if (!requireAdminAccess()) return;
   materialDialogMode = "create";
   materialDialogOriginalName = null;
   materialDialogRecipe = [];
@@ -640,6 +689,7 @@ function openMaterialDialogCreate() {
 }
 
 function openMaterialDialogEdit(materialName) {
+  if (!requireAdminAccess()) return;
   materialDialogMode = "edit";
   materialDialogOriginalName = materialName;
   const recipeDef = getMaterialRecipe(materialName);
@@ -662,6 +712,7 @@ function closeMaterialDialog() {
 
 function saveMaterialFromDialog(event) {
   event.preventDefault();
+  if (!requireAdminAccess()) return;
   const name = cleanText(els.newMaterialName.value);
   const output = positiveInteger(els.newMaterialOutput.value, 1);
   const unitPrice = optionalNumber(els.newMaterialUnitPrice.value);
@@ -769,6 +820,7 @@ function renderMaterialDialogRecipeRows() {
 }
 
 function openProductDialogCreate(factory) {
+  if (!requireAdminAccess()) return;
   productDialogMode = "create";
   productDialogFactory = factory;
   productDialogProductId = null;
@@ -789,6 +841,7 @@ function openProductDialogCreate(factory) {
 }
 
 function openProductDialogEdit(factory, productId) {
+  if (!requireAdminAccess()) return;
   const product = state.products[factory].find((item) => item.id === productId);
   if (!product) return;
   productDialogMode = "edit";
@@ -816,6 +869,7 @@ function closeProductDialog() {
 
 function saveProductFromDialog(event) {
   event.preventDefault();
+  if (!requireAdminAccess()) return;
   const name = cleanText(els.newProductName.value);
   const output = positiveInteger(els.newProductOutput.value, 1);
   const importPrice = optionalNumber(els.newProductImportPrice.value);
@@ -997,6 +1051,10 @@ function exportData() {
 }
 
 function importData(event) {
+  if (!requireAdminAccess()) {
+    event.target.value = "";
+    return;
+  }
   const file = event.target.files?.[0];
   if (!file) return;
   const reader = new FileReader();
@@ -1015,11 +1073,73 @@ function importData(event) {
   reader.readAsText(file);
 }
 
-function resetData() {
-  if (!confirm("Alle lokal gespeicherten Daten werden gelöscht. Fortfahren?")) return;
+async function resetData() {
+  if (!requireAdminAccess()) return;
+  if (!confirm("Alle lokal gespeicherten Daten werden gelöscht und durch die mitgelieferten Standarddaten ersetzt. Fortfahren?")) return;
   localStorage.removeItem(STORAGE_KEY);
   state = createDefaultState();
+  await bootstrapBundledData(true);
   renderAll();
+}
+
+async function loadBundledDataFromMenu() {
+  if (!requireAdminAccess()) return;
+  if (!confirm("Lokale Daten durch die mitgelieferte waren-daten.json ersetzen?")) return;
+  await bootstrapBundledData(true);
+  renderAll();
+}
+
+
+async function bootstrapBundledData(force) {
+  if (!force && localStorage.getItem(STORAGE_KEY)) return false;
+  try {
+    const response = await fetch(BUNDLED_DATA_URL, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const bundled = await response.json();
+    validateImportedState(bundled);
+    state = bundled;
+    normalizeState();
+    saveState();
+    return true;
+  } catch (error) {
+    console.warn(`Standarddaten konnten nicht geladen werden: ${error.message}`);
+    return false;
+  }
+}
+
+function toggleAdminAccess() {
+  if (adminUnlocked) {
+    adminUnlocked = false;
+    localStorage.removeItem(ADMIN_FLAG_KEY);
+    renderAll();
+    return;
+  }
+
+  if (!confirm(EDIT_CONFIRMATION_TEXT)) return;
+  adminUnlocked = true;
+  localStorage.setItem(ADMIN_FLAG_KEY, "1");
+  renderAll();
+}
+
+function requireAdminAccess() {
+  if (adminUnlocked) return true;
+  alert("Bearbeiten ist gesperrt. Öffne im Daten-Menü den Bearbeitungsmodus und bestätige den Hinweis.");
+  return false;
+}
+
+function updateAdminUi() {
+  document.body.classList.toggle("admin-unlocked", adminUnlocked);
+  document.body.classList.toggle("admin-locked", !adminUnlocked);
+  if (els.adminAccessBtn) els.adminAccessBtn.textContent = adminUnlocked ? "Bearbeitung sperren" : "Bearbeitung aktivieren";
+  if (els.standardMarginInput) els.standardMarginInput.disabled = !adminUnlocked;
+  document.querySelectorAll(".admin-only").forEach((item) => {
+    item.hidden = !adminUnlocked;
+  });
+}
+
+function updateBackToTopVisibility() {
+  if (!els.backToTopBtn) return;
+  els.backToTopBtn.classList.toggle("visible", window.scrollY > 520);
 }
 
 function updatePlanProductOptions(select, factory, selectedProductId) {

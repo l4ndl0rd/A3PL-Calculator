@@ -169,9 +169,9 @@ Empfohlener Ablauf:
 Sinnvolle nächste Ausbaustufen wären:
 
 - zentrale Datenhaltung über kleines Backend mit SQLite
-- Admin-Modus für Datenpflege
+- bestätigungspflichtiger Bearbeitungsmodus für Datenpflege
 - öffentlich lesbare, zentral gepflegte Stammdaten
-- getrennte Rollen für reine Nutzung und Bearbeitung
+- Lesemodus als Standard, Bearbeitung erst nach ausdrücklicher Bestätigung
 - optionaler Preisvergleich zwischen Händlerimport, Eigenproduktion und Export
 - weitere Auswertungen für Gewinn pro Produktionslauf oder pro Rohmaterialeinsatz
 
@@ -190,3 +190,36 @@ Diese Version enthält:
 ## Lizenz / Rechte
 
 © 2026 l4ndl0rd · Warenherstellung Calculator · Fishers Life DE · Alle Rechte vorbehalten.
+
+
+## v39: Bearbeitungsmodus ohne Passwort
+
+- Admin-Code entfernt
+- `Daten > Bearbeitung aktivieren` schaltet die Bearbeitung nach Bestätigung frei
+- Bestätigungsdialog weist auf lokale Speicherung, Risiko und empfohlenen vorherigen Export hin
+- UI-Texte von Admin-Modus auf Bearbeitungsmodus umgestellt
+
+## v38: Bedienbarkeit bei vielen Datensätzen
+
+Diese Version ergänzt mehrere Komfortfunktionen für größere Datenbestände:
+
+- Die Hauptnavigation bleibt beim Scrollen sichtbar.
+- In langen Material- und Fabriklisten bleibt der jeweilige Abschnittskopf mit dem Hinzufügen-Button oben sichtbar.
+- Ein schwebender Nach-oben-Button erscheint nach längerem Scrollen.
+- Tabellen und Warenkarten wurden kompakter und besser lesbar gestaltet.
+
+## Mitgelieferte Datensätze
+
+Die Datei `waren-daten.json` dient als mitgelieferter Standarddatenbestand. Beim ersten Öffnen ohne lokale Browserdaten lädt die Seite diese Datei automatisch. Über `Daten > Standarddaten laden` kann der lokale Bestand durch diese Datei ersetzt werden.
+
+Wichtig: Für GitHub Pages wird die Datei nur gelesen. Änderungen an `waren-daten.json` müssen im Repository committed werden. Der Browser kann diese Datei nicht direkt auf GitHub Pages zurückschreiben.
+
+## Bearbeitungsschutz / Admin-Modus
+
+Die Stammdatenbereiche Materialien und Fabriken sind standardmäßig im Lesemodus. Bearbeiten, Import, Reset und Standarddaten-Neuladen sind erst nach `Daten > Bearbeitung aktivieren` verfügbar.
+
+Es gibt kein Admin-Passwort mehr. Stattdessen muss der Bearbeitungsmodus per Bestätigungsdialog freigeschaltet werden. Der Hinweis macht klar, dass Änderungen lokal im Browser gespeichert werden und vor größeren Anpassungen ein Export empfohlen ist.
+
+Das ist für ein statisches GitHub-Pages-Projekt weiterhin kein echter Zugriffsschutz, sondern nur ein Schutz gegen versehentliche Bearbeitung. Echte Zugriffskontrolle benötigt später ein Backend/API mit Benutzerverwaltung und zentraler Datenhaltung, zum Beispiel SQLite.
+
+Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine API mit Login und SQLite-Datenbank auf einem Server.
