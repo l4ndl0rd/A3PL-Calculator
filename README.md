@@ -339,3 +339,10 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Die Spalte „Benötigte Menge pro Produktionszyklus“ sitzt weiter links in festem Abstand neben dem Material.
 - Materialstammdaten nutzen wieder die volle Tabellenbreite, ohne die Spalten optisch zu stauchen.
 - Horizontale Scrollbars bleiben entfernt.
+
+### v54 - Tabellenbreiten nach UI-Feedback
+
+- Fabrik-Rezepttabellen enden wieder nach der Mengenspalte und laufen nicht mehr leer bis zum rechten Kartenrand.
+- Mengenspalte in Fabrik-Rezepten bleibt in festem Abstand rechts neben dem Material.
+- Materialstammdaten nutzen die volle Tabellenbox ohne gestauchte Spalten.
+- Tabellenhintergruende und Zeilen laufen wieder sauber bis zum rechten Rand der jeweiligen Box.
