@@ -141,20 +141,20 @@ function renderFactoryNavigation() {
   const activeTarget = document.querySelector(".panel.active")?.id || "calculator";
   els.tabs.innerHTML = "";
 
-  const navInner = document.createElement("div");
-  navInner.className = "nav-inner";
+  const primaryRow = document.createElement("div");
+  primaryRow.className = "primary-tab-row";
 
   const calculatorButton = createPrimaryTab("calculator", "Calculator", activeTarget === "calculator");
-
-  const factoryGroup = document.createElement("div");
-  factoryGroup.className = "nav-dropdown";
-
   const factoryButton = document.createElement("button");
   factoryButton.className = "tab factory-menu-toggle";
   factoryButton.type = "button";
   factoryButton.setAttribute("aria-expanded", "false");
   factoryButton.textContent = "Fabriken";
   if (Object.hasOwn(FACTORIES, activeTarget)) factoryButton.classList.add("active");
+
+  const materialsButton = createPrimaryTab("materials", "Materialien", activeTarget === "materials");
+
+  primaryRow.append(calculatorButton, factoryButton, materialsButton);
 
   const factoryMenu = document.createElement("div");
   factoryMenu.className = "factory-menu";
@@ -170,12 +170,7 @@ function renderFactoryNavigation() {
     factoryMenu.appendChild(button);
   }
 
-  factoryGroup.append(factoryButton, factoryMenu);
-
-  const materialsButton = createPrimaryTab("materials", "Materialien", activeTarget === "materials");
-
-  navInner.append(calculatorButton, factoryGroup, materialsButton);
-  els.tabs.append(navInner);
+  els.tabs.append(primaryRow, factoryMenu);
 }
 
 function createPrimaryTab(target, label, isActive) {
