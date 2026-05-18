@@ -1482,7 +1482,7 @@ html {
   }
 }
 
-/* v22 navigation hotfix: true 3-column full-width navbar + classic factory dropdown */
+/* v23 navigation fix: #tabs must be the outer wrapper, not the 3-column grid itself. */
 .tabs {
   position: sticky;
   top: 10px;
@@ -1498,8 +1498,14 @@ html {
   overflow: visible;
 }
 
-#tabs,
-.tab-row,
+#tabs.tab-row {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+#tabs > .primary-tab-row,
 .primary-tab-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1507,6 +1513,13 @@ html {
   align-items: stretch;
   width: 100%;
   min-width: 0;
+  overflow: visible;
+}
+
+.primary-tab-row > .tab,
+.primary-tab-row > .nav-dropdown {
+  min-width: 0;
+  width: 100%;
 }
 
 .nav-dropdown {
@@ -1515,11 +1528,11 @@ html {
   align-items: stretch;
   width: 100%;
   min-width: 0;
+  overflow: visible;
 }
 
-.tab,
 .primary-tab-row .tab,
-.nav-dropdown > .tab {
+.nav-dropdown > .factory-menu-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1542,8 +1555,8 @@ html {
   transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
-.tab.active,
-.tab:hover,
+.primary-tab-row .tab.active,
+.primary-tab-row .tab:hover,
 .factory-menu-toggle[aria-expanded="true"] {
   background: var(--accent-hover);
   color: #fff;
@@ -1614,16 +1627,14 @@ html {
 }
 
 @media (max-width: 860px) {
-  #tabs,
-  .tab-row,
+  #tabs > .primary-tab-row,
   .primary-tab-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
   }
 
-  .tab,
   .primary-tab-row .tab,
-  .nav-dropdown > .tab {
+  .nav-dropdown > .factory-menu-toggle {
     padding: 9px 8px;
     font-size: 0.82rem;
   }
@@ -1640,9 +1651,8 @@ html {
 }
 
 @media (max-width: 520px) {
-  .tab,
   .primary-tab-row .tab,
-  .nav-dropdown > .tab {
+  .nav-dropdown > .factory-menu-toggle {
     padding: 8px 6px;
     font-size: 0.76rem;
   }
