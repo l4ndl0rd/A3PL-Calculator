@@ -1,31 +1,2215 @@
 {
   "materials": [
+    "Aluminiumbarren",
+    "Aluminiumbarren (aus Palette)",
+    "Aluminiumbarrenpalette",
     "Aluminiumerz",
+    "Aluminiumpalette",
+    "Aluminiumplatten",
+    "Aluminiumplatten (aus Palette)",
+    "Amethystbarren",
+    "Amethystbarren (aus Palette)",
+    "Amethystbarrenpalette",
+    "Amethysterz",
+    "Baggerschaufel",
+    "Bell 214 (Luxury)",
+    "Bell 412 (Civil)",
+    "Bell 412 (Ex-Military)",
+    "Bell 412 (Veteran Transport)",
+    "Benzin",
+    "Benzinkanister - leerer Kanister",
+    "Dünger",
+    "Eisenbarren",
+    "Eisenbarren (aus Palette)",
+    "Eisenbarrenpalette",
     "Eisenerz",
+    "Eurocopter AS 350",
+    "Fenster",
+    "Fiberglas",
+    "Glas",
+    "Glasfaser",
+    "Goldbarren",
+    "Goldbarren (aus Palette)",
+    "Goldbarrenpalette",
+    "Golderz",
+    "Goldplatten",
+    "Grumman Goose",
+    "Gummi",
+    "Kerosin",
+    "Kohlebarren",
+    "Kohlebarren (aus Palette)",
+    "Kohlebarrenpalette",
     "Kohleerz",
+    "Kunstfaser",
+    "Kunststoff",
+    "Leere Wasserflasche",
+    "Leerer Spritkanister",
+    "M-900",
+    "Ölkanister",
+    "Ölpumpe",
+    "Pallet Lifter",
+    "Polyester",
+    "Presslufthammer (Bagger)",
+    "Reifen",
     "Rohöl",
+    "Sand",
+    "Saphirbarren",
+    "Saphirbarren (aus Palette)",
+    "Saphirbarrenpalette",
     "Saphirerz",
+    "Schießpulver",
+    "Schwefelbarren",
+    "Schwefelerz",
+    "Smaragdbarren",
+    "Smaragdbarren (aus Palette)",
+    "Smaragdbarrenpalette",
     "Smaragderz",
+    "Spritkanister",
+    "Spritkanister (Kerosin)",
+    "Spritkanister (Kerosin) - leerer Kanister",
+    "Stahlpalette",
+    "Stahlplatten",
+    "Stahlplatten (aus Palette)",
+    "Steerable Parachute",
+    "Titanbarren",
+    "Titanbarren (aus Palette)",
+    "Titanbarrenpalette",
+    "Titanerz",
+    "Titanpalette",
+    "Titanplatten",
+    "Titanplatten (aus Palette)",
+    "Vivianitbarren",
+    "Vivianitbarren (aus Palette)",
+    "Vivianitbarrenpalette",
     "Vivianiterz"
   ],
-  "materialRecipes": {},
+  "materialRecipes": {
+    "Eisenerz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Kohleerz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Saphirerz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Vivianiterz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Smaragderz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Golderz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Amethysterz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Aluminiumerz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Aluminiumbarren": {
+      "output": 1,
+      "autoProductId": "6f1c8dd9-b697-4d31-917f-ffb45a56c9b7",
+      "recipe": [
+        {
+          "material": "Aluminiumerz",
+          "amount": 2
+        }
+      ]
+    },
+    "Sand": {
+      "output": 1,
+      "recipe": []
+    },
+    "Titanerz": {
+      "output": 4,
+      "autoProductId": "4b381b66-0126-46ca-a83a-7a0c72d5fc04",
+      "recipe": [
+        {
+          "material": "Sand",
+          "amount": 2
+        }
+      ]
+    },
+    "Schwefelbarren": {
+      "output": 10,
+      "autoProductId": "1b75f5c2-c02e-49a6-b0cb-11d017ea35b9",
+      "recipe": [
+        {
+          "material": "Schwefelerz",
+          "amount": 5
+        }
+      ]
+    },
+    "Schießpulver": {
+      "output": 5,
+      "autoProductId": "d4b372b9-7d45-4acd-bae9-10ee61ce3042",
+      "recipe": [
+        {
+          "material": "Schwefelbarren",
+          "amount": 5
+        },
+        {
+          "material": "Kohlebarren",
+          "amount": 1
+        }
+      ]
+    },
+    "Kunststoff": {
+      "output": 1,
+      "autoProductId": "312bc031-b9bc-4d52-80c8-9592498ccb29",
+      "recipe": [
+        {
+          "material": "Rohöl",
+          "amount": 6
+        }
+      ]
+    },
+    "Fiberglas": {
+      "output": 1,
+      "autoProductId": "25a84a9a-4321-4ed7-b5e6-e8ac01589bb7",
+      "recipe": [
+        {
+          "material": "Glasfaser",
+          "amount": 1
+        }
+      ]
+    },
+    "Gummi": {
+      "output": 1,
+      "autoProductId": "7e4e90ab-4b4b-485d-842b-e56f546414fd",
+      "recipe": [
+        {
+          "material": "Kunstfaser",
+          "amount": 1
+        }
+      ]
+    },
+    "Kunstfaser": {
+      "output": 1,
+      "autoProductId": "70dce5dc-2ac6-45b6-80e0-b76140d43c72",
+      "recipe": [
+        {
+          "material": "Rohöl",
+          "amount": 7
+        }
+      ]
+    },
+    "Glasfaser": {
+      "output": 3,
+      "autoProductId": "6fe0f348-d249-4f46-aec8-a0e843d928a3",
+      "recipe": [
+        {
+          "material": "Sand",
+          "amount": 1
+        }
+      ]
+    },
+    "Polyester": {
+      "output": 1,
+      "autoProductId": "98ebd364-323a-4a1a-9c3d-33315ec350f9",
+      "recipe": [
+        {
+          "material": "Kunstfaser",
+          "amount": 1
+        }
+      ]
+    },
+    "Leere Wasserflasche": {
+      "output": 1,
+      "autoProductId": "0426db5a-5564-4cfd-a014-d8cbb1896c8a",
+      "recipe": [
+        {
+          "material": "Kunststoff",
+          "amount": 1
+        }
+      ]
+    },
+    "Glas": {
+      "output": 1,
+      "autoProductId": "9a95913d-1ec6-4f9f-97d2-dd92588ed621",
+      "recipe": [
+        {
+          "material": "Glasfaser",
+          "amount": 1
+        }
+      ]
+    },
+    "Dünger": {
+      "output": 1,
+      "autoProductId": "3a89978c-6788-46b9-b082-916c5580f464",
+      "recipe": []
+    },
+    "Rohöl": {
+      "output": 1,
+      "recipe": []
+    },
+    "Ölpumpe": {
+      "output": 1,
+      "autoProductId": "74966ecd-b1e1-4349-8112-7657b50eceba",
+      "recipe": []
+    },
+    "Benzin": {
+      "output": 3,
+      "autoProductId": "eafc19b7-9298-42d5-86aa-e16d484a08bd",
+      "recipe": [
+        {
+          "material": "Rohöl",
+          "amount": 1
+        }
+      ]
+    },
+    "Leerer Spritkanister": {
+      "output": 2,
+      "autoProductId": "394d9893-6804-472e-94af-fb03c554b07c",
+      "recipe": [
+        {
+          "material": "Stahlplatten",
+          "amount": 2
+        }
+      ]
+    },
+    "Spritkanister": {
+      "output": 2,
+      "autoProductId": "e213a1d1-64e4-4295-a4ce-d3229ed78b22",
+      "recipe": [
+        {
+          "material": "Stahlplatten",
+          "amount": 1
+        },
+        {
+          "material": "Benzin",
+          "amount": 2
+        }
+      ]
+    },
+    "Kerosin": {
+      "output": 3,
+      "autoProductId": "0a197268-66ae-4ec3-b48d-4aa8e915d392",
+      "recipe": [
+        {
+          "material": "Rohöl",
+          "amount": 1
+        }
+      ]
+    },
+    "Ölkanister": {
+      "output": 20,
+      "autoProductId": "d17f9976-c0d9-4860-8943-3c8eb74ff91b",
+      "recipe": [
+        {
+          "material": "Rohöl",
+          "amount": 2
+        }
+      ]
+    },
+    "Spritkanister (Kerosin)": {
+      "output": 2,
+      "autoProductId": "19c8e079-8faf-4694-9a16-cfe66af1d7bf",
+      "recipe": [
+        {
+          "material": "Kerosin",
+          "amount": 1
+        },
+        {
+          "material": "Stahlplatten",
+          "amount": 2
+        }
+      ]
+    },
+    "Spritkanister (Kerosin) - leerer Kanister": {
+      "output": 2,
+      "autoProductId": "1d534685-a2dd-485f-b000-3511e0a29a82",
+      "recipe": [
+        {
+          "material": "Kerosin",
+          "amount": 1
+        },
+        {
+          "material": "Leerer Spritkanister",
+          "amount": 2
+        }
+      ]
+    },
+    "Benzinkanister - leerer Kanister": {
+      "output": 2,
+      "autoProductId": "6e362003-5147-4871-a7b8-9d1baca299e5",
+      "recipe": [
+        {
+          "material": "Benzin",
+          "amount": 1
+        },
+        {
+          "material": "Leerer Spritkanister",
+          "amount": 2
+        }
+      ]
+    },
+    "Baggerschaufel": {
+      "output": 1,
+      "autoProductId": "730239f0-b536-4b5c-9c32-7e59c7488415",
+      "recipe": [
+        {
+          "material": "Stahlplatten",
+          "amount": 11
+        }
+      ]
+    },
+    "Presslufthammer (Bagger)": {
+      "output": 1,
+      "autoProductId": "98e50703-8788-4f8f-8ef2-7caa002af625",
+      "recipe": [
+        {
+          "material": "Stahlplatten",
+          "amount": 11
+        }
+      ]
+    },
+    "Eisenbarren": {
+      "output": 1,
+      "autoProductId": "4782211c-275e-47d1-88b9-e07a518af6d1",
+      "recipe": [
+        {
+          "material": "Eisenerz",
+          "amount": 4
+        }
+      ]
+    },
+    "Kohlebarren": {
+      "output": 1,
+      "autoProductId": "34824925-a9d7-4506-ae17-71f25e09b3aa",
+      "recipe": [
+        {
+          "material": "Kohleerz",
+          "amount": 4
+        }
+      ]
+    },
+    "Titanbarren": {
+      "output": 1,
+      "autoProductId": "c60624f6-25a5-4c73-a400-387f98952a62",
+      "recipe": [
+        {
+          "material": "Titanerz",
+          "amount": 5
+        }
+      ]
+    },
+    "Saphirbarren": {
+      "output": 1,
+      "autoProductId": "e85b64a1-277d-4ede-b8d4-ce380e60deec",
+      "recipe": [
+        {
+          "material": "Saphirerz",
+          "amount": 4
+        }
+      ]
+    },
+    "Vivianitbarren": {
+      "output": 1,
+      "autoProductId": "328f2391-8ac4-4115-b9f1-642b0ab3ec72",
+      "recipe": [
+        {
+          "material": "Vivianiterz",
+          "amount": 4
+        }
+      ]
+    },
+    "Smaragdbarren": {
+      "output": 1,
+      "autoProductId": "f2d745e5-cd3d-4293-bf11-3f08be14c274",
+      "recipe": [
+        {
+          "material": "Smaragderz",
+          "amount": 4
+        }
+      ]
+    },
+    "Goldbarren": {
+      "output": 1,
+      "autoProductId": "b3793fd4-4a1d-4839-8d83-86a42cb422bc",
+      "recipe": [
+        {
+          "material": "Golderz",
+          "amount": 4
+        }
+      ]
+    },
+    "Amethystbarren": {
+      "output": 1,
+      "autoProductId": "27f40765-529d-491f-bb34-b8167171c003",
+      "recipe": [
+        {
+          "material": "Amethysterz",
+          "amount": 4
+        }
+      ]
+    },
+    "Aluminiumplatten": {
+      "output": 30,
+      "autoProductId": "8e26454b-b18a-4a02-918c-807e765b1bfa",
+      "recipe": [
+        {
+          "material": "Aluminiumbarren",
+          "amount": 4
+        },
+        {
+          "material": "Eisenbarren",
+          "amount": 2
+        },
+        {
+          "material": "Kohlebarren",
+          "amount": 6
+        }
+      ]
+    },
+    "Stahlplatten": {
+      "output": 30,
+      "autoProductId": "d685036c-b8a4-490e-9940-77f5e3efa75e",
+      "recipe": [
+        {
+          "material": "Eisenbarren",
+          "amount": 5
+        },
+        {
+          "material": "Kohlebarren",
+          "amount": 3
+        }
+      ]
+    },
+    "Goldplatten": {
+      "output": 30,
+      "autoProductId": "21cfbcd8-5591-4330-8d2e-c037eb74c4fd",
+      "recipe": [
+        {
+          "material": "Goldbarren",
+          "amount": 30
+        },
+        {
+          "material": "Kohlebarren",
+          "amount": 2
+        }
+      ]
+    },
+    "Stahlpalette": {
+      "output": 1,
+      "autoProductId": "adaac0bd-edd3-487b-b958-62c6ad35a7fe",
+      "recipe": [
+        {
+          "material": "Stahlplatten",
+          "amount": 60
+        }
+      ]
+    },
+    "Aluminiumpalette": {
+      "output": 1,
+      "autoProductId": "9104a569-b515-4e58-9acd-fe683717d67e",
+      "recipe": [
+        {
+          "material": "Aluminiumplatten",
+          "amount": 60
+        }
+      ]
+    },
+    "Aluminiumplatten (aus Palette)": {
+      "output": 60,
+      "autoProductId": "ceaebb47-820f-4e75-aa7d-6a136a4cad66",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Stahlplatten (aus Palette)": {
+      "output": 60,
+      "autoProductId": "9f40b3e9-48fb-4041-9137-72cf16d41e70",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Titanplatten": {
+      "output": 15,
+      "autoProductId": "46f0ca06-672d-4b67-a16a-36bbbfa0835b",
+      "recipe": [
+        {
+          "material": "Titanbarren",
+          "amount": 4
+        },
+        {
+          "material": "Kohlebarren",
+          "amount": 2
+        }
+      ]
+    },
+    "Titanpalette": {
+      "output": 1,
+      "autoProductId": "5da442d8-6f4e-40a2-90db-2fcb59f9d1fc",
+      "recipe": [
+        {
+          "material": "Titanplatten",
+          "amount": 60
+        }
+      ]
+    },
+    "Titanplatten (aus Palette)": {
+      "output": 60,
+      "autoProductId": "83f53fc4-a9ad-4514-8597-f6baf0fe2339",
+      "recipe": [
+        {
+          "material": "Titanpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Eisenbarrenpalette": {
+      "output": 1,
+      "autoProductId": "37b413fe-670e-4d65-879e-a7cc80203748",
+      "recipe": [
+        {
+          "material": "Eisenbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Kohlebarrenpalette": {
+      "output": 1,
+      "autoProductId": "077d2156-96af-4744-aa54-4273f4d00c5b",
+      "recipe": [
+        {
+          "material": "Kohlebarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Aluminiumbarrenpalette": {
+      "output": 1,
+      "autoProductId": "2e481a70-91b1-4a3f-afde-a50feb5621e3",
+      "recipe": [
+        {
+          "material": "Aluminiumbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Titanbarrenpalette": {
+      "output": 1,
+      "autoProductId": "94c21217-f84e-45b1-aa16-03e2522efa6b",
+      "recipe": [
+        {
+          "material": "Titanbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Saphirbarrenpalette": {
+      "output": 1,
+      "autoProductId": "9d29ea1e-9e6f-4578-8793-859c1016d7d9",
+      "recipe": [
+        {
+          "material": "Saphirbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Vivianitbarrenpalette": {
+      "output": 1,
+      "autoProductId": "2f3ec299-6257-4a1f-aa04-f43365fdd508",
+      "recipe": [
+        {
+          "material": "Vivianitbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Smaragdbarrenpalette": {
+      "output": 1,
+      "autoProductId": "faa78d58-607f-4955-9a99-e5cacd5cef52",
+      "recipe": [
+        {
+          "material": "Smaragdbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Goldbarrenpalette": {
+      "output": 1,
+      "autoProductId": "ffa45688-b532-4cb6-8f59-68beb4ec27ee",
+      "recipe": [
+        {
+          "material": "Goldbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Amethystbarrenpalette": {
+      "output": 1,
+      "autoProductId": "b32cde6a-bc23-4b20-8dce-60b02c6e988b",
+      "recipe": [
+        {
+          "material": "Amethystbarren",
+          "amount": 256
+        }
+      ]
+    },
+    "Schwefelerz": {
+      "output": 1,
+      "recipe": []
+    },
+    "Titanbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "9b895dd8-ce2d-4493-9da0-4756345c6879",
+      "recipe": [
+        {
+          "material": "Titanbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Eisenbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "268ee9aa-ab6a-4eb2-9675-25746b221451",
+      "recipe": [
+        {
+          "material": "Eisenbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Kohlebarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "ad907c1a-8c66-4fbb-a858-3b46c7c3dd09",
+      "recipe": [
+        {
+          "material": "Kohlebarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Aluminiumbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "640799f1-2890-453c-9921-6a9fa19f02ba",
+      "recipe": [
+        {
+          "material": "Aluminiumbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Saphirbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "3c160dc7-18dc-4b8b-872e-4657e4b4b714",
+      "recipe": [
+        {
+          "material": "Saphirbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Vivianitbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "e200f907-3f04-4a3e-aaf9-d976944031d6",
+      "recipe": [
+        {
+          "material": "Vivianitbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Smaragdbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "fa25c055-6123-4cc4-9f73-60fd791bee69",
+      "recipe": [
+        {
+          "material": "Smaragdbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Goldbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "993d3c64-0423-4567-a8bd-c5424413fcfb",
+      "recipe": [
+        {
+          "material": "Goldbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Amethystbarren (aus Palette)": {
+      "output": 256,
+      "autoProductId": "f95d2b40-2a26-4a82-b205-1a84fa2cc27b",
+      "recipe": [
+        {
+          "material": "Amethystbarrenpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Pallet Lifter": {
+      "output": 1,
+      "autoProductId": "19f14d40-f88a-4e28-bba4-11e0a983ff90",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 32
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 65
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 9
+        }
+      ]
+    },
+    "M-900": {
+      "output": 1,
+      "autoProductId": "5aadd4fa-d6cb-4833-83bf-6d631c323055",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 125
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 125
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 25
+        },
+        {
+          "material": "Glas",
+          "amount": 4
+        }
+      ]
+    },
+    "Eurocopter AS 350": {
+      "output": 1,
+      "autoProductId": "9d7dd64d-158c-4ac5-b9ea-05c0c1790d47",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 115
+        },
+        {
+          "material": "Glas",
+          "amount": 5
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 38
+        },
+        {
+          "material": "Fiberglas",
+          "amount": 38
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 126
+        }
+      ]
+    },
+    "Bell 412 (Civil)": {
+      "output": 1,
+      "autoProductId": "018d69ad-aa88-4809-813e-2497bb975479",
+      "recipe": [
+        {
+          "material": "Aluminiumbarrenpalette",
+          "amount": 115
+        },
+        {
+          "material": "Glas",
+          "amount": 5
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 35
+        },
+        {
+          "material": "Fiberglas",
+          "amount": 97
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 183
+        }
+      ]
+    },
+    "Bell 412 (Ex-Military)": {
+      "output": 1,
+      "autoProductId": "8378e079-08d0-44f4-b1fb-cd12f3263f5b",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 244
+        },
+        {
+          "material": "Glas",
+          "amount": 4
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 49
+        },
+        {
+          "material": "Fiberglas",
+          "amount": 98
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 185
+        }
+      ]
+    },
+    "Bell 412 (Veteran Transport)": {
+      "output": 1,
+      "autoProductId": "b7a91f2f-b9a3-49c2-a705-7a9f2710ee5a",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 244
+        },
+        {
+          "material": "Glas",
+          "amount": 4
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 49
+        },
+        {
+          "material": "Fiberglas",
+          "amount": 98
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 185
+        }
+      ]
+    },
+    "Bell 214 (Luxury)": {
+      "output": 1,
+      "autoProductId": "f3815c2e-b37e-4501-b547-70c083b56f7a",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 244
+        },
+        {
+          "material": "Glas",
+          "amount": 4
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 49
+        },
+        {
+          "material": "Fiberglas",
+          "amount": 98
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 185
+        }
+      ]
+    },
+    "Grumman Goose": {
+      "output": 1,
+      "autoProductId": "535a12b0-35d6-40c7-9ae5-7dcf43ab0678",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 75
+        },
+        {
+          "material": "Stahlpalette",
+          "amount": 107
+        }
+      ]
+    },
+    "Steerable Parachute": {
+      "output": 1,
+      "autoProductId": "feb13cf7-7a02-43da-a23b-453adb774ef8",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        },
+        {
+          "material": "Gummi",
+          "amount": 1
+        },
+        {
+          "material": "Kunststoff",
+          "amount": 1
+        }
+      ]
+    },
+    "Fenster": {
+      "output": 4,
+      "autoProductId": "6e319ec1-1b1e-407b-8074-ca736be10d73",
+      "recipe": [
+        {
+          "material": "Glas",
+          "amount": 1
+        }
+      ]
+    },
+    "Reifen": {
+      "output": 8,
+      "autoProductId": "795b10ed-f832-4a71-91c8-09f36dbe40ba",
+      "recipe": [
+        {
+          "material": "Gummi",
+          "amount": 3
+        }
+      ]
+    }
+  },
+  "products": {
+    "steel": [
+      {
+        "id": "b32cde6a-bc23-4b20-8dce-60b02c6e988b",
+        "name": "Amethystbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Amethystbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "ffa45688-b532-4cb6-8f59-68beb4ec27ee",
+        "name": "Goldbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Goldbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "faa78d58-607f-4955-9a99-e5cacd5cef52",
+        "name": "Smaragdbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Smaragdbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "2f3ec299-6257-4a1f-aa04-f43365fdd508",
+        "name": "Vivianitbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Vivianitbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "9d29ea1e-9e6f-4578-8793-859c1016d7d9",
+        "name": "Saphirbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Saphirbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "94c21217-f84e-45b1-aa16-03e2522efa6b",
+        "name": "Titanbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Titanbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "2e481a70-91b1-4a3f-afde-a50feb5621e3",
+        "name": "Aluminiumbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "077d2156-96af-4744-aa54-4273f4d00c5b",
+        "name": "Kohlebarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kohlebarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "37b413fe-670e-4d65-879e-a7cc80203748",
+        "name": "Eisenbarrenpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Eisenbarren",
+            "amount": 256
+          }
+        ]
+      },
+      {
+        "id": "83f53fc4-a9ad-4514-8597-f6baf0fe2339",
+        "name": "Titanplatten (aus Palette)",
+        "output": 60,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Titanpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "5da442d8-6f4e-40a2-90db-2fcb59f9d1fc",
+        "name": "Titanpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Titanplatten",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "ceaebb47-820f-4e75-aa7d-6a136a4cad66",
+        "name": "Aluminiumplatten (aus Palette)",
+        "output": 60,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "9104a569-b515-4e58-9acd-fe683717d67e",
+        "name": "Aluminiumpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumplatten",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "9f40b3e9-48fb-4041-9137-72cf16d41e70",
+        "name": "Stahlplatten (aus Palette)",
+        "output": 60,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "adaac0bd-edd3-487b-b958-62c6ad35a7fe",
+        "name": "Stahlpalette",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 60
+          }
+        ]
+      },
+      {
+        "id": "46f0ca06-672d-4b67-a16a-36bbbfa0835b",
+        "name": "Titanplatten",
+        "output": 15,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Titanbarren",
+            "amount": 4
+          },
+          {
+            "material": "Kohlebarren",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "21cfbcd8-5591-4330-8d2e-c037eb74c4fd",
+        "name": "Goldplatten",
+        "output": 30,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Goldbarren",
+            "amount": 30
+          },
+          {
+            "material": "Kohlebarren",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "8e26454b-b18a-4a02-918c-807e765b1bfa",
+        "name": "Aluminiumplatten",
+        "output": 30,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumbarren",
+            "amount": 4
+          },
+          {
+            "material": "Eisenbarren",
+            "amount": 2
+          },
+          {
+            "material": "Kohlebarren",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "27f40765-529d-491f-bb34-b8167171c003",
+        "name": "Amethystbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Amethysterz",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "b3793fd4-4a1d-4839-8d83-86a42cb422bc",
+        "name": "Goldbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Golderz",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "f2d745e5-cd3d-4293-bf11-3f08be14c274",
+        "name": "Smaragdbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Smaragderz",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "328f2391-8ac4-4115-b9f1-642b0ab3ec72",
+        "name": "Vivianitbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Vivianiterz",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "e85b64a1-277d-4ede-b8d4-ce380e60deec",
+        "name": "Saphirbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Saphirerz",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "c60624f6-25a5-4c73-a400-387f98952a62",
+        "name": "Titanbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Titanerz",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "34824925-a9d7-4506-ae17-71f25e09b3aa",
+        "name": "Kohlebarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kohleerz",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "4782211c-275e-47d1-88b9-e07a518af6d1",
+        "name": "Eisenbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Eisenerz",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "98e50703-8788-4f8f-8ef2-7caa002af625",
+        "name": "Presslufthammer (Bagger)",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 11
+          }
+        ]
+      },
+      {
+        "id": "730239f0-b536-4b5c-9c32-7e59c7488415",
+        "name": "Baggerschaufel",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 11
+          }
+        ]
+      },
+      {
+        "id": "d685036c-b8a4-490e-9940-77f5e3efa75e",
+        "name": "Stahlplatten",
+        "output": 30,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Eisenbarren",
+            "amount": 5
+          },
+          {
+            "material": "Kohlebarren",
+            "amount": 3
+          }
+        ]
+      }
+    ],
+    "vehicle": [
+      {
+        "id": "795b10ed-f832-4a71-91c8-09f36dbe40ba",
+        "name": "Reifen",
+        "output": 8,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Gummi",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "6e319ec1-1b1e-407b-8074-ca736be10d73",
+        "name": "Fenster",
+        "output": 4,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Glas",
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "clothing": [],
+    "aircraft": [
+      {
+        "id": "feb13cf7-7a02-43da-a23b-453adb774ef8",
+        "name": "Steerable Parachute",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          },
+          {
+            "material": "Gummi",
+            "amount": 1
+          },
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "535a12b0-35d6-40c7-9ae5-7dcf43ab0678",
+        "name": "Grumman Goose",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 75
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 107
+          }
+        ]
+      },
+      {
+        "id": "f3815c2e-b37e-4501-b547-70c083b56f7a",
+        "name": "Bell 214 (Luxury)",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 244
+          },
+          {
+            "material": "Glas",
+            "amount": 4
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 49
+          },
+          {
+            "material": "Fiberglas",
+            "amount": 98
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 185
+          }
+        ]
+      },
+      {
+        "id": "b7a91f2f-b9a3-49c2-a705-7a9f2710ee5a",
+        "name": "Bell 412 (Veteran Transport)",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 244
+          },
+          {
+            "material": "Glas",
+            "amount": 4
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 49
+          },
+          {
+            "material": "Fiberglas",
+            "amount": 98
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 185
+          }
+        ]
+      },
+      {
+        "id": "8378e079-08d0-44f4-b1fb-cd12f3263f5b",
+        "name": "Bell 412 (Ex-Military)",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 244
+          },
+          {
+            "material": "Glas",
+            "amount": 4
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 49
+          },
+          {
+            "material": "Fiberglas",
+            "amount": 98
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 185
+          }
+        ]
+      },
+      {
+        "id": "018d69ad-aa88-4809-813e-2497bb975479",
+        "name": "Bell 412 (Civil)",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumbarrenpalette",
+            "amount": 115
+          },
+          {
+            "material": "Glas",
+            "amount": 5
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 35
+          },
+          {
+            "material": "Fiberglas",
+            "amount": 97
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 183
+          }
+        ]
+      },
+      {
+        "id": "9d7dd64d-158c-4ac5-b9ea-05c0c1790d47",
+        "name": "Eurocopter AS 350",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 115
+          },
+          {
+            "material": "Glas",
+            "amount": 5
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 38
+          },
+          {
+            "material": "Fiberglas",
+            "amount": 38
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 126
+          }
+        ]
+      },
+      {
+        "id": "5aadd4fa-d6cb-4833-83bf-6d631c323055",
+        "name": "M-900",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 125
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 125
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 25
+          },
+          {
+            "material": "Glas",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "19f14d40-f88a-4e28-bba4-11e0a983ff90",
+        "name": "Pallet Lifter",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 32
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 65
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 9
+          }
+        ]
+      }
+    ],
+    "boat": [],
+    "oil": [
+      {
+        "id": "6e362003-5147-4871-a7b8-9d1baca299e5",
+        "name": "Benzinkanister - leerer Kanister",
+        "output": 2,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Benzin",
+            "amount": 1
+          },
+          {
+            "material": "Leerer Spritkanister",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "1d534685-a2dd-485f-b000-3511e0a29a82",
+        "name": "Spritkanister (Kerosin) - leerer Kanister",
+        "output": 2,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kerosin",
+            "amount": 1
+          },
+          {
+            "material": "Leerer Spritkanister",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "19c8e079-8faf-4694-9a16-cfe66af1d7bf",
+        "name": "Spritkanister (Kerosin)",
+        "output": 2,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kerosin",
+            "amount": 1
+          },
+          {
+            "material": "Stahlplatten",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "d17f9976-c0d9-4860-8943-3c8eb74ff91b",
+        "name": "Ölkanister",
+        "output": 20,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Rohöl",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "0a197268-66ae-4ec3-b48d-4aa8e915d392",
+        "name": "Kerosin",
+        "output": 3,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Rohöl",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "e213a1d1-64e4-4295-a4ce-d3229ed78b22",
+        "name": "Spritkanister",
+        "output": 2,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 1
+          },
+          {
+            "material": "Benzin",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "394d9893-6804-472e-94af-fb03c554b07c",
+        "name": "Leerer Spritkanister",
+        "output": 2,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "eafc19b7-9298-42d5-86aa-e16d484a08bd",
+        "name": "Benzin",
+        "output": 3,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Rohöl",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "74966ecd-b1e1-4349-8112-7657b50eceba",
+        "name": "Ölpumpe",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": []
+      }
+    ],
+    "goods": [],
+    "chemistry": [
+      {
+        "id": "f95d2b40-2a26-4a82-b205-1a84fa2cc27b",
+        "name": "Amethystbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Amethystbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "993d3c64-0423-4567-a8bd-c5424413fcfb",
+        "name": "Goldbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Goldbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "fa25c055-6123-4cc4-9f73-60fd791bee69",
+        "name": "Smaragdbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Smaragdbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "e200f907-3f04-4a3e-aaf9-d976944031d6",
+        "name": "Vivianitbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Vivianitbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "3c160dc7-18dc-4b8b-872e-4657e4b4b714",
+        "name": "Saphirbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Saphirbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "640799f1-2890-453c-9921-6a9fa19f02ba",
+        "name": "Aluminiumbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "ad907c1a-8c66-4fbb-a858-3b46c7c3dd09",
+        "name": "Kohlebarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kohlebarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "268ee9aa-ab6a-4eb2-9675-25746b221451",
+        "name": "Eisenbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Eisenbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "9b895dd8-ce2d-4493-9da0-4756345c6879",
+        "name": "Titanbarren (aus Palette)",
+        "output": 256,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Titanbarrenpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "3a89978c-6788-46b9-b082-916c5580f464",
+        "name": "Dünger",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": []
+      },
+      {
+        "id": "9a95913d-1ec6-4f9f-97d2-dd92588ed621",
+        "name": "Glas",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Glasfaser",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "0426db5a-5564-4cfd-a014-d8cbb1896c8a",
+        "name": "Leere Wasserflasche",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "98ebd364-323a-4a1a-9c3d-33315ec350f9",
+        "name": "Polyester",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kunstfaser",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "6fe0f348-d249-4f46-aec8-a0e843d928a3",
+        "name": "Glasfaser",
+        "output": 3,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Sand",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "70dce5dc-2ac6-45b6-80e0-b76140d43c72",
+        "name": "Kunstfaser",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Rohöl",
+            "amount": 7
+          }
+        ]
+      },
+      {
+        "id": "7e4e90ab-4b4b-485d-842b-e56f546414fd",
+        "name": "Gummi",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Kunstfaser",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "25a84a9a-4321-4ed7-b5e6-e8ac01589bb7",
+        "name": "Fiberglas",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Glasfaser",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "312bc031-b9bc-4d52-80c8-9592498ccb29",
+        "name": "Kunststoff",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Rohöl",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "d4b372b9-7d45-4acd-bae9-10ee61ce3042",
+        "name": "Schießpulver",
+        "output": 5,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Schwefelbarren",
+            "amount": 5
+          },
+          {
+            "material": "Kohlebarren",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "1b75f5c2-c02e-49a6-b0cb-11d017ea35b9",
+        "name": "Schwefelbarren",
+        "output": 10,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Schwefelerz",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "4b381b66-0126-46ca-a83a-7a0c72d5fc04",
+        "name": "Titanerz",
+        "output": 4,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Sand",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "6f1c8dd9-b697-4d31-917f-ffb45a56c9b7",
+        "name": "Aluminiumbarren",
+        "output": 1,
+        "importPrice": null,
+        "exportPrice": null,
+        "marketValue": null,
+        "runCost": null,
+        "recipe": [
+          {
+            "material": "Aluminiumerz",
+            "amount": 2
+          }
+        ]
+      }
+    ],
+    "illegalWeapons": [],
+    "food": []
+  },
+  "plan": [],
   "materialPrices": {},
   "pricing": {
     "standardMarginPercent": 30
   },
-  "products": {
-    "steel": [],
-    "vehicle": [],
-    "clothing": [],
-    "aircraft": [],
-    "boat": [],
-    "oil": [],
-    "goods": [],
-    "food": [],
-    "chemistry": [],
-    "illegalWeapons": []
-  },
-  "plan": [],
   "materialImportPrices": {},
   "materialExportPrices": {}
 }
