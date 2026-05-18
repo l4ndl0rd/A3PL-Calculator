@@ -22,6 +22,15 @@
       </div>
     </nav>
 
+    <section class="data-actions" aria-label="Datenverwaltung">
+      <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
+      <label class="button button-secondary file-button">
+        Daten importieren
+        <input id="importDataInput" type="file" accept="application/json" />
+      </label>
+      <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
+    </section>
+
     <section id="calculator" class="panel active" aria-labelledby="calculator-tab">
       <div class="panel-grid calculator-grid">
         <section class="card">
@@ -141,14 +150,6 @@
 
     <div id="factoryPanels"></div>
 
-    <section class="data-actions" aria-label="Datenverwaltung">
-      <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
-      <label class="button button-secondary file-button">
-        Daten importieren
-        <input id="importDataInput" type="file" accept="application/json" />
-      </label>
-      <button id="resetDataBtn" class="button button-danger" type="button">Zurücksetzen</button>
-    </section>
   </main>
 
   <template id="factoryPanelTemplate">

@@ -1669,3 +1669,76 @@ html {
     white-space: normal;
   }
 }
+
+/* v24: move global data management from the page bottom to a compact toolbar below the main navigation. */
+.data-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  max-width: none;
+  margin: -8px 0 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.data-actions .button,
+.data-actions .file-button {
+  width: auto;
+  min-width: 150px;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.data-actions .button-secondary,
+.data-actions .file-button {
+  background: rgba(38, 38, 38, 0.82);
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+
+.data-actions .button-secondary:hover,
+.data-actions .file-button:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #fff;
+}
+
+.data-actions .button-danger {
+  min-width: 132px;
+}
+
+@media (max-width: 860px) {
+  .data-actions {
+    justify-content: stretch;
+    margin: -6px 0 14px;
+  }
+
+  .data-actions .button,
+  .data-actions .file-button {
+    flex: 1 1 150px;
+    min-width: 0;
+    padding: 9px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .data-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .data-actions .button,
+  .data-actions .file-button {
+    width: 100%;
+  }
+}
