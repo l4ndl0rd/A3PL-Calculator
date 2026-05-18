@@ -222,6 +222,66 @@
     </tr>
   </template>
 
+
+  <dialog id="addMaterialDialog" class="modal-dialog">
+    <form id="addMaterialForm" class="modal-card" method="dialog">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow modal-eyebrow">Material</p>
+          <h2>Material hinzufügen</h2>
+          <p>Materialien ohne Unterrezept werden im Calculator als Rohmaterial behandelt.</p>
+        </div>
+        <button id="closeMaterialDialogBtn" class="icon-button" type="button" aria-label="Fenster schließen">×</button>
+      </div>
+
+      <div class="modal-fields">
+        <label>
+          Materialname
+          <input id="newMaterialName" type="text" placeholder="z. B. Eisenerz" autocomplete="off" />
+        </label>
+        <label>
+          Ausstoß pro Unterrezept-Lauf
+          <input id="newMaterialOutput" type="number" min="1" step="1" value="1" />
+        </label>
+      </div>
+
+      <div class="modal-section">
+        <div class="card-header compact-header">
+          <div>
+            <h3>Optionales Unterrezept</h3>
+            <p>Leer lassen, wenn es sich um ein echtes Rohmaterial handelt.</p>
+          </div>
+          <button id="addMaterialDialogRecipeRowBtn" class="button button-secondary" type="button">Unterrezept-Zeile hinzufügen</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table compact" id="materialDialogRecipeTable">
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Menge pro Lauf</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-secondary" type="button" id="cancelMaterialDialogBtn">Abbrechen</button>
+        <button class="button" type="submit">Material speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="materialDialogRecipeRowTemplate">
+    <tr>
+      <td><select class="material-dialog-recipe-material"></select></td>
+      <td><input class="material-dialog-recipe-amount" type="number" min="0" step="1" value="1" /></td>
+      <td><button class="icon-button remove-material-dialog-recipe-row" type="button" aria-label="Unterrezept-Zeile entfernen">×</button></td>
+    </tr>
+  </template>
+
   <script src="app.js"></script>
 </body>
 </html>

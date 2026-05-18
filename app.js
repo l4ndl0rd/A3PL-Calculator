@@ -13,6 +13,7 @@ const FACTORIES = {
 };
 
 let state = loadState();
+let materialDialogRecipe = [];
 
 const els = {
   tabs: document.querySelector("#tabs"),
@@ -29,6 +30,14 @@ const els = {
   exportDataBtn: document.querySelector("#exportDataBtn"),
   importDataInput: document.querySelector("#importDataInput"),
   resetDataBtn: document.querySelector("#resetDataBtn"),
+  addMaterialDialog: document.querySelector("#addMaterialDialog"),
+  addMaterialForm: document.querySelector("#addMaterialForm"),
+  closeMaterialDialogBtn: document.querySelector("#closeMaterialDialogBtn"),
+  cancelMaterialDialogBtn: document.querySelector("#cancelMaterialDialogBtn"),
+  newMaterialName: document.querySelector("#newMaterialName"),
+  newMaterialOutput: document.querySelector("#newMaterialOutput"),
+  addMaterialDialogRecipeRowBtn: document.querySelector("#addMaterialDialogRecipeRowBtn"),
+  materialDialogRecipeTableBody: document.querySelector("#materialDialogRecipeTable tbody"),
   kpiPositions: document.querySelector("#kpiPositions"),
   kpiRuns: document.querySelector("#kpiRuns"),
   kpiMaterials: document.querySelector("#kpiMaterials"),
@@ -36,7 +45,8 @@ const els = {
   productTemplate: document.querySelector("#productTemplate"),
   recipeRowTemplate: document.querySelector("#recipeRowTemplate"),
   materialRecipeRowTemplate: document.querySelector("#materialRecipeRowTemplate"),
-  planRowTemplate: document.querySelector("#planRowTemplate")
+  planRowTemplate: document.querySelector("#planRowTemplate"),
+  materialDialogRecipeRowTemplate: document.querySelector("#materialDialogRecipeRowTemplate")
 };
 
 init();
@@ -53,13 +63,20 @@ function bindStaticEvents() {
     activateTab(tab.dataset.target);
   });
 
-  els.addMaterialBtn.addEventListener("click", addMaterial);
+  els.addMaterialBtn.addEventListener("click", openAddMaterialDialog);
   els.addPlanRowBtn.addEventListener("click", addPlanRow);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
   els.copyRawMaterialsBtn.addEventListener("click", copyRawRequirementsTable);
   els.exportDataBtn.addEventListener("click", exportData);
   els.importDataInput.addEventListener("change", importData);
   els.resetDataBtn.addEventListener("click", resetData);
+  els.addMaterialForm.addEventListener("submit", saveMaterialFromDialog);
+  els.closeMaterialDialogBtn.addEventListener("click", closeAddMaterialDialog);
+  els.cancelMaterialDialogBtn.addEventListener("click", closeAddMaterialDialog);
+  els.addMaterialDialogRecipeRowBtn.addEventListener("click", addMaterialDialogRecipeRow);
+  els.addMaterialDialog.addEventListener("click", (event) => {
+    if (event.target === els.addMaterialDialog) closeAddMaterialDialog();
+  });
 }
 
 function renderAll() {
@@ -221,6 +238,7 @@ function renderMaterials() {
     });
 
     row.querySelector(".material-output").addEventListener("change", (event) => {
+      clearAutoRecipeFlag(material);
       getMaterialRecipe(material).output = positiveInteger(event.target.value, 1);
       renderAll();
       activateTab("materials");
@@ -240,6 +258,7 @@ function renderMaterials() {
     row.querySelector(".add-material-recipe-row").addEventListener("click", () => {
       ensureMinimumMaterial();
       const defaultMaterial = state.materials.find((item) => item !== material) || state.materials[0];
+      clearAutoRecipeFlag(material);
       getMaterialRecipe(material).recipe.unshift({ material: defaultMaterial, amount: 1 });
       renderAll();
       activateTab("materials");
@@ -270,18 +289,21 @@ function createMaterialRecipeRow(materialName, index, recipeItem) {
   amountInput.value = recipeItem.amount;
 
   materialSelect.addEventListener("change", () => {
+    clearAutoRecipeFlag(materialName);
     getMaterialRecipe(materialName).recipe[index].material = materialSelect.value;
     renderAll();
     activateTab("materials");
   });
 
   amountInput.addEventListener("change", () => {
+    clearAutoRecipeFlag(materialName);
     getMaterialRecipe(materialName).recipe[index].amount = positiveInteger(amountInput.value, 0);
     renderAll();
     activateTab("materials");
   });
 
   row.querySelector(".remove-material-recipe-row").addEventListener("click", () => {
+    clearAutoRecipeFlag(materialName);
     getMaterialRecipe(materialName).recipe.splice(index, 1);
     renderAll();
     activateTab("materials");
@@ -529,18 +551,101 @@ function addProduct(factory) {
   queueFocus(`#${factory} .product-card[data-product-id="${cssEscape(product.id)}"] .product-name`);
 }
 
-function addMaterial() {
-  let base = "Neues Material";
-  let name = base;
-  let counter = 2;
-  while (state.materials.includes(name)) {
-    name = `${base} ${counter}`;
-    counter += 1;
+function openAddMaterialDialog() {
+  materialDialogRecipe = [];
+  els.newMaterialName.value = "";
+  els.newMaterialOutput.value = 1;
+  renderMaterialDialogRecipeRows();
+  if (typeof els.addMaterialDialog.showModal === "function") {
+    els.addMaterialDialog.showModal();
+    queueFocus("#newMaterialName");
+  } else {
+    const name = prompt("Materialname eingeben:");
+    if (!name) return;
+    createMaterialFromDialogData(name, 1, []);
   }
-  state.materials.unshift(name);
+}
+
+function closeAddMaterialDialog() {
+  els.addMaterialDialog.close();
+}
+
+function saveMaterialFromDialog(event) {
+  event.preventDefault();
+  const name = cleanText(els.newMaterialName.value);
+  const output = positiveInteger(els.newMaterialOutput.value, 1);
+  const recipe = materialDialogRecipe
+    .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
+    .filter((item) => item.material && item.amount > 0);
+
+  if (!name) {
+    alert("Bitte einen Materialnamen eintragen.");
+    queueFocus("#newMaterialName");
+    return;
+  }
+
+  if (state.materials.some((material) => material.toLocaleLowerCase("de-DE") === name.toLocaleLowerCase("de-DE"))) {
+    alert(`Das Material "${name}" existiert bereits.`);
+    queueFocus("#newMaterialName");
+    return;
+  }
+
+  createMaterialFromDialogData(name, output, recipe);
+  closeAddMaterialDialog();
+}
+
+function createMaterialFromDialogData(name, output, recipe) {
+  state.materials.push(name);
+  if (recipe.length) {
+    state.materialRecipes[name] = { output, recipe };
+  }
   renderAll();
   activateTab("materials");
-  queueFocus("#materialsTable tbody tr:first-child input");
+  queueFocusMaterialName(name);
+}
+
+function addMaterialDialogRecipeRow() {
+  if (!state.materials.length) {
+    alert("Lege zuerst mindestens ein Basismaterial an, bevor du ein Unterrezept erstellst.");
+    return;
+  }
+  materialDialogRecipe.unshift({ material: state.materials[0], amount: 1 });
+  renderMaterialDialogRecipeRows();
+}
+
+function renderMaterialDialogRecipeRows() {
+  els.materialDialogRecipeTableBody.innerHTML = "";
+
+  if (!materialDialogRecipe.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="3" class="empty-state">Kein Unterrezept. Das neue Material wird als Rohmaterial behandelt.</td>`;
+    els.materialDialogRecipeTableBody.appendChild(row);
+    return;
+  }
+
+  materialDialogRecipe.forEach((item, index) => {
+    const row = els.materialDialogRecipeRowTemplate.content.firstElementChild.cloneNode(true);
+    const materialSelect = row.querySelector(".material-dialog-recipe-material");
+    const amountInput = row.querySelector(".material-dialog-recipe-amount");
+
+    fillSelect(materialSelect, state.materials.map((material) => ({ value: material, label: material })), item.material);
+    amountInput.value = item.amount;
+
+    materialSelect.addEventListener("change", () => {
+      materialDialogRecipe[index].material = materialSelect.value;
+    });
+
+    amountInput.addEventListener("change", () => {
+      materialDialogRecipe[index].amount = positiveInteger(amountInput.value, 0);
+    });
+
+    row.querySelector(".remove-material-dialog-recipe-row").addEventListener("click", () => {
+      materialDialogRecipe.splice(index, 1);
+      renderMaterialDialogRecipeRows();
+    });
+
+    els.materialDialogRecipeTableBody.appendChild(row);
+  });
 }
 
 function addPlanRow() {
@@ -673,11 +778,11 @@ function getExistingMaterialRecipe(materialName) {
 }
 function ensureMaterial(name) {
   const cleaned = cleanText(name);
-  if (cleaned && !state.materials.includes(cleaned)) state.materials.unshift(cleaned);
+  if (cleaned && !state.materials.includes(cleaned)) state.materials.push(cleaned);
 }
 
 function ensureMinimumMaterial() {
-  if (!state.materials.length) state.materials.unshift("Neues Material");
+  if (!state.materials.length) state.materials.push("Neues Material");
 }
 
 function renameMaterial(oldName, newName) {
@@ -721,6 +826,51 @@ function isMaterialInUse(materialName) {
   return usedInProducts || usedInMaterialRecipes;
 }
 
+function clearAutoRecipeFlag(materialName) {
+  const recipeDef = getExistingMaterialRecipe(materialName);
+  if (recipeDef?.autoProductId) delete recipeDef.autoProductId;
+}
+
+function syncProductRecipesToMaterials() {
+  const validAutoKeys = new Set();
+
+  for (const product of Object.values(state.products).flat()) {
+    const productName = cleanText(product.name);
+    if (!productName) continue;
+
+    ensureMaterial(productName);
+
+    if (!product.recipe.length) continue;
+
+    const existing = getExistingMaterialRecipe(productName);
+    const shouldSync = !existing || existing.autoProductId === product.id || !existing.recipe?.length;
+
+    if (shouldSync) {
+      state.materialRecipes[productName] = {
+        output: positiveInteger(product.output, 1),
+        recipe: product.recipe
+          .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
+          .filter((item) => item.material && item.amount > 0),
+        autoProductId: product.id
+      };
+    }
+
+    validAutoKeys.add(`${product.id}|${productName}`);
+  }
+
+  for (const [materialName, recipeDef] of Object.entries(state.materialRecipes ?? {})) {
+    if (!recipeDef?.autoProductId) continue;
+    const key = `${recipeDef.autoProductId}|${materialName}`;
+    if (!validAutoKeys.has(key)) {
+      delete state.materialRecipes[materialName];
+    }
+  }
+}
+
+function sortMaterials() {
+  state.materials = unique(state.materials).sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+}
+
 function normalizeState() {
   state.materials = unique((state.materials ?? []).map(cleanText).filter(Boolean));
   state.products ??= {};
@@ -753,6 +903,7 @@ function normalizeState() {
     if (!name || !state.materials.includes(name)) continue;
     normalizedMaterialRecipes[name] = {
       output: positiveInteger(recipeDef?.output, 1),
+      autoProductId: cleanText(recipeDef?.autoProductId) || undefined,
       recipe: Array.isArray(recipeDef?.recipe)
         ? recipeDef.recipe.map((item) => ({
             material: cleanText(item.material) || state.materials[0] || "Neues Material",
@@ -763,6 +914,8 @@ function normalizeState() {
     normalizedMaterialRecipes[name].recipe.forEach((item) => ensureMaterial(item.material));
   }
   state.materialRecipes = normalizedMaterialRecipes;
+  syncProductRecipesToMaterials();
+  sortMaterials();
 
   state.plan = state.plan.map((item) => {
     const factory = FACTORIES[item.factory] ? item.factory : Object.keys(FACTORIES)[0];
@@ -872,6 +1025,17 @@ function queueFocus(selector) {
     element.scrollIntoView({ block: "center", behavior: "smooth" });
     element.focus();
     if (typeof element.select === "function") element.select();
+  }, 0);
+}
+
+function queueFocusMaterialName(materialName) {
+  window.setTimeout(() => {
+    const inputs = [...document.querySelectorAll("#materialsTable .material-name")];
+    const element = inputs.find((input) => input.value === materialName);
+    if (!element) return;
+    element.scrollIntoView({ block: "center", behavior: "smooth" });
+    element.focus();
+    element.select();
   }, 0);
 }
 

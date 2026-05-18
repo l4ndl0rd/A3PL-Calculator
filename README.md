@@ -11,7 +11,7 @@ Statisches Webinterface für GitHub Pages zur Verwaltung von Produktionsrezepten
 ## Funktionen
 
 - Calculator für Produktionsplan und aggregierten Materialbedarf
-- Materialstammdaten
+- Materialstammdaten mit alphabetischer Sortierung und Dialog zum Hinzufügen
 - Rezeptverwaltung für:
   - Stahlfabrik
   - Fahrzeugfabrik
@@ -22,10 +22,13 @@ Statisches Webinterface für GitHub Pages zur Verwaltung von Produktionsrezepten
   - Warenfabrik
   - Chemiefabrik
   - Illegale Waffenfabrik
-- Calculator, Materialien und alle Fabriken in einer gemeinsamen, responsive umbrechenden Tab-Zeile
+- Calculator, alle Fabriken und Materialien in einer gemeinsamen, responsive umbrechenden Tab-Zeile
+- Sticky Navigation beim Scrollen
+- Automatische Übernahme von Warenrezepten als Material-Unterrezepte
+- Rekursive Rohmaterialberechnung über Waren- und Material-Unterrezepte
 - Lokale Speicherung im Browser per `localStorage`
 - JSON Export/Import
-- Reset auf Standarddaten
+- Reset auf leere Standarddaten
 
 ## GitHub Pages Deployment
 
