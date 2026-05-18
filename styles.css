@@ -910,3 +910,92 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+/* v15: keep original palette and force navigation into one non-wrapping row */
+:root {
+  --bg: #111111;
+  --panel: #181818;
+  --panel-2: #202020;
+  --text: #f4f4f4;
+  --muted: #a9a9a9;
+  --line: #333333;
+  --accent: #cc6900;
+  --accent-hover: #e27a0c;
+  --danger: #b13a3a;
+  --danger-hover: #c84646;
+}
+
+.tabs {
+  overflow: hidden;
+}
+
+.tab-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) rgba(255, 255, 255, 0.08);
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.tab-row::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.tab-row::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.tab {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: max-content;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 860px) {
+  .tab-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: max-content;
+    white-space: nowrap;
+    padding: 9px 12px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .tab-row {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: max-content;
+    white-space: nowrap;
+    padding: 8px 11px;
+    font-size: 0.78rem;
+  }
+}

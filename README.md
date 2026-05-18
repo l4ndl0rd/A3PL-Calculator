@@ -27,3 +27,10 @@ Es wird kein Backend und kein Build-Prozess benötigt.
 ## Datenspeicherung
 
 Die Daten werden lokal im Browser per `localStorage` gespeichert. Für Backups stehen JSON Export und Import zur Verfügung.
+
+
+## Version v15
+
+- Farbvariablen explizit auf die ursprüngliche dunkle/orange Palette gesetzt.
+- Navigationsmenü bleibt in einer einzelnen Zeile ohne Zeilenumbruch.
+- Bei kleinen Fensterbreiten ist die Navigationszeile horizontal scrollbar, statt umzubrechen.
