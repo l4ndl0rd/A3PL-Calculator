@@ -57,6 +57,7 @@ const els = {
   inventoryTableBody: document.querySelector("#inventoryTable tbody"),
   inventoryItemOptions: document.querySelector("#inventoryItemOptions"),
   addInventoryItemBtn: document.querySelector("#addInventoryItemBtn"),
+  resetInventoryBtn: document.querySelector("#resetInventoryBtn"),
   requirementsTableBody: document.querySelector("#requirementsTable tbody"),
   rawRequirementsTableBody: document.querySelector("#rawRequirementsTable tbody"),
   rawRequirementsHint: document.querySelector("#rawRequirementsHint"),
@@ -64,6 +65,7 @@ const els = {
   economyHint: document.querySelector("#economyHint"),
   standardMarginInput: document.querySelector("#standardMarginInput"),
   addPlanRowBtn: document.querySelector("#addPlanRowBtn"),
+  clearPlanBtn: document.querySelector("#clearPlanBtn"),
   addMaterialBtn: document.querySelector("#addMaterialBtn"),
   materialSearchInput: document.querySelector("#materialSearchInput"),
   copyMaterialsBtn: document.querySelector("#copyMaterialsBtn"),
@@ -154,7 +156,9 @@ function bindStaticEvents() {
     openMaterialDialogCreate();
   });
   els.addPlanRowBtn.addEventListener("click", addPlanRow);
+  if (els.clearPlanBtn) els.clearPlanBtn.addEventListener("click", clearPlan);
   if (els.addInventoryItemBtn) els.addInventoryItemBtn.addEventListener("click", addInventoryItem);
+  if (els.resetInventoryBtn) els.resetInventoryBtn.addEventListener("click", resetInventory);
   if (els.materialSearchInput) {
     els.materialSearchInput.addEventListener("input", () => {
       materialSearchQuery = cleanText(els.materialSearchInput.value);
@@ -582,6 +586,29 @@ function renderPlan() {
   });
 }
 
+function clearPlan() {
+  if (!state.plan.length) return;
+  state.plan = [];
+  renderAll();
+}
+
+function resetInventory() {
+  const hasInventory = Object.values(state.inventory ?? {}).some((amount) => positiveInteger(amount, 0) > 0) || inventoryDraftRows.length > 0;
+  if (!hasInventory) return;
+
+  const confirmed = confirm([
+    "Eigenes Inventar wirklich zurücksetzen?",
+    "",
+    "Alle eingetragenen Inventarwerte werden aus dieser lokalen Kalkulation entfernt.",
+    "Produktionsplan, Materialien, Waren und Preise bleiben erhalten."
+  ].join("\n"));
+
+  if (!confirmed) return;
+  state.inventory = {};
+  inventoryDraftRows = [];
+  renderAll();
+}
+
 function renderRequirements() {
   const directRequirements = calculateRequirements();
   const rawResult = calculateRawRequirements();
@@ -777,7 +804,7 @@ function renderInventory() {
   });
 
   inventoryDraftRows.forEach((draft) => {
-    els.inventoryTableBody.appendChild(createInventoryRow({ material: draft.material ?? "", amount: draft.amount ?? 1, isDraft: true, draftId: draft.id }));
+    els.inventoryTableBody.appendChild(createInventoryRow({ material: draft.material ?? "", amount: draft.amount ?? "", isDraft: true, draftId: draft.id }));
   });
 }
 
@@ -798,7 +825,7 @@ function createInventoryRow(config) {
   if (isDraft) row.classList.add("draft-row");
   row.innerHTML = `
     <td><input class="inventory-material" type="text" list="inventoryItemOptions" autocomplete="off" placeholder="Item auswählen oder suchen" value="${escapeHtml(material)}" /></td>
-    <td><input class="inventory-amount" type="number" min="0" step="1" value="${positiveInteger(amount, 0) || 1}" /></td>
+    <td><input class="inventory-amount" type="number" min="0" step="1" placeholder="0" value="${isDraft && (amount === "" || amount === null || amount === undefined) ? "" : positiveInteger(amount, 0)}" /></td>
     <td><button class="icon-button remove-inventory-row" type="button" aria-label="Inventarzeile entfernen">×</button></td>
   `;
 
@@ -810,11 +837,21 @@ function createInventoryRow(config) {
     const newMaterial = cleanText(materialInput.value);
     const currentAmount = positiveInteger(amountInput.value, 0);
     if (!newMaterial) return;
+
+    if (isDraft && currentAmount <= 0) {
+      const draft = inventoryDraftRows.find((item) => item.id === draftId);
+      if (draft) {
+        draft.material = newMaterial;
+        draft.amount = "";
+      }
+      return;
+    }
+
     ensureMaterial(newMaterial);
 
     if (isDraft) {
       inventoryDraftRows = inventoryDraftRows.filter((item) => item.id !== draftId);
-      if (currentAmount > 0) state.inventory[newMaterial] = (positiveInteger(state.inventory[newMaterial], 0) || 0) + currentAmount;
+      state.inventory[newMaterial] = (positiveInteger(state.inventory[newMaterial], 0) || 0) + currentAmount;
       renderAll();
       return;
     }
@@ -868,7 +905,7 @@ function addInventoryItem() {
     alert("Lege zuerst mindestens ein Material oder eine Ware an.");
     return;
   }
-  inventoryDraftRows.push({ id: cryptoId(), material: "", amount: 1 });
+  inventoryDraftRows.push({ id: cryptoId(), material: "", amount: "" });
   renderAll();
   activateTab("calculator");
   queueFocus("#inventoryTable tbody tr:last-child .inventory-material");
@@ -1415,6 +1452,8 @@ async function resetData() {
   if (!requireAdminAccess()) return;
   if (!confirm("Alle lokal gespeicherten Daten werden gelöscht und durch die mitgelieferten Standarddaten ersetzt. Fortfahren?")) return;
   localStorage.removeItem(STORAGE_KEY);
+  LEGACY_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+  inventoryDraftRows = [];
   state = createDefaultState();
   await bootstrapBundledData(true);
   renderAll();

@@ -49,7 +49,10 @@
               <h2>Produktionsplan</h2>
               <p>Trage ein, welche Waren hergestellt werden sollen. Der Materialbedarf wird unten aggregiert.</p>
             </div>
-            <button id="addPlanRowBtn" class="button" type="button">Position hinzufügen</button>
+            <div class="card-actions">
+              <button id="clearPlanBtn" class="button button-secondary" type="button">Plan leeren</button>
+              <button id="addPlanRowBtn" class="button" type="button">Position hinzufügen</button>
+            </div>
           </div>
           <div class="table-wrap">
             <table class="data-table" id="planTable">
@@ -94,7 +97,10 @@
             <h2>Eigenes Inventar</h2>
             <p>Trage erfarmte Items ein. Diese Mengen werden vom Bedarf abgezogen und müssen nicht eingekauft werden.</p>
           </div>
-          <button id="addInventoryItemBtn" class="button" type="button">Inventar-Item hinzufügen</button>
+          <div class="card-actions">
+            <button id="resetInventoryBtn" class="button button-secondary" type="button">Inventar zurücksetzen</button>
+            <button id="addInventoryItemBtn" class="button" type="button">Inventar-Item hinzufügen</button>
+          </div>
         </div>
         <p class="hint">Inventarwerte sind Kalkulationsdaten und benötigen keinen Bearbeitungsmodus. Sie werden beim Export in der JSON mitgespeichert.</p>
         <div class="table-wrap">
@@ -132,7 +138,7 @@
             </thead>
             <tbody></tbody>
           </table>
-          <datalist id="inventoryItemOptions"></datalist>
+          
         </div>
       </section>
 

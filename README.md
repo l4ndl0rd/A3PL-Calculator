@@ -280,3 +280,20 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Inventar-Auswahl nutzt jetzt ein Textfeld mit Vorschlägen aller bekannten Materialien und Waren.
 - Neue Inventar- und Produktionsplan-Einträge werden zunächst unten angefügt.
 - Nach Auswahl/Änderung werden Inventar und Produktionsplan alphabetisch sortiert.
+
+
+## Version v46
+
+- Im Produktionsplan gibt es jetzt einen Button **Plan leeren**.
+- Der Produktionsplan wird ohne weitere Rückfrage geleert, da er nur die aktuelle Kalkulation betrifft.
+- Im Inventarbereich gibt es jetzt einen Button **Inventar zurücksetzen**.
+- Der Inventar-Reset fragt vor dem Löschen ausdrücklich nach Bestätigung.
+- Beim Inventar-Reset bleiben Produktionsplan, Materialien, Waren und Preise erhalten.
+
+
+## v47 - Inventar-Reset-Korrektur
+
+- Inventar-Draft-Zeilen starten ohne automatische Menge.
+- Auswahl eines Inventar-Items schreibt erst nach Eingabe einer Menge > 0 in den Datenbestand.
+- Daten-Reset entfernt zusätzlich alte Legacy-LocalStorage-Daten und leert offene Inventar-Draft-Zeilen.
+- Doppeltes Datalist-Element für Inventarvorschläge entfernt.
