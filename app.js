@@ -46,6 +46,8 @@ const els = {
   materialDialogSubmitBtn: document.querySelector("#materialDialogSubmitBtn"),
   newMaterialName: document.querySelector("#newMaterialName"),
   newMaterialOutput: document.querySelector("#newMaterialOutput"),
+  materialHasRecipeCheckbox: document.querySelector("#materialHasRecipeCheckbox"),
+  materialRecipeEditor: document.querySelector("#materialRecipeEditor"),
   addMaterialDialogRecipeRowBtn: document.querySelector("#addMaterialDialogRecipeRowBtn"),
   materialDialogRecipeTableBody: document.querySelector("#materialDialogRecipeTable tbody"),
   productDialog: document.querySelector("#productDialog"),
@@ -96,7 +98,9 @@ function bindStaticEvents() {
   els.addMaterialForm.addEventListener("submit", saveMaterialFromDialog);
   els.closeMaterialDialogBtn.addEventListener("click", closeMaterialDialog);
   els.cancelMaterialDialogBtn.addEventListener("click", closeMaterialDialog);
+  els.materialHasRecipeCheckbox.addEventListener("change", handleMaterialRecipeCheckboxChange);
   els.addMaterialDialogRecipeRowBtn.addEventListener("click", addMaterialDialogRecipeRow);
+  document.addEventListener("mousedown", preventNonInputCaret);
   els.addMaterialDialog.addEventListener("click", (event) => {
     if (event.target === els.addMaterialDialog) closeMaterialDialog();
   });
@@ -233,7 +237,7 @@ function renderMaterials() {
       const table = document.createElement("table");
       table.className = "data-table compact nested-recipe-table";
       table.innerHTML = `
-        <thead><tr><th>Material</th><th>Menge pro Lauf</th></tr></thead>
+        <thead><tr><th>Material</th><th>Benötigte Menge pro Produktionszyklus</th></tr></thead>
         <tbody></tbody>
       `;
       const body = table.querySelector("tbody");
@@ -462,6 +466,7 @@ function openMaterialDialogCreate() {
   els.materialDialogSubmitBtn.textContent = "Material speichern";
   els.newMaterialName.value = "";
   els.newMaterialOutput.value = 1;
+  setMaterialRecipeEditorEnabled(false);
   renderMaterialDialogRecipeRows();
   showDialog(els.addMaterialDialog, "#newMaterialName");
 }
@@ -477,6 +482,7 @@ function openMaterialDialogEdit(materialName) {
   els.materialDialogSubmitBtn.textContent = "Änderungen speichern";
   els.newMaterialName.value = materialName;
   els.newMaterialOutput.value = positiveInteger(recipeDef.output, 1);
+  setMaterialRecipeEditorEnabled(materialDialogRecipe.length > 0);
   renderMaterialDialogRecipeRows();
   showDialog(els.addMaterialDialog, "#newMaterialName");
 }
@@ -489,9 +495,11 @@ function saveMaterialFromDialog(event) {
   event.preventDefault();
   const name = cleanText(els.newMaterialName.value);
   const output = positiveInteger(els.newMaterialOutput.value, 1);
-  const recipe = materialDialogRecipe
-    .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
-    .filter((item) => item.material && item.amount > 0);
+  const recipe = els.materialHasRecipeCheckbox.checked
+    ? materialDialogRecipe
+        .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
+        .filter((item) => item.material && item.amount > 0)
+    : [];
 
   if (!name) {
     alert("Bitte einen Materialnamen eintragen.");
@@ -524,6 +532,34 @@ function saveMaterialFromDialog(event) {
   renderAll();
   activateTab("materials");
   queueFocusMaterialRow(name);
+}
+
+function handleMaterialRecipeCheckboxChange() {
+  if (!els.materialHasRecipeCheckbox.checked) {
+    materialDialogRecipe = [];
+    setMaterialRecipeEditorEnabled(false);
+    renderMaterialDialogRecipeRows();
+    return;
+  }
+
+  if (!state.materials.length) {
+    alert("Lege zuerst mindestens ein Rohmaterial an, bevor du ein Unterrezept erstellst.");
+    els.materialHasRecipeCheckbox.checked = false;
+    setMaterialRecipeEditorEnabled(false);
+    return;
+  }
+
+  setMaterialRecipeEditorEnabled(true);
+  if (!materialDialogRecipe.length) {
+    const fallback = state.materials.find((material) => material !== materialDialogOriginalName) || state.materials[0];
+    materialDialogRecipe.push({ material: fallback, amount: 1 });
+  }
+  renderMaterialDialogRecipeRows();
+}
+
+function setMaterialRecipeEditorEnabled(enabled) {
+  els.materialHasRecipeCheckbox.checked = Boolean(enabled);
+  els.materialRecipeEditor.hidden = !enabled;
 }
 
 function addMaterialDialogRecipeRow() {
@@ -1003,6 +1039,17 @@ function positiveInteger(value, fallback) {
   const number = Number.parseInt(value, 10);
   if (!Number.isFinite(number) || number < 0) return fallback;
   return number;
+}
+
+function preventNonInputCaret(event) {
+  const interactive = event.target.closest('input, select, textarea, button, label, a, [contenteditable="true"]');
+  if (interactive) return;
+  if (event.target.closest('.card, .product-card, .modal-card, .tabs, .data-actions')) {
+    event.preventDefault();
+    if (document.activeElement && !['BODY', 'HTML'].includes(document.activeElement.tagName)) {
+      document.activeElement.blur();
+    }
+  }
 }
 
 function cleanText(value) {

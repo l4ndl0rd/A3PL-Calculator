@@ -36,3 +36,10 @@ Statisches Webinterface für GitHub Pages zur Verwaltung von Waren, Fabrikrezept
 ## Daten
 
 Alle Daten liegen lokal im Browser. Für Backups die Funktion `Daten exportieren` verwenden.
+
+## Version 12 Änderungen
+
+- Rezept-Spalten verwenden jetzt die Bezeichnung „Benötigte Menge pro Produktionszyklus“.
+- Material-Unterrezepte werden über eine Checkbox „Verarbeitetes Material“ aktiviert.
+- Bei aktivierter Checkbox wird sofort eine Rezeptzeile angezeigt; weitere Zeilen können ergänzt werden.
+- Nicht editierbare Box-/Tabellenbereiche erzeugen keinen Text-Cursor mehr beim Anklicken.

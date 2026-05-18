@@ -187,7 +187,7 @@
           <thead>
             <tr>
               <th>Material</th>
-              <th>Menge pro Lauf</th>
+              <th>Benötigte Menge pro Produktionszyklus</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -225,30 +225,40 @@
           <input id="newMaterialName" type="text" placeholder="z. B. Eisenerz" autocomplete="off" />
         </label>
         <label>
-          Ausstoß pro Unterrezept-Lauf
+          Ausstoß pro Produktionszyklus
           <input id="newMaterialOutput" type="number" min="1" step="1" value="1" />
         </label>
       </div>
 
       <div class="modal-section">
-        <div class="card-header compact-header">
-          <div>
-            <h3>Optionales Unterrezept</h3>
-            <p>Leer lassen, wenn es sich um ein echtes Rohmaterial handelt.</p>
+        <label class="checkbox-row">
+          <input id="materialHasRecipeCheckbox" type="checkbox" />
+          <span>
+            <strong>Verarbeitetes Material</strong>
+            <small>Aktivieren, wenn dieses Material aus anderen Materialien hergestellt wird. Ohne Haken gilt es als Rohmaterial.</small>
+          </span>
+        </label>
+
+        <div id="materialRecipeEditor" class="recipe-editor" hidden>
+          <div class="card-header compact-header">
+            <div>
+              <h3>Unterrezept</h3>
+              <p>Trage die benötigten Materialien pro Produktionszyklus ein.</p>
+            </div>
+            <button id="addMaterialDialogRecipeRowBtn" class="button button-secondary" type="button">Weitere Zeile hinzufügen</button>
           </div>
-          <button id="addMaterialDialogRecipeRowBtn" class="button button-secondary" type="button">Unterrezept-Zeile hinzufügen</button>
-        </div>
-        <div class="table-wrap">
-          <table class="data-table compact" id="materialDialogRecipeTable">
-            <thead>
-              <tr>
-                <th>Material</th>
-                <th>Menge pro Lauf</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="table-wrap">
+            <table class="data-table compact" id="materialDialogRecipeTable">
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th>Benötigte Menge pro Produktionszyklus</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -299,7 +309,7 @@
             <thead>
               <tr>
                 <th>Material</th>
-                <th>Menge pro Lauf</th>
+                <th>Benötigte Menge pro Produktionszyklus</th>
                 <th></th>
               </tr>
             </thead>

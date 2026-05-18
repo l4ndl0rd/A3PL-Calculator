@@ -628,3 +628,66 @@ input[readonly] {
     flex: 1;
   }
 }
+
+/* v12: avoid accidental text-caret selection in non-editable cards/boxes */
+.card,
+.product-card,
+.modal-card,
+.tabs,
+.data-actions,
+.data-table th,
+.data-table td,
+.empty-state,
+.kpi,
+.raw-material-badge {
+  cursor: default;
+  user-select: none;
+}
+
+input,
+select,
+textarea,
+button,
+label,
+.file-button,
+.data-table input,
+.data-table select {
+  user-select: auto;
+}
+
+.checkbox-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #393939;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.checkbox-row strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.checkbox-row small {
+  display: block;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.recipe-editor {
+  display: grid;
+  gap: 12px;
+}
