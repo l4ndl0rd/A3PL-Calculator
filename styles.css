@@ -3528,3 +3528,125 @@ body.admin-locked .floating-add {
     min-width: 780px !important;
   }
 }
+
+/* v55: Tabellenoptik symmetrisch links/rechts nach Screenshot-Feedback.
+   Ziel: Rechte Tabellenkante soll denselben optischen Abschluss haben wie links;
+   keine leere Aktions-/Restspalte im Nur-Lesen-Modus. */
+.factory-panel .product-card .recipe-table-wrap {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.factory-panel .product-card .recipe-table.data-table,
+.factory-panel .product-card .recipe-table.data-table.compact {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed;
+}
+
+.factory-panel .product-card .recipe-table th:first-child,
+.factory-panel .product-card .recipe-table td:first-child {
+  width: 480px !important;
+  max-width: 480px !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.factory-panel .product-card .recipe-table th:last-child,
+.factory-panel .product-card .recipe-table td:last-child {
+  width: auto !important;
+  max-width: none !important;
+  text-align: left !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Im gesperrten Materialbereich existiert keine Aktionsspalte.
+   Der leere Header rechts wird daher ebenfalls ausgeblendet und die sichtbaren
+   Spalten werden auf die volle Tabellenbreite verteilt. */
+body.admin-locked #materials .material-recipe-table th:nth-child(7),
+body.admin-locked #materials .material-recipe-table td:nth-child(7) {
+  display: none !important;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(1),
+body.admin-locked #materials .material-recipe-table td:nth-child(1) {
+  width: 28% !important;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(2),
+body.admin-locked #materials .material-recipe-table td:nth-child(2) {
+  width: 10% !important;
+  text-align: center;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(3),
+body.admin-locked #materials .material-recipe-table td:nth-child(3),
+body.admin-locked #materials .material-recipe-table th:nth-child(4),
+body.admin-locked #materials .material-recipe-table td:nth-child(4),
+body.admin-locked #materials .material-recipe-table th:nth-child(5),
+body.admin-locked #materials .material-recipe-table td:nth-child(5) {
+  width: 10% !important;
+  text-align: right;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(6),
+body.admin-locked #materials .material-recipe-table td:nth-child(6) {
+  width: 32% !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Im entsperrten Modus bleibt die Aktionsspalte erhalten, aber ohne leere Restflaeche. */
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(1),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(1) {
+  width: 22% !important;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(2),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(2) {
+  width: 9% !important;
+  text-align: center;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(3),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(3),
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(4),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(4),
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(5),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(5) {
+  width: 9% !important;
+  text-align: right;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(6),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(6) {
+  width: 28% !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(7),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(7) {
+  width: 14% !important;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .factory-panel .product-card .recipe-table th:first-child,
+  .factory-panel .product-card .recipe-table td:first-child {
+    width: 52% !important;
+    max-width: 52% !important;
+  }
+
+  .factory-panel .product-card .recipe-table th:last-child,
+  .factory-panel .product-card .recipe-table td:last-child {
+    width: 48% !important;
+    max-width: 48% !important;
+  }
+}

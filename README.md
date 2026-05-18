@@ -346,3 +346,10 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Mengenspalte in Fabrik-Rezepten bleibt in festem Abstand rechts neben dem Material.
 - Materialstammdaten nutzen die volle Tabellenbox ohne gestauchte Spalten.
 - Tabellenhintergruende und Zeilen laufen wieder sauber bis zum rechten Rand der jeweiligen Box.
+
+### v55 - Symmetrische Tabellenkanten
+
+- Fabrik-Rezepttabellen laufen optisch wieder bis zur rechten Innenkante der Box, passend zur linken Seite.
+- Die Mengenspalte bleibt in festem Abstand neben dem Material, ohne leere Restfläche rechts.
+- In der Materialliste wird die versteckte Aktionsspalte im Nur-Lesen-Modus vollständig entfernt.
+- Materialstammdaten verteilen die sichtbaren Spalten wieder über die volle Tabellenbreite.
