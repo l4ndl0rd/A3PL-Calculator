@@ -159,7 +159,10 @@ function renderFactoryPanels() {
     if (!state.products[factory].length) {
       container.innerHTML = `<div class="empty-state">Noch keine Waren vorhanden.</div>`;
     } else {
-      state.products[factory].forEach((product) => container.appendChild(createProductCard(factory, product)));
+      state.products[factory]
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }))
+        .forEach((product) => container.appendChild(createProductCard(factory, product)));
     }
 
     els.factoryPanels.appendChild(panel);
@@ -208,15 +211,16 @@ function activateTab(targetId) {
 
 function renderMaterials() {
   els.materialsTableBody.innerHTML = "";
+  const visibleMaterials = getManualMaterials();
 
-  if (!state.materials.length) {
+  if (!visibleMaterials.length) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="4" class="empty-state">Noch keine Materialien vorhanden.</td>`;
+    row.innerHTML = `<td colspan="4" class="empty-state">Noch keine manuell angelegten Materialien vorhanden. Waren aus Fabriken werden intern als Zwischenprodukte geführt, aber hier nicht als manuelle Materialien angezeigt.</td>`;
     els.materialsTableBody.appendChild(row);
     return;
   }
 
-  state.materials.forEach((material) => {
+  visibleMaterials.forEach((material) => {
     const recipeDef = getMaterialRecipe(material);
     const row = document.createElement("tr");
     row.className = "material-row";
@@ -508,13 +512,24 @@ function saveMaterialFromDialog(event) {
   }
 
   const existing = state.materials.find((material) => material.toLocaleLowerCase("de-DE") === name.toLocaleLowerCase("de-DE"));
+  const existingProduct = findProductByName(name);
+  const ownAutoRecipe = materialDialogMode === "edit" && getExistingMaterialRecipe(materialDialogOriginalName)?.autoProductId === existingProduct?.id;
+
   if (materialDialogMode === "create" && existing) {
-    alert(`Das Material "${name}" existiert bereits.`);
+    const origin = getAutoMaterialOrigin(existing);
+    alert(origin ? `"${name}" existiert bereits als Ware aus der ${origin.factoryLabel} und kann nicht zusätzlich als manuelles Material angelegt werden.` : `Das Material "${name}" existiert bereits.`);
     queueFocus("#newMaterialName");
     return;
   }
   if (materialDialogMode === "edit" && existing && existing !== materialDialogOriginalName) {
-    alert(`Das Material "${name}" existiert bereits.`);
+    const origin = getAutoMaterialOrigin(existing);
+    alert(origin ? `"${name}" existiert bereits als Ware aus der ${origin.factoryLabel} und kann nicht zusätzlich als manuelles Material verwendet werden.` : `Das Material "${name}" existiert bereits.`);
+    queueFocus("#newMaterialName");
+    return;
+  }
+  if (existingProduct && !ownAutoRecipe) {
+    const origin = getProductOrigin(existingProduct.id);
+    alert(`"${name}" ist bereits eine Ware${origin ? ` aus der ${origin.factoryLabel}` : ""}. Fabrik-Waren werden automatisch als Zwischenprodukte geführt und können nicht zusätzlich als manuelles Material angelegt werden.`);
     queueFocus("#newMaterialName");
     return;
   }
@@ -542,7 +557,8 @@ function handleMaterialRecipeCheckboxChange() {
     return;
   }
 
-  if (!state.materials.length) {
+  const available = getMaterialOptionsForDialog(materialDialogOriginalName);
+  if (!available.length) {
     alert("Lege zuerst mindestens ein Rohmaterial an, bevor du ein Unterrezept erstellst.");
     els.materialHasRecipeCheckbox.checked = false;
     setMaterialRecipeEditorEnabled(false);
@@ -551,24 +567,25 @@ function handleMaterialRecipeCheckboxChange() {
 
   setMaterialRecipeEditorEnabled(true);
   if (!materialDialogRecipe.length) {
-    const fallback = state.materials.find((material) => material !== materialDialogOriginalName) || state.materials[0];
-    materialDialogRecipe.push({ material: fallback, amount: 1 });
+    materialDialogRecipe.push({ material: available[0].value, amount: 1 });
   }
   renderMaterialDialogRecipeRows();
 }
 
 function setMaterialRecipeEditorEnabled(enabled) {
-  els.materialHasRecipeCheckbox.checked = Boolean(enabled);
-  els.materialRecipeEditor.hidden = !enabled;
+  const isEnabled = Boolean(enabled);
+  els.materialHasRecipeCheckbox.checked = isEnabled;
+  els.materialRecipeEditor.hidden = !isEnabled;
+  els.addMaterialDialogRecipeRowBtn.hidden = !isEnabled;
 }
 
 function addMaterialDialogRecipeRow() {
-  if (!state.materials.length) {
+  const available = getMaterialOptionsForDialog(materialDialogOriginalName);
+  if (!available.length) {
     alert("Lege zuerst mindestens ein Basismaterial an, bevor du ein Unterrezept erstellst.");
     return;
   }
-  const fallback = state.materials.find((material) => material !== materialDialogOriginalName) || state.materials[0];
-  materialDialogRecipe.push({ material: fallback, amount: 1 });
+  materialDialogRecipe.push({ material: available[0].value, amount: 1 });
   renderMaterialDialogRecipeRows();
 }
 
@@ -644,6 +661,17 @@ function saveProductFromDialog(event) {
     return;
   }
 
+  const existingMaterial = state.materials.find((material) => material.toLocaleLowerCase("de-DE") === name.toLocaleLowerCase("de-DE"));
+  const existingRecipe = existingMaterial ? getExistingMaterialRecipe(existingMaterial) : null;
+  if (existingMaterial && existingRecipe?.autoProductId !== productDialogProductId) {
+    const origin = getAutoMaterialOrigin(existingMaterial);
+    alert(origin
+      ? `"${name}" existiert bereits als Ware aus der ${origin.factoryLabel}. Warennamen müssen eindeutig sein.`
+      : `"${name}" existiert bereits als manuelles Material. Lege die Ware bitte unter einem anderen Namen an oder benenne das Material vorher um.`);
+    queueFocus("#newProductName");
+    return;
+  }
+
   if (productDialogMode === "create") {
     const product = { id: cryptoId(), name, output, recipe };
     factoryProducts.unshift(product);
@@ -674,11 +702,12 @@ function saveProductFromDialog(event) {
 }
 
 function addProductDialogRecipeRow() {
-  if (!state.materials.length) {
-    alert("Lege zuerst mindestens ein Material an, bevor du eine Rezeptzeile erstellst.");
+  const available = getMaterialOptionsForDialog();
+  if (!available.length) {
+    alert("Lege zuerst mindestens ein Material oder eine Ware an, bevor du eine Rezeptzeile erstellst.");
     return;
   }
-  productDialogRecipe.push({ material: state.materials[0], amount: 1 });
+  productDialogRecipe.push({ material: available[0].value, amount: 1 });
   renderProductDialogRecipeRows();
 }
 
@@ -708,7 +737,7 @@ function renderDialogRecipeRows(config) {
     const row = template.content.firstElementChild.cloneNode(true);
     const materialSelect = row.querySelector(materialSelector);
     const amountInput = row.querySelector(amountSelector);
-    fillSelect(materialSelect, state.materials.map((material) => ({ value: material, label: material })), item.material);
+    fillSelect(materialSelect, getMaterialOptionsForDialog(materialDialogMode === "edit" && recipe === materialDialogRecipe ? materialDialogOriginalName : null), item.material);
     amountInput.value = positiveInteger(item.amount, 1);
     materialSelect.addEventListener("change", () => {
       recipe[index].material = materialSelect.value;
@@ -829,6 +858,39 @@ function fillSelect(select, options, selectedValue) {
     });
   if (selectedValue && options.some((option) => option.value === selectedValue)) select.value = selectedValue;
 }
+function getManualMaterials() {
+  return state.materials
+    .filter((material) => !getExistingMaterialRecipe(material)?.autoProductId)
+    .sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+}
+
+function getMaterialOptionsForDialog(excludeMaterial = null) {
+  return state.materials
+    .filter((material) => material !== excludeMaterial)
+    .map((material) => {
+      const origin = getAutoMaterialOrigin(material);
+      return {
+        value: material,
+        label: origin ? `${material} — Ware aus ${origin.factoryLabel}` : material
+      };
+    })
+    .sort((a, b) => a.label.localeCompare(b.label, "de", { sensitivity: "base" }));
+}
+
+function getAutoMaterialOrigin(materialName) {
+  const recipeDef = getExistingMaterialRecipe(materialName);
+  if (!recipeDef?.autoProductId) return null;
+  return getProductOrigin(recipeDef.autoProductId);
+}
+
+function getProductOrigin(productId) {
+  for (const [factory, products] of Object.entries(state.products ?? {})) {
+    const product = products.find((item) => item.id === productId);
+    if (product) return { factory, factoryLabel: FACTORIES[factory], product };
+  }
+  return null;
+}
+
 
 function findProduct(productId) {
   if (!productId) return null;
