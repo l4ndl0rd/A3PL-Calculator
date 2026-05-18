@@ -1891,3 +1891,173 @@ html {
     width: min(230px, calc(100vw - 32px));
   }
 }
+
+/* v26: integrate the data menu into the right side of the main navbar and remove the header caret issue. */
+.app-header {
+  padding-top: 0;
+  cursor: default;
+  user-select: none;
+}
+
+.app-header *:not(input):not(select):not(textarea) {
+  cursor: default;
+  user-select: none;
+}
+
+.tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.tabs > #tabs.tab-row {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tabs > .data-actions {
+  position: relative;
+  flex: 0 0 auto;
+  z-index: 90;
+  display: block;
+  align-self: stretch;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+}
+
+.tabs > .data-actions > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-width: 92px;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 15px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.72rem, 0.72vw, 0.94rem);
+  font-weight: 750;
+  line-height: 1.15;
+  list-style: none;
+  user-select: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tabs > .data-actions > summary::-webkit-details-marker {
+  display: none;
+}
+
+.tabs > .data-actions > summary::after {
+  content: "▾";
+  display: inline-block;
+  margin-left: 8px;
+  transform: translateY(-1px);
+  transition: transform 0.15s ease;
+}
+
+.tabs > .data-actions[open] > summary,
+.tabs > .data-actions > summary:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+.tabs > .data-actions[open] > summary::after {
+  transform: translateY(-1px) rotate(180deg);
+}
+
+.tabs > .data-actions .data-actions-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  width: 230px;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(18, 18, 18, 0.98);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.tabs > .data-actions .button,
+.tabs > .data-actions .file-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 4px;
+  padding: 10px 12px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.84rem;
+  line-height: 1.15;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabs > .data-actions .button-secondary:hover,
+.tabs > .data-actions .file-button:hover,
+.tabs > .data-actions .button-danger:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #fff;
+}
+
+.tabs > .data-actions .button-danger {
+  margin-top: 2px;
+  background: transparent;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .app-header {
+    padding-top: 0;
+  }
+
+  .tabs {
+    gap: 6px;
+  }
+
+  .tabs > .data-actions > summary {
+    min-width: 78px;
+    padding: 9px 10px;
+    font-size: 0.82rem;
+  }
+
+  .tabs > .data-actions .data-actions-menu {
+    width: min(230px, calc(100vw - 28px));
+  }
+}
+
+@media (max-width: 640px) {
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .tabs > #tabs.tab-row {
+    flex-basis: 100%;
+  }
+
+  .tabs > .data-actions {
+    margin-left: auto;
+  }
+}

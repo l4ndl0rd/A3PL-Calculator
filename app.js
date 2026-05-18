@@ -97,6 +97,9 @@ function bindStaticEvents() {
 
   document.addEventListener("click", (event) => {
     if (!els.tabs.contains(event.target)) closeFactoryMenu();
+
+    const dataActions = document.querySelector(".data-actions");
+    if (dataActions && !dataActions.contains(event.target)) dataActions.removeAttribute("open");
   });
 
   els.addMaterialBtn.addEventListener("click", () => openMaterialDialogCreate());
@@ -1185,9 +1188,9 @@ function positiveInteger(value, fallback) {
 }
 
 function preventNonInputCaret(event) {
-  const interactive = event.target.closest('input, select, textarea, button, label, a, [contenteditable="true"]');
+  const interactive = event.target.closest('input, select, textarea, button, label, a, summary, details, [contenteditable="true"]');
   if (interactive) return;
-  if (event.target.closest('.card, .product-card, .modal-card, .tabs, .data-actions')) {
+  if (event.target.closest('.app-header, .card, .product-card, .modal-card, .tabs, .data-actions')) {
     event.preventDefault();
     if (document.activeElement && !['BODY', 'HTML'].includes(document.activeElement.tagName)) {
       document.activeElement.blur();
