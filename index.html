@@ -179,7 +179,9 @@
               <tr>
                 <th>Material / Zwischenprodukt</th>
                 <th>Ausstoß / Lauf</th>
-                <th>Preis / Einheit</th>
+                <th>Wert / Einheit</th>
+                <th>Importpreis</th>
+                <th>Exportpreis</th>
                 <th>Unterrezept</th>
                 <th></th>
               </tr>
@@ -283,8 +285,16 @@
           <input id="newMaterialOutput" type="number" min="1" step="1" value="1" />
         </label>
         <label>
-          Preis pro Einheit <span class="optional-label">optional</span>
+          Wert pro Einheit <span class="optional-label">optional</span>
           <input id="newMaterialUnitPrice" type="number" min="0" step="0.01" placeholder="0" />
+        </label>
+        <label>
+          Importpreis <span class="optional-label">optional</span>
+          <input id="newMaterialImportPrice" type="number" min="0" step="0.01" placeholder="0" />
+        </label>
+        <label>
+          Exportpreis <span class="optional-label">optional</span>
+          <input id="newMaterialExportPrice" type="number" min="0" step="0.01" placeholder="0" />
         </label>
       </div>
 

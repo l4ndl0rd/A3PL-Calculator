@@ -30,7 +30,8 @@ Die Seite ist für GitHub Pages ausgelegt und benötigt keinen Build-Prozess, ke
 
 - Materialstammdaten verwalten
 - Materialien als Rohmaterial oder verarbeitetes Zwischenprodukt behandeln
-- optionalen Preis pro Einheit hinterlegen
+- optionalen Wert pro Einheit hinterlegen
+- optionale Import- und Exportpreise für handelbare Rohstoffe hinterlegen
 - Unterrezepte für Zwischenprodukte definieren
 
 ### Datenverwaltung
@@ -46,7 +47,7 @@ Die Preisberechnung ist hybrid aufgebaut, damit sie auch funktioniert, wenn nich
 
 ### Materialkosten
 
-Für jedes benötigte Material wird der hinterlegte **Preis pro Einheit** verwendet. Wenn ein Material ein eigenes Unterrezept besitzt, wird es rekursiv bis zu seinen Rohmaterialien aufgelöst.
+Für jedes benötigte Material wird ein hinterlegter Materialwert verwendet. Wenn ein **Importpreis** vorhanden ist, wird dieser als Kostenbasis bevorzugt. Andernfalls nutzt die Anwendung den **Wert pro Einheit**. Wenn ein Material ein eigenes Unterrezept besitzt, wird es rekursiv bis zu seinen Rohmaterialien aufgelöst.
 
 Fehlen notwendige Materialpreise, wird die Kalkulation nicht künstlich mit `0` gerechnet, sondern als unvollständig markiert.
 
@@ -138,7 +139,7 @@ waren-calculator-web/
 1. Bereich `Materialien` öffnen.
 2. `Material hinzufügen` klicken.
 3. Materialname eintragen.
-4. Optional Preis pro Einheit setzen.
+4. Optional Wert pro Einheit sowie Import- und Exportpreis setzen.
 5. Falls das Material selbst hergestellt wird, `Verarbeitetes Material` aktivieren und ein Unterrezept eintragen.
 6. Material speichern.
 
@@ -191,6 +192,30 @@ Diese Version enthält:
 
 © 2026 l4ndl0rd · Warenherstellung Calculator · Fishers Life DE · Alle Rechte vorbehalten.
 
+
+
+## v42: Handelbare Rohstoffe ergänzt
+
+Diese Version erweitert Materialien um optionale Import- und Exportpreise. Importpreise werden bei der Herstellungskostenrechnung als Materialkosten bevorzugt, wenn sie gepflegt sind.
+
+Als Standard-Rohstoffe sind jetzt enthalten:
+
+- Aluminiumerz
+- Kohleerz
+- Rohöl
+- Smaragderz
+- Eisenerz
+- Saphirerz
+- Vivianiterz
+
+## v41: Essensfabrik ergänzt
+
+Diese Version ergänzt die **Essensfabrik** als weitere Fabrik-Kategorie.
+
+- neuer Fabrik-Key: `food`
+- neue Anzeige: `Essensfabrik`
+- `waren-daten.json` enthält jetzt `products.food` als leere Rezeptliste
+- bestehende lokale Daten werden beim Laden automatisch um die fehlende Fabrik ergänzt
 
 ## v40: Mitscrollende Hinzufügen-Aktionen
 

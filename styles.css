@@ -2444,7 +2444,7 @@ select {
 }
 
 .material-price-fields {
-  grid-template-columns: minmax(0, 1fr) 210px 190px;
+  grid-template-columns: minmax(0, 1fr) 170px repeat(3, minmax(150px, 1fr));
 }
 
 .price-fields {

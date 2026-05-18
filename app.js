@@ -1,5 +1,5 @@
-const STORAGE_KEY = "fg2_warenherstellung_calculator_v4_empty";
-const ADMIN_FLAG_KEY = "fg2_warenherstellung_calculator_admin_unlocked";
+const STORAGE_KEY = "l4n_warenherstellung_calculator_v4_empty";
+const ADMIN_FLAG_KEY = "l4n_warenherstellung_calculator_admin_unlocked";
 const BUNDLED_DATA_URL = "waren-daten.json";
 const EDIT_CONFIRMATION_TEXT = [
   "Bearbeitung auf eigene Gefahr freischalten?",
@@ -18,9 +18,20 @@ const FACTORIES = {
   boat: "Bootsfabrik",
   oil: "Ölfabrik",
   goods: "Warenfabrik",
+  food: "Essensfabrik",
   chemistry: "Chemiefabrik",
   illegalWeapons: "Illegale Waffenfabrik"
 };
+
+const DEFAULT_RAW_MATERIALS = [
+  "Aluminiumerz",
+  "Kohleerz",
+  "Rohöl",
+  "Smaragderz",
+  "Eisenerz",
+  "Saphirerz",
+  "Vivianiterz"
+];
 
 let state = loadState();
 let adminUnlocked = localStorage.getItem(ADMIN_FLAG_KEY) === "1";
@@ -65,6 +76,8 @@ const els = {
   newMaterialName: document.querySelector("#newMaterialName"),
   newMaterialOutput: document.querySelector("#newMaterialOutput"),
   newMaterialUnitPrice: document.querySelector("#newMaterialUnitPrice"),
+  newMaterialImportPrice: document.querySelector("#newMaterialImportPrice"),
+  newMaterialExportPrice: document.querySelector("#newMaterialExportPrice"),
   materialHasRecipeCheckbox: document.querySelector("#materialHasRecipeCheckbox"),
   materialRecipeEditor: document.querySelector("#materialRecipeEditor"),
   addMaterialDialogRecipeRowBtn: document.querySelector("#addMaterialDialogRecipeRowBtn"),
@@ -346,7 +359,7 @@ function renderMaterials() {
 
   if (!visibleMaterials.length) {
     const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="5" class="empty-state">Noch keine manuell angelegten Materialien vorhanden. Waren aus Fabriken werden intern als Zwischenprodukte geführt, aber hier nicht als manuelle Materialien angezeigt.</td>`;
+    row.innerHTML = `<td colspan="7" class="empty-state">Noch keine manuell angelegten Materialien vorhanden. Waren aus Fabriken werden intern als Zwischenprodukte geführt, aber hier nicht als manuelle Materialien angezeigt.</td>`;
     els.materialsTableBody.appendChild(row);
     return;
   }
@@ -359,6 +372,8 @@ function renderMaterials() {
       <td><strong>${escapeHtml(material)}</strong></td>
       <td>${positiveInteger(recipeDef.output, 1).toLocaleString("de-DE")}</td>
       <td>${formatOptionalMoney(getMaterialManualPrice(material))}</td>
+      <td>${formatOptionalMoney(getMaterialImportPrice(material))}</td>
+      <td>${formatOptionalMoney(getMaterialExportPrice(material))}</td>
       <td><div class="nested-recipe"></div></td>
       <td class="row-actions">
         <button class="button button-secondary edit-material" type="button">Bearbeiten</button>
@@ -404,6 +419,8 @@ function renderMaterials() {
       state.materials = state.materials.filter((item) => item !== material);
       delete state.materialRecipes[material];
       delete state.materialPrices[material];
+      delete state.materialImportPrices?.[material];
+      delete state.materialExportPrices?.[material];
       renderAll();
       activateTab("materials");
     });
@@ -688,6 +705,8 @@ function openMaterialDialogCreate() {
   els.newMaterialName.value = "";
   els.newMaterialOutput.value = 1;
   els.newMaterialUnitPrice.value = "";
+  els.newMaterialImportPrice.value = "";
+  els.newMaterialExportPrice.value = "";
   setMaterialRecipeEditorEnabled(false);
   renderMaterialDialogRecipeRows();
   showDialog(els.addMaterialDialog, "#newMaterialName");
@@ -706,6 +725,8 @@ function openMaterialDialogEdit(materialName) {
   els.newMaterialName.value = materialName;
   els.newMaterialOutput.value = positiveInteger(recipeDef.output, 1);
   els.newMaterialUnitPrice.value = formatInputNumber(getMaterialManualPrice(materialName));
+  els.newMaterialImportPrice.value = formatInputNumber(getMaterialImportPrice(materialName));
+  els.newMaterialExportPrice.value = formatInputNumber(getMaterialExportPrice(materialName));
   setMaterialRecipeEditorEnabled(materialDialogRecipe.length > 0);
   renderMaterialDialogRecipeRows();
   showDialog(els.addMaterialDialog, "#newMaterialName");
@@ -721,6 +742,8 @@ function saveMaterialFromDialog(event) {
   const name = cleanText(els.newMaterialName.value);
   const output = positiveInteger(els.newMaterialOutput.value, 1);
   const unitPrice = optionalNumber(els.newMaterialUnitPrice.value);
+  const importPrice = optionalNumber(els.newMaterialImportPrice.value);
+  const exportPrice = optionalNumber(els.newMaterialExportPrice.value);
   const recipe = els.materialHasRecipeCheckbox.checked
     ? materialDialogRecipe
         .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
@@ -765,6 +788,8 @@ function saveMaterialFromDialog(event) {
   }
 
   setMaterialManualPrice(name, unitPrice);
+  setMaterialImportPrice(name, importPrice);
+  setMaterialExportPrice(name, exportPrice);
   clearAutoRecipeFlag(name);
   closeMaterialDialog();
   renderAll();
@@ -1247,6 +1272,8 @@ function getMaterialRecipe(materialName) {
   const name = cleanText(materialName);
   state.materialRecipes ??= {};
   state.materialPrices ??= {};
+  state.materialImportPrices ??= {};
+  state.materialExportPrices ??= {};
   state.pricing ??= {};
   state.pricing.standardMarginPercent = positiveNumber(state.pricing.standardMarginPercent, 30);
   state.materialRecipes[name] ??= { output: 1, recipe: [] };
@@ -1283,6 +1310,14 @@ function renameMaterial(oldName, newName, shouldRender = true) {
   if (state.materialPrices?.[oldName] !== undefined) {
     state.materialPrices[newName] = state.materialPrices[oldName];
     delete state.materialPrices[oldName];
+  }
+  if (state.materialImportPrices?.[oldName] !== undefined) {
+    state.materialImportPrices[newName] = state.materialImportPrices[oldName];
+    delete state.materialImportPrices[oldName];
+  }
+  if (state.materialExportPrices?.[oldName] !== undefined) {
+    state.materialExportPrices[newName] = state.materialExportPrices[oldName];
+    delete state.materialExportPrices[oldName];
   }
   replaceRecipeMaterialReferences(oldName, newName);
   if (shouldRender) renderAll();
@@ -1360,8 +1395,11 @@ function normalizeState() {
   state.plan ??= [];
   state.materialRecipes ??= {};
   state.materialPrices ??= {};
+  state.materialImportPrices ??= {};
+  state.materialExportPrices ??= {};
   state.pricing ??= {};
   state.pricing.standardMarginPercent = positiveNumber(state.pricing.standardMarginPercent, 30);
+  DEFAULT_RAW_MATERIALS.forEach(ensureMaterial);
 
   for (const factory of Object.keys(FACTORIES)) {
     state.products[factory] ??= [];
@@ -1404,8 +1442,22 @@ function normalizeState() {
     const value = optionalNumber(price);
     if (name && value !== null) normalizedMaterialPrices[name] = value;
   }
+  const normalizedMaterialImportPrices = {};
+  for (const [materialName, price] of Object.entries(state.materialImportPrices ?? {})) {
+    const name = cleanText(materialName);
+    const value = optionalNumber(price);
+    if (name && value !== null) normalizedMaterialImportPrices[name] = value;
+  }
+  const normalizedMaterialExportPrices = {};
+  for (const [materialName, price] of Object.entries(state.materialExportPrices ?? {})) {
+    const name = cleanText(materialName);
+    const value = optionalNumber(price);
+    if (name && value !== null) normalizedMaterialExportPrices[name] = value;
+  }
   state.materialRecipes = normalizedMaterialRecipes;
   state.materialPrices = normalizedMaterialPrices;
+  state.materialImportPrices = normalizedMaterialImportPrices;
+  state.materialExportPrices = normalizedMaterialExportPrices;
   syncProductRecipesToMaterials();
   sortMaterials();
 
@@ -1431,6 +1483,8 @@ function validateImportedState(value) {
   if (!Array.isArray(value.plan)) throw new Error("Feld 'plan' fehlt oder ist ungültig.");
   if (value.materialRecipes !== undefined && (typeof value.materialRecipes !== "object" || Array.isArray(value.materialRecipes))) throw new Error("Feld 'materialRecipes' ist ungültig.");
   if (value.materialPrices !== undefined && (typeof value.materialPrices !== "object" || Array.isArray(value.materialPrices))) throw new Error("Feld 'materialPrices' ist ungültig.");
+  if (value.materialImportPrices !== undefined && (typeof value.materialImportPrices !== "object" || Array.isArray(value.materialImportPrices))) throw new Error("Feld 'materialImportPrices' ist ungültig.");
+  if (value.materialExportPrices !== undefined && (typeof value.materialExportPrices !== "object" || Array.isArray(value.materialExportPrices))) throw new Error("Feld 'materialExportPrices' ist ungültig.");
   if (value.pricing !== undefined && (typeof value.pricing !== "object" || Array.isArray(value.pricing))) throw new Error("Feld 'pricing' ist ungültig.");
 }
 
@@ -1457,7 +1511,7 @@ function firstFactoryWithProduct() {
 function createDefaultState() {
   const products = {};
   for (const factory of Object.keys(FACTORIES)) products[factory] = [];
-  return { materials: [], materialRecipes: {}, materialPrices: {}, pricing: { standardMarginPercent: 30 }, products, plan: [] };
+  return { materials: [], materialRecipes: {}, materialPrices: {}, materialImportPrices: {}, materialExportPrices: {}, pricing: { standardMarginPercent: 30 }, products, plan: [] };
 }
 
 
@@ -1493,6 +1547,38 @@ function setMaterialManualPrice(materialName, value) {
   else state.materialPrices[name] = price;
 }
 
+function getMaterialImportPrice(materialName) {
+  const value = state.materialImportPrices?.[cleanText(materialName)];
+  return optionalNumber(value);
+}
+
+function setMaterialImportPrice(materialName, value) {
+  state.materialImportPrices ??= {};
+  const name = cleanText(materialName);
+  if (!name) return;
+  const price = optionalNumber(value);
+  if (price === null) delete state.materialImportPrices[name];
+  else state.materialImportPrices[name] = price;
+}
+
+function getMaterialExportPrice(materialName) {
+  const value = state.materialExportPrices?.[cleanText(materialName)];
+  return optionalNumber(value);
+}
+
+function setMaterialExportPrice(materialName, value) {
+  state.materialExportPrices ??= {};
+  const name = cleanText(materialName);
+  if (!name) return;
+  const price = optionalNumber(value);
+  if (price === null) delete state.materialExportPrices[name];
+  else state.materialExportPrices[name] = price;
+}
+
+function getMaterialCostPrice(materialName) {
+  return getMaterialImportPrice(materialName) ?? getMaterialManualPrice(materialName);
+}
+
 function calculateMaterialUnitCost(materialName, stack = new Set()) {
   const name = cleanText(materialName);
   const materialKey = `material:${name.toLocaleLowerCase("de-DE")}`;
@@ -1519,9 +1605,9 @@ function calculateMaterialUnitCost(materialName, stack = new Set()) {
   const craftableProduct = findProductByName(name);
   if (craftableProduct?.recipe?.length) return calculateProductUnitCost(craftableProduct, stack);
 
-  const manualPrice = getMaterialManualPrice(name);
-  if (manualPrice === null) return { complete: false, unitCost: null, missing: [name] };
-  return { complete: true, unitCost: manualPrice, missing: [] };
+  const materialCost = getMaterialCostPrice(name);
+  if (materialCost === null) return { complete: false, unitCost: null, missing: [name] };
+  return { complete: true, unitCost: materialCost, missing: [] };
 }
 
 function calculateProductUnitCost(product, stack = new Set()) {
