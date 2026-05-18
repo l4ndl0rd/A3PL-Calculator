@@ -3063,7 +3063,7 @@ body.admin-locked .floating-add {
   }
 }
 
-/* v50: Fabrik-Rezepttabellen ohne horizontale Scrollbar; feste Material-/Mengenspalten. */
+/* v51: Fabrik-Rezepte ohne Scrollbar und ohne abgeschnittene Materialnamen. */
 .factory-panel .product-card .recipe-table-wrap {
   overflow-x: hidden;
   overflow-y: visible;
@@ -3080,23 +3080,24 @@ body.admin-locked .floating-add {
 .factory-panel .product-card .recipe-table th,
 .factory-panel .product-card .recipe-table td {
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   vertical-align: middle;
 }
 
 .factory-panel .product-card .recipe-table th:first-child,
 .factory-panel .product-card .recipe-table td:first-child {
-  width: clamp(260px, 58%, 520px);
-  max-width: clamp(260px, 58%, 520px);
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  width: 360px;
+  max-width: 360px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .factory-panel .product-card .recipe-table th:last-child,
 .factory-panel .product-card .recipe-table td:last-child {
-  width: 280px;
-  max-width: 280px;
-  text-align: right;
+  width: 180px;
+  max-width: 180px;
+  text-align: left;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
@@ -3104,17 +3105,14 @@ body.admin-locked .floating-add {
 @media (max-width: 760px) {
   .factory-panel .product-card .recipe-table th:first-child,
   .factory-panel .product-card .recipe-table td:first-child {
-    width: calc(100% - 150px);
-    max-width: calc(100% - 150px);
-    white-space: normal;
-    overflow-wrap: anywhere;
-    text-overflow: clip;
+    width: 62%;
+    max-width: 62%;
   }
 
   .factory-panel .product-card .recipe-table th:last-child,
   .factory-panel .product-card .recipe-table td:last-child {
-    width: 150px;
-    max-width: 150px;
+    width: 38%;
+    max-width: 38%;
     white-space: normal;
   }
 }

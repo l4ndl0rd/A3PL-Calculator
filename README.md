@@ -270,7 +270,6 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - In jeder Fabrik gibt es im Bearbeitungsmodus eine Suche für **Waren**.
 - Die Suche filtert nach Name, Preisfeldern und verwendeten Rezeptmaterialien.
 - Das interne LocalStorage-Naming wurde von einem alten projektspezifischen Präfix auf neutrales `warenherstellung_*` umgestellt.
-- Bestehende lokale Daten aus der alten Browser-Speicherung werden automatisch übernommen, damit Nutzer durch die Umbenennung keine lokalen Daten verlieren.
 
 
 ## Version v45
@@ -295,7 +294,7 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 
 - Inventar-Draft-Zeilen starten ohne automatische Menge.
 - Auswahl eines Inventar-Items schreibt erst nach Eingabe einer Menge > 0 in den Datenbestand.
-- Daten-Reset entfernt zusätzlich alte Legacy-LocalStorage-Daten und leert offene Inventar-Draft-Zeilen.
+- Daten-Reset leert offene Inventar-Draft-Zeilen.
 - Doppeltes Datalist-Element für Inventarvorschläge entfernt.
 
 
@@ -319,3 +318,10 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Material- und Mengenspalten in den Fabrik-Rezepten haben feste Breiten.
 - Lange Materialnamen werden kontrolliert gekürzt oder auf kleinen Viewports umbrochen.
 
+
+
+## v51 - Fabrik-Rezeptlayout und Legacy-Bereinigung
+
+- Die Mengenangabe in Fabrik-Rezepten steht nicht mehr rechtsbündig am Kartenrand, sondern in einer festen Spalte direkt rechts neben dem Material.
+- Materialnamen werden nicht mehr per Ellipsis abgeschnitten, sondern umbrechen innerhalb der Materialspalte.
+- Alte Legacy-Migration für das frühere projektspezifische LocalStorage-Präfix wurde aus dem Code entfernt.

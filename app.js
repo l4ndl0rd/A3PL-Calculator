@@ -1,8 +1,5 @@
 const STORAGE_KEY = "warenherstellung_calculator_v4_empty";
 const ADMIN_FLAG_KEY = "warenherstellung_calculator_edit_unlocked";
-const LEGACY_PREFIX = ["f", "g", "2"].join("");
-const LEGACY_STORAGE_KEYS = [`${LEGACY_PREFIX}_warenherstellung_calculator_v4_empty`];
-const LEGACY_ADMIN_FLAG_KEYS = [`${LEGACY_PREFIX}_warenherstellung_calculator_admin_unlocked`];
 const BUNDLED_DATA_URL = "waren-daten.json";
 const EDIT_CONFIRMATION_TEXT = [
   "Bearbeitung auf eigene Gefahr freischalten?",
@@ -37,7 +34,7 @@ const DEFAULT_RAW_MATERIALS = [
 ];
 
 let state = loadState();
-let adminUnlocked = localStorage.getItem(ADMIN_FLAG_KEY) === "1" || LEGACY_ADMIN_FLAG_KEYS.some((key) => localStorage.getItem(key) === "1");
+let adminUnlocked = localStorage.getItem(ADMIN_FLAG_KEY) === "1";
 let materialSearchQuery = "";
 const productSearchQueries = {};
 let inventoryDraftRows = [];
@@ -1452,7 +1449,6 @@ async function resetData() {
   if (!requireAdminAccess()) return;
   if (!confirm("Alle lokal gespeicherten Daten werden gelöscht und durch die mitgelieferten Standarddaten ersetzt. Fortfahren?")) return;
   localStorage.removeItem(STORAGE_KEY);
-  LEGACY_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
   inventoryDraftRows = [];
   state = createDefaultState();
   await bootstrapBundledData(true);
@@ -1488,7 +1484,6 @@ function toggleAdminAccess() {
   if (adminUnlocked) {
     adminUnlocked = false;
     localStorage.removeItem(ADMIN_FLAG_KEY);
-    LEGACY_ADMIN_FLAG_KEYS.forEach((key) => localStorage.removeItem(key));
     renderAll();
     return;
   }
@@ -1861,13 +1856,6 @@ function validateImportedState(value) {
 function loadState() {
   try {
     let saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) {
-      const legacyKey = LEGACY_STORAGE_KEYS.find((key) => localStorage.getItem(key));
-      if (legacyKey) {
-        saved = localStorage.getItem(legacyKey);
-        localStorage.setItem(STORAGE_KEY, saved);
-      }
-    }
     if (!saved) return createDefaultState();
     const parsed = JSON.parse(saved);
     validateImportedState(parsed);
