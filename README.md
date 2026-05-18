@@ -353,3 +353,11 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Die Mengenspalte bleibt in festem Abstand neben dem Material, ohne leere Restfläche rechts.
 - In der Materialliste wird die versteckte Aktionsspalte im Nur-Lesen-Modus vollständig entfernt.
 - Materialstammdaten verteilen die sichtbaren Spalten wieder über die volle Tabellenbreite.
+
+
+## v56 - Fabrik-/Materialtabellen optisch nachjustiert
+
+- Fabrik-Rezeptcontainer wieder kompakt mit rechtem Rounded-Edge eingefasst statt bis zum Kartenrand zu laufen.
+- Mengenspalte bleibt in festem Abstand neben dem Material.
+- Materialstammdaten behalten volle Tabellenbreite, aber mit mehr Abstand zwischen Exportpreis und Unterrezept.
+- Unterrezept-Spalte wirkt weniger gestaucht.
