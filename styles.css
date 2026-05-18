@@ -1193,16 +1193,16 @@ html {
   }
 }
 
-/* v18: rounded navigation shell like v16, but keep v17 dropdown behavior */
+/* v19: full-width rounded nav, fewer rounded edges */
 .tabs {
   position: sticky;
   top: 10px;
   z-index: 60;
-  width: min(1100px, calc(100% - 32px));
-  margin: 0 auto 18px;
-  padding: 12px 14px;
+  width: 100%;
+  margin: 0 0 18px;
+  padding: 10px 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 22px;
+  border-radius: 18px;
   background: rgba(20, 20, 20, 0.94);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(10px);
@@ -1214,7 +1214,7 @@ html {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   min-height: auto;
   margin: 0;
@@ -1231,8 +1231,8 @@ html {
 .primary-tab-row .tab {
   width: auto;
   min-width: 0;
-  border: 1px solid #2e2e2e;
-  border-radius: 999px;
+  border: 1px solid #2f2f2f;
+  border-radius: 10px;
   padding: 11px 16px;
   color: #d2d2d2;
   background: #252525;
@@ -1275,18 +1275,18 @@ html {
 
 .factory-menu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 8px);
   left: 0;
   display: none;
   width: max-content;
   min-width: 280px;
   max-width: min(720px, calc(100vw - 48px));
   grid-template-columns: repeat(2, minmax(190px, 1fr));
-  gap: 10px;
+  gap: 8px;
   margin: 0;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
+  border-radius: 12px;
   background: rgba(24, 24, 24, 0.98);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
 }
@@ -1297,7 +1297,7 @@ html {
 
 .factory-menu-item {
   border: 1px solid #2f2f2f;
-  border-radius: 999px;
+  border-radius: 10px;
   padding: 11px 14px;
   color: #d2d2d2;
   background: #252525;
@@ -1318,17 +1318,6 @@ html {
 }
 
 @media (max-width: 860px) {
-  .tabs,
-  .layout,
-  .app-header {
-    width: min(100% - 24px, 1100px);
-  }
-
-  .tab-row,
-  .nav-inner {
-    gap: 8px;
-  }
-
   .tab,
   .primary-tab-row .tab {
     padding: 10px 14px;
@@ -1343,21 +1332,21 @@ html {
 }
 
 @media (max-width: 520px) {
-  .tabs,
-  .layout,
-  .app-header {
-    width: min(100% - 16px, 1100px);
-  }
-
   .tabs {
-    padding: 10px;
-    border-radius: 18px;
+    padding: 8px 10px;
+    border-radius: 16px;
   }
 
   .tab,
   .primary-tab-row .tab {
     padding: 10px 12px;
     font-size: 0.78rem;
+    border-radius: 9px;
+  }
+
+  .factory-menu,
+  .factory-menu-item {
+    border-radius: 10px;
   }
 
   .factory-menu {
