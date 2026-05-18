@@ -2541,3 +2541,24 @@ select {
     margin-top: 14px;
   }
 }
+
+
+/* v37: small rendering/performance hardening */
+img {
+  max-width: 100%;
+}
+
+.brand-logo {
+  aspect-ratio: 1 / 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
