@@ -2272,7 +2272,7 @@ body {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: clamp(18px, 4vw, 56px);
-  min-height: 142px;
+  min-height: 164px;
   padding-inline: clamp(10px, 1.5vw, 22px);
   overflow: hidden;
 }
@@ -2288,7 +2288,7 @@ body {
 }
 
 .brand-logo {
-  width: clamp(118px, 15vw, 178px);
+  width: clamp(148px, 18vw, 226px);
   height: auto;
   display: block;
   justify-self: end;
@@ -2319,7 +2319,7 @@ body {
   }
 
   .brand-logo {
-    width: clamp(92px, 24vw, 132px);
+    width: clamp(116px, 28vw, 164px);
     justify-self: center;
     order: -1;
     opacity: 0.60;
@@ -2349,6 +2349,18 @@ body {
 
 .app-footer p {
   margin: 0;
+}
+
+.app-footer a {
+  color: rgba(255, 151, 56, 0.9);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.app-footer a:hover,
+.app-footer a:focus-visible {
+  color: #ffb15c;
+  text-decoration: underline;
 }
 
 @media (max-width: 640px) {
