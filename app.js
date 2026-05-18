@@ -82,9 +82,21 @@ function init() {
 
 function bindStaticEvents() {
   els.tabs.addEventListener("click", (event) => {
-    const tab = event.target.closest(".tab");
-    if (!tab) return;
-    activateTab(tab.dataset.target);
+    const menuToggle = event.target.closest(".factory-menu-toggle");
+    if (menuToggle) {
+      toggleFactoryMenu();
+      return;
+    }
+
+    const navItem = event.target.closest("[data-target]");
+    if (!navItem) return;
+
+    activateTab(navItem.dataset.target);
+    closeFactoryMenu();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!els.tabs.contains(event.target)) closeFactoryMenu();
   });
 
   els.addMaterialBtn.addEventListener("click", () => openMaterialDialogCreate());
@@ -127,23 +139,65 @@ function renderAll() {
 
 function renderFactoryNavigation() {
   const activeTarget = document.querySelector(".panel.active")?.id || "calculator";
-  const tabs = [
-    { target: "calculator", label: "Calculator" },
-    ...Object.entries(FACTORIES).map(([target, label]) => ({ target, label })),
-    { target: "materials", label: "Materialien" }
-  ];
-
   els.tabs.innerHTML = "";
 
-  for (const tabInfo of tabs) {
+  const primaryRow = document.createElement("div");
+  primaryRow.className = "primary-tab-row";
+
+  const calculatorButton = createPrimaryTab("calculator", "Calculator", activeTarget === "calculator");
+  const factoryButton = document.createElement("button");
+  factoryButton.className = "tab factory-menu-toggle";
+  factoryButton.type = "button";
+  factoryButton.setAttribute("aria-expanded", "false");
+  factoryButton.textContent = "Fabriken";
+  if (Object.hasOwn(FACTORIES, activeTarget)) factoryButton.classList.add("active");
+
+  const materialsButton = createPrimaryTab("materials", "Materialien", activeTarget === "materials");
+
+  primaryRow.append(calculatorButton, factoryButton, materialsButton);
+
+  const factoryMenu = document.createElement("div");
+  factoryMenu.className = "factory-menu";
+  factoryMenu.setAttribute("aria-label", "Fabriken auswählen");
+
+  for (const [target, label] of Object.entries(FACTORIES)) {
     const button = document.createElement("button");
-    button.className = "tab";
-    button.dataset.target = tabInfo.target;
+    button.className = "factory-menu-item";
+    button.dataset.target = target;
     button.type = "button";
-    button.textContent = tabInfo.label;
-    if (tabInfo.target === activeTarget) button.classList.add("active");
-    els.tabs.appendChild(button);
+    button.textContent = label;
+    if (target === activeTarget) button.classList.add("active");
+    factoryMenu.appendChild(button);
   }
+
+  els.tabs.append(primaryRow, factoryMenu);
+}
+
+function createPrimaryTab(target, label, isActive) {
+  const button = document.createElement("button");
+  button.className = "tab";
+  button.dataset.target = target;
+  button.type = "button";
+  button.textContent = label;
+  if (isActive) button.classList.add("active");
+  return button;
+}
+
+function toggleFactoryMenu() {
+  const menu = els.tabs.querySelector(".factory-menu");
+  const toggle = els.tabs.querySelector(".factory-menu-toggle");
+  if (!menu || !toggle) return;
+  const willOpen = !menu.classList.contains("open");
+  menu.classList.toggle("open", willOpen);
+  toggle.setAttribute("aria-expanded", String(willOpen));
+}
+
+function closeFactoryMenu() {
+  const menu = els.tabs.querySelector(".factory-menu");
+  const toggle = els.tabs.querySelector(".factory-menu-toggle");
+  if (!menu || !toggle) return;
+  menu.classList.remove("open");
+  toggle.setAttribute("aria-expanded", "false");
 }
 
 function renderFactoryPanels() {
@@ -206,7 +260,12 @@ function createProductCard(factory, product) {
 }
 
 function activateTab(targetId) {
-  document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("active", item.dataset.target === targetId));
+  document.querySelectorAll(".tab[data-target]").forEach((item) => item.classList.toggle("active", item.dataset.target === targetId));
+  document.querySelectorAll(".factory-menu-item").forEach((item) => item.classList.toggle("active", item.dataset.target === targetId));
+
+  const factoryToggle = document.querySelector(".factory-menu-toggle");
+  if (factoryToggle) factoryToggle.classList.toggle("active", Object.hasOwn(FACTORIES, targetId));
+
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === targetId));
 }
 

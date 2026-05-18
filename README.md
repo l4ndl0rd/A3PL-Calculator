@@ -34,3 +34,12 @@ Die Daten werden lokal im Browser per `localStorage` gespeichert. Für Backups s
 - Farbvariablen explizit auf die ursprüngliche dunkle/orange Palette gesetzt.
 - Navigationsmenü bleibt in einer einzelnen Zeile ohne Zeilenumbruch.
 - Bei kleinen Fensterbreiten ist die Navigationszeile horizontal scrollbar, statt umzubrechen.
+
+
+## Version v16
+
+- Navigation auf verschachteltes Fabrikmenü umgestellt: keine horizontale Scrollbar im Nav-Menü.
+- Hauptnavigation bleibt kompakt: Calculator, Fabriken, Materialien.
+- Fabriken werden in einem ausklappbaren Raster angezeigt.
+- Farb-/Kontrastwirkung wieder näher an v13 belassen.
+- Responsive Tabellen-/Dialoglogik aus den neueren Versionen bleibt erhalten.
