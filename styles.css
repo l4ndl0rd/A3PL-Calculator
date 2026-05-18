@@ -2332,3 +2332,89 @@ body {
     display: none;
   }
 }
+
+
+/* v29: footer copyright notice */
+.app-footer {
+  width: min(1500px, calc(100% - 32px));
+  margin: -20px auto 28px;
+  padding: 14px 18px;
+  color: rgba(244, 238, 232, 0.62);
+  text-align: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  border-top: 1px solid rgba(255, 151, 56, 0.16);
+  user-select: none;
+}
+
+.app-footer p {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .app-footer {
+    margin-top: -26px;
+    font-size: 0.76rem;
+  }
+}
+
+/* v30: author copyright + site-wide caret hardening for non-editable UI elements */
+body,
+.app-header,
+.app-header *,
+.app-footer,
+.app-footer *,
+.card,
+.card *,
+.product-card,
+.product-card *,
+.kpi,
+.kpi *,
+.tabs,
+.tabs *,
+.modal-card,
+.modal-card *,
+.data-table,
+.data-table th,
+.data-table td,
+.empty-state,
+.raw-material-badge {
+  caret-color: transparent;
+}
+
+button,
+.button,
+.tab,
+.icon-button,
+summary,
+.file-button,
+.factory-menu-toggle,
+.factory-menu-item,
+.row-actions,
+.product-actions {
+  caret-color: transparent !important;
+  user-select: none !important;
+}
+
+button *,
+.button *,
+.tab *,
+.icon-button *,
+summary *,
+.file-button *,
+.factory-menu-toggle *,
+.factory-menu-item * {
+  caret-color: transparent !important;
+  user-select: none !important;
+}
+
+input,
+textarea {
+  caret-color: auto !important;
+  user-select: text !important;
+}
+
+select {
+  caret-color: transparent !important;
+  user-select: auto !important;
+}
