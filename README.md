@@ -312,3 +312,10 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Die Materialspalte hat jetzt eine feste Breite.
 - Preis-, Ausstoß- und Aktionsspalten sind fest definiert und bleiben ausgerichtet.
 - Lange Materialnamen und Unterrezept-Einträge umbrechen kontrolliert innerhalb der vorhandenen Spalten.
+
+## v50 - Fabrik-Rezepttabellen ohne horizontale Scrollbar
+
+- Horizontale Scrollbar in den Rezepttabellen der Fabrik-Warenkarten entfernt.
+- Material- und Mengenspalten in den Fabrik-Rezepten haben feste Breiten.
+- Lange Materialnamen werden kontrolliert gekürzt oder auf kleinen Viewports umbrochen.
+

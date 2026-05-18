@@ -3062,3 +3062,59 @@ body.admin-locked .floating-add {
     width: 110px;
   }
 }
+
+/* v50: Fabrik-Rezepttabellen ohne horizontale Scrollbar; feste Material-/Mengenspalten. */
+.factory-panel .product-card .recipe-table-wrap {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.factory-panel .product-card .recipe-table.data-table,
+.factory-panel .product-card .recipe-table.data-table.compact {
+  width: 100%;
+  min-width: 0 !important;
+  max-width: 100%;
+  table-layout: fixed;
+}
+
+.factory-panel .product-card .recipe-table th,
+.factory-panel .product-card .recipe-table td {
+  min-width: 0;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.factory-panel .product-card .recipe-table th:first-child,
+.factory-panel .product-card .recipe-table td:first-child {
+  width: clamp(260px, 58%, 520px);
+  max-width: clamp(260px, 58%, 520px);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.factory-panel .product-card .recipe-table th:last-child,
+.factory-panel .product-card .recipe-table td:last-child {
+  width: 280px;
+  max-width: 280px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  .factory-panel .product-card .recipe-table th:first-child,
+  .factory-panel .product-card .recipe-table td:first-child {
+    width: calc(100% - 150px);
+    max-width: calc(100% - 150px);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+  }
+
+  .factory-panel .product-card .recipe-table th:last-child,
+  .factory-panel .product-card .recipe-table td:last-child {
+    width: 150px;
+    max-width: 150px;
+    white-space: normal;
+  }
+}
