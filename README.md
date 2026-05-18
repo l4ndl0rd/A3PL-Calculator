@@ -361,3 +361,11 @@ Für echte Zugriffskontrolle wäre ein Backend erforderlich, z. B. eine kleine A
 - Mengenspalte bleibt in festem Abstand neben dem Material.
 - Materialstammdaten behalten volle Tabellenbreite, aber mit mehr Abstand zwischen Exportpreis und Unterrezept.
 - Unterrezept-Spalte wirkt weniger gestaucht.
+
+## v57 - Tabellenabstände nachjustiert
+
+- Fabrik-Rezeptboxen behalten wieder die oberen und unteren Abstände innerhalb der Warenkarte.
+- Rezeptboxen laufen links und rechts mit gleichem Innenabstand bis zum Kartenende und behalten ihren Rounded-Edge.
+- Die Mengenspalte in Fabrik-Rezepten steht weiter rechts, bleibt aber linksbündig und nicht am Kartenrand ausgerichtet.
+- Auf der Materialseite wurde die Spalte Unterrezept um 20 px nach rechts gesetzt.
+- Zwischen den Materialtabellen-Spalten wurde der horizontale Abstand erhöht.

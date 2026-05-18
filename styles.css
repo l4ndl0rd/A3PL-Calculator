@@ -3816,3 +3816,88 @@ body:not(.admin-locked) #materials .material-recipe-table td:nth-child(7) {
     min-width: 820px !important;
   }
 }
+
+/* v57: precise table spacing correction after visual feedback.
+   Factories: recipe box keeps top/bottom spacing and spans from the product text edge
+   to the same right inset, with rounded edges intact.
+   Materials: Unterrezept moves 20px right; visible columns receive more horizontal breathing room. */
+.factory-panel .product-card .recipe-table-wrap {
+  display: block !important;
+  width: calc(100% - 32px) !important;
+  max-width: calc(100% - 32px) !important;
+  margin: 12px 16px 16px !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.factory-panel .product-card .recipe-table.data-table,
+.factory-panel .product-card .recipe-table.data-table.compact {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed;
+}
+
+.factory-panel .product-card .recipe-table th,
+.factory-panel .product-card .recipe-table td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.factory-panel .product-card .recipe-table th:first-child,
+.factory-panel .product-card .recipe-table td:first-child {
+  width: 520px !important;
+  max-width: 520px !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.factory-panel .product-card .recipe-table th:last-child,
+.factory-panel .product-card .recipe-table td:last-child {
+  width: auto !important;
+  max-width: none !important;
+  text-align: left !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+#materials .material-recipe-table th,
+#materials .material-recipe-table td {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+body.admin-locked #materials .material-recipe-table th:nth-child(6),
+body.admin-locked #materials .material-recipe-table td:nth-child(6),
+body:not(.admin-locked) #materials .material-recipe-table th:nth-child(6),
+body:not(.admin-locked) #materials .material-recipe-table td:nth-child(6) {
+  padding-left: 48px !important;
+}
+
+#materials .nested-recipe-table th,
+#materials .nested-recipe-table td {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+@media (max-width: 760px) {
+  .factory-panel .product-card .recipe-table-wrap {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    margin: 12px 12px 16px !important;
+  }
+
+  .factory-panel .product-card .recipe-table th:first-child,
+  .factory-panel .product-card .recipe-table td:first-child {
+    width: 52% !important;
+    max-width: 52% !important;
+  }
+
+  .factory-panel .product-card .recipe-table th:last-child,
+  .factory-panel .product-card .recipe-table td:last-child {
+    width: 48% !important;
+    max-width: 48% !important;
+  }
+}
