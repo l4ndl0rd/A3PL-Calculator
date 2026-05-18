@@ -53,6 +53,7 @@ const els = {
   loadBundledDataBtn: document.querySelector("#loadBundledDataBtn"),
   adminAccessBtn: document.querySelector("#adminAccessBtn"),
   backToTopBtn: document.querySelector("#backToTopBtn"),
+  floatingAddBtn: document.querySelector("#floatingAddBtn"),
   addMaterialDialog: document.querySelector("#addMaterialDialog"),
   addMaterialForm: document.querySelector("#addMaterialForm"),
   closeMaterialDialogBtn: document.querySelector("#closeMaterialDialogBtn"),
@@ -141,6 +142,9 @@ function bindStaticEvents() {
     els.backToTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
     window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
     updateBackToTopVisibility();
+  }
+  if (els.floatingAddBtn) {
+    els.floatingAddBtn.addEventListener("click", handleFloatingAdd);
   }
   els.standardMarginInput.addEventListener("change", () => {
     if (!requireAdminAccess()) {
@@ -333,6 +337,7 @@ function activateTab(targetId) {
   if (factoryToggle) factoryToggle.classList.toggle("active", Object.hasOwn(FACTORIES, targetId));
 
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === targetId));
+  updateFloatingAddButton();
 }
 
 function renderMaterials() {
@@ -1045,7 +1050,7 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "warenherstellung-daten.json";
+  link.download = "waren-daten.json";
   link.click();
   URL.revokeObjectURL(url);
 }
@@ -1135,6 +1140,38 @@ function updateAdminUi() {
   document.querySelectorAll(".admin-only").forEach((item) => {
     item.hidden = !adminUnlocked;
   });
+  updateFloatingAddButton();
+}
+
+function getActiveTarget() {
+  return document.querySelector(".panel.active")?.id || "calculator";
+}
+
+function updateFloatingAddButton() {
+  if (!els.floatingAddBtn) return;
+  const activeTarget = getActiveTarget();
+  const isFactory = Object.hasOwn(FACTORIES, activeTarget);
+  const shouldShow = adminUnlocked && (activeTarget === "materials" || isFactory);
+  els.floatingAddBtn.hidden = !shouldShow;
+  if (!shouldShow) {
+    els.floatingAddBtn.removeAttribute("data-target");
+    return;
+  }
+
+  els.floatingAddBtn.dataset.target = activeTarget;
+  els.floatingAddBtn.textContent = activeTarget === "materials" ? "Material hinzufügen" : "Ware hinzufügen";
+}
+
+function handleFloatingAdd() {
+  if (!requireAdminAccess()) return;
+  const target = els.floatingAddBtn?.dataset.target || getActiveTarget();
+  if (target === "materials") {
+    openMaterialDialogCreate();
+    return;
+  }
+  if (Object.hasOwn(FACTORIES, target)) {
+    openProductDialogCreate(target);
+  }
 }
 
 function updateBackToTopVisibility() {

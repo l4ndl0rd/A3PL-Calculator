@@ -192,6 +192,13 @@ Diese Version enthält:
 © 2026 l4ndl0rd · Warenherstellung Calculator · Fishers Life DE · Alle Rechte vorbehalten.
 
 
+## v40: Mitscrollende Hinzufügen-Aktionen
+
+- Zusätzlicher schwebender Button für `Material hinzufügen` im Bereich Materialien
+- Zusätzlicher schwebender Button für `Ware hinzufügen` in aktiven Fabrikbereichen
+- Abschnittsköpfe mit Add-Button bleiben auch auf kleineren Viewports sticky statt wieder statisch zu werden
+- Die schwebenden Add-Buttons erscheinen nur im freigeschalteten Bearbeitungsmodus
+
 ## v39: Bearbeitungsmodus ohne Passwort
 
 - Admin-Code entfernt
