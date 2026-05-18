@@ -2518,3 +2518,14 @@ select {
     justify-self: stretch;
   }
 }
+
+/* v32: lower the complete header area slightly so the Arma 3 / Fishers Life title has more breathing room at the browser top. */
+.app-header {
+  margin-top: clamp(16px, 2.2vw, 30px);
+}
+
+@media (max-width: 520px) {
+  .app-header {
+    margin-top: 14px;
+  }
+}
