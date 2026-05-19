@@ -72,6 +72,8 @@ Farmkosten pro Einheit = Arbeitswert pro Stunde / Farmmenge pro Stunde
 
 Crafting selbst hat weiterhin keine Kosten. Bewertet werden nur die benötigten Inputs, also Inventar, Farmzeit, Importpreise, manuelle Materialwerte und rekursive Herstellungswege.
 
+Bei mehreren Produktionsplan-Positionen wird der direkte Materialbedarf zuerst aggregiert. Dadurch werden gemeinsame Zwischenprodukt-Läufe nur einmal bewertet. Beispiel: Zwei Waren mit je 11 Stahlplatten Bedarf ergeben zusammen 22 Stahlplatten; daraus wird ein Stahlplatten-Lauf berechnet, nicht zwei getrennte Läufe.
+
 ## Zentrale Handelsdaten
 
 Import-, Export- und Marktpreise werden nicht mehr direkt an Materialien oder Waren gespeichert. Stattdessen gibt es den Bereich **Handel**.

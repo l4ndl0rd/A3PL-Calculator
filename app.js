@@ -1114,7 +1114,7 @@ function renderEconomy() {
   els.economyTableBody.innerHTML = "";
   const rows = [];
   const warnings = [];
-  const inventoryRemaining = createInventoryPool();
+  const planCosting = calculatePlanMaterialCostAllocation();
 
   for (const item of state.plan) {
     const product = findProduct(item.productId);
@@ -1125,7 +1125,7 @@ function renderEconomy() {
     const produced = runs * output;
     if (!runs || !produced) continue;
 
-    const cost = calculateProductBatchCostWithInventory(product, runs, inventoryRemaining, new Set());
+    const cost = calculateProductAllocatedPlanCost(product, runs, planCosting);
     const unitCost = cost.complete ? cost.totalCost / produced : null;
     const baseCost = calculateProductUnitCostWithOptimalInputs(product, new Set());
     const craftUnitCost = baseCost.complete ? baseCost.unitCost : null;
@@ -1174,6 +1174,65 @@ function renderEconomy() {
   } else {
     els.economyHint.hidden = true;
   }
+}
+
+function calculatePlanMaterialCostAllocation() {
+  const requirements = calculateRequirements();
+  const inventoryPool = createInventoryPool();
+  const materialCosts = {};
+  const missing = [];
+  const actions = [];
+
+  for (const [material, amount] of Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" }))) {
+    const required = positiveInteger(amount, 0);
+    if (!material || required <= 0) continue;
+    const result = calculateMaterialBatchCostWithInventory(material, required, inventoryPool, new Set());
+    if (!result.complete) {
+      materialCosts[material] = { complete: false, unitCost: null, totalCost: null, missing: result.missing ?? [material], actions: [] };
+      missing.push(...(result.missing ?? [material]));
+      continue;
+    }
+    materialCosts[material] = {
+      complete: true,
+      unitCost: result.totalCost / required,
+      totalCost: result.totalCost,
+      missing: [],
+      actions: result.actions ?? []
+    };
+    actions.push(...(result.actions ?? []));
+  }
+
+  return { requirements, materialCosts, missing: unique(missing), actions: mergeProcurementActions(actions) };
+}
+
+function calculateProductAllocatedPlanCost(product, runs, planCosting) {
+  let totalCost = 0;
+  const missing = [];
+  const actions = [];
+
+  for (const item of product.recipe ?? []) {
+    const material = cleanText(item.material);
+    const required = positiveInteger(item.amount, 0) * positiveInteger(runs, 0);
+    if (!material || required <= 0) continue;
+    const costInfo = planCosting.materialCosts?.[material];
+    if (!costInfo?.complete) {
+      missing.push(...(costInfo?.missing ?? [material]));
+      continue;
+    }
+    totalCost += costInfo.unitCost * required;
+    actions.push(...scaleProcurementActions(costInfo.actions ?? [], required / positiveInteger(planCosting.requirements?.[material], 1)));
+  }
+
+  if (missing.length) return { complete: false, totalCost: null, missing: unique(missing), actions: [] };
+  return { complete: true, totalCost, missing: [], actions: mergeProcurementActions(actions) };
+}
+
+function scaleProcurementActions(actions, factor) {
+  const multiplier = Number.isFinite(factor) && factor > 0 ? factor : 0;
+  return (actions ?? []).map((action) => ({
+    ...action,
+    amount: Math.round(positiveNumber(action.amount, 0) * multiplier * 100) / 100
+  })).filter((action) => action.amount > 0);
 }
 
 function createInventoryPool() {
@@ -1228,11 +1287,11 @@ function calculateMaterialBatchCostWithInventory(materialName, requiredAmount, i
 
   const buyUnitCost = getMaterialBuyUnitCost(name);
   const buyOption = buyUnitCost !== null
-    ? { complete: true, totalCost: buyUnitCost * inventory.remaining, missing: [], actions: [createProcurementAction("import", name, inventory.remaining)] }
+    ? { complete: true, totalCost: buyUnitCost * inventory.remaining, missing: [], actions: [createProcurementAction("import", name, inventory.remaining)], kind: "import" }
     : null;
   const farmUnitCost = getFarmUnitCost(name);
   const farmOption = farmUnitCost !== null
-    ? { complete: true, totalCost: farmUnitCost * inventory.remaining, missing: [], actions: [createProcurementAction("farm", name, inventory.remaining)] }
+    ? { complete: true, totalCost: farmUnitCost * inventory.remaining, missing: [], actions: [createProcurementAction("farm", name, inventory.remaining)], kind: "farm" }
     : null;
   const craftOption = calculateMaterialCraftBatchCostWithInventory(name, inventory.remaining, inventoryPool, stack);
 
@@ -1270,7 +1329,7 @@ function calculateMaterialCraftBatchCostWithInventory(materialName, requiredAmou
     const runs = Math.ceil(required / output);
     addBatchOption((optionPool) => {
       const result = calculateProductBatchCostWithInventory(product, runs, optionPool, nextStack);
-      if (result.complete) result.actions = [...(result.actions ?? []), createProcurementAction("craft", product.name, runs * output)];
+      if (result.complete) { result.actions = [...(result.actions ?? []), createProcurementAction("craft", product.name, runs * output)]; result.kind = "craft"; }
       return result;
     });
   }
@@ -1286,7 +1345,7 @@ function calculateMaterialCraftBatchCostWithInventory(materialName, requiredAmou
   }
 
   const materialCost = getMaterialManualPrice(name);
-  if (materialCost !== null) return { complete: true, totalCost: materialCost * required, missing: [], actions: [createProcurementAction("provide", name, required)] };
+  if (materialCost !== null) return { complete: true, totalCost: materialCost * required, missing: [], actions: [createProcurementAction("provide", name, required)], kind: "provide" };
   return { complete: false, totalCost: null, missing: unique(missing.length ? missing : [name]), actions: [] };
 }
 
@@ -1313,7 +1372,7 @@ function calculateRecipeDefinitionBatchCostWithInventory(recipeDef, requiredAmou
     }
   }
   if (missing.length) return { complete: false, totalCost: null, missing: unique(missing), actions: [] };
-  return { complete: true, totalCost, missing: [], actions: mergeProcurementActions(actions) };
+  return { complete: true, totalCost, missing: [], actions: mergeProcurementActions(actions), kind: "craft" };
 }
 
 function chooseCheapestBatchOption(buyOption, craftOption, fallbackName) {
@@ -1530,18 +1589,12 @@ function calculateRequirements() {
 function calculateRawRequirements() {
   const totals = {};
   const warnings = [];
-  for (const item of state.plan) {
-    const product = findProduct(item.productId);
-    if (!product) continue;
-    const output = positiveInteger(product.output, 1);
-    const quantity = positiveInteger(item.quantity, 0);
-    const runs = quantity > 0 ? Math.ceil(quantity / output) : 0;
-    for (const recipeItem of product.recipe) {
-      const material = cleanText(recipeItem.material);
-      const amount = positiveInteger(recipeItem.amount, 0) * runs;
-      if (!material || amount <= 0) continue;
-      expandRawMaterial(material, amount, totals, warnings, new Set([`product:${product.id}`]));
-    }
+  const directRequirements = calculateRequirements();
+  for (const [material, amount] of Object.entries(directRequirements)) {
+    const name = cleanText(material);
+    const required = positiveInteger(amount, 0);
+    if (!name || required <= 0) continue;
+    expandRawMaterial(name, required, totals, warnings, new Set());
   }
   return { totals, warnings };
 }
@@ -2764,19 +2817,37 @@ function getFarmUnitCost(materialName) {
 
 function createFarmUnitOption(materialName) {
   const unitCost = getFarmUnitCost(materialName);
-  return unitCost !== null ? { complete: true, unitCost, missing: [] } : null;
+  return unitCost !== null ? { complete: true, unitCost, missing: [], kind: "farm" } : null;
+}
+
+function getProcurementOptionPriority(option) {
+  const kind = cleanText(option?.kind || option?.actions?.[0]?.type);
+  const priorities = { inventory: 0, farm: 1, craft: 2, import: 3, provide: 4, material: 4 };
+  return priorities[kind] ?? 9;
 }
 
 function chooseCheapestUnitOptionFromList(options, fallbackName) {
   const complete = (options ?? []).filter((option) => option?.complete);
-  if (complete.length) return complete.reduce((best, current) => current.unitCost < best.unitCost ? current : best);
+  if (complete.length) {
+    return complete.reduce((best, current) => {
+      if (current.unitCost < best.unitCost) return current;
+      if (current.unitCost === best.unitCost && getProcurementOptionPriority(current) < getProcurementOptionPriority(best)) return current;
+      return best;
+    });
+  }
   const missing = (options ?? []).flatMap((option) => option?.missing ?? []);
   return { complete: false, unitCost: null, missing: unique([...(missing ?? []), fallbackName].filter(Boolean)) };
 }
 
 function chooseCheapestBatchOptionFromList(options, fallbackName) {
   const complete = (options ?? []).filter((option) => option?.complete);
-  if (complete.length) return complete.reduce((best, current) => current.totalCost < best.totalCost ? current : best);
+  if (complete.length) {
+    return complete.reduce((best, current) => {
+      if (current.totalCost < best.totalCost) return current;
+      if (current.totalCost === best.totalCost && getProcurementOptionPriority(current) < getProcurementOptionPriority(best)) return current;
+      return best;
+    });
+  }
   const missing = (options ?? []).flatMap((option) => option?.missing ?? []);
   return { complete: false, totalCost: null, missing: unique([...(missing ?? []), fallbackName].filter(Boolean)), actions: [] };
 }
@@ -2792,7 +2863,7 @@ function calculateMaterialUnitCost(materialName, stack = new Set()) {
   if (craftOption.complete) return craftOption;
 
   const materialCost = getMaterialCostPrice(name);
-  const materialOption = materialCost !== null ? { complete: true, unitCost: materialCost, missing: [] } : null;
+  const materialOption = materialCost !== null ? { complete: true, unitCost: materialCost, missing: [], kind: "material" } : null;
   const farmOption = createFarmUnitOption(name);
   return chooseCheapestUnitOptionFromList([craftOption, materialOption, farmOption], name);
 }
@@ -2804,7 +2875,7 @@ function calculateMaterialUnitCostWithOptimalInputs(materialName, stack = new Se
 
   const buyUnitCost = getMaterialBuyUnitCost(name);
   const buyOption = buyUnitCost !== null
-    ? { complete: true, unitCost: buyUnitCost, missing: [] }
+    ? { complete: true, unitCost: buyUnitCost, missing: [], kind: "import" }
     : null;
   const farmOption = createFarmUnitOption(name);
 
@@ -2826,7 +2897,7 @@ function calculateMaterialCraftUnitCostWithOptimalInputs(materialName, stack = n
   if (craftOption.complete) return craftOption;
 
   const manualCost = getMaterialManualPrice(name);
-  if (manualCost !== null) return { complete: true, unitCost: manualCost, missing: [] };
+  if (manualCost !== null) return { complete: true, unitCost: manualCost, missing: [], kind: "material" };
   return { complete: false, unitCost: null, missing: unique([...(craftOption.missing ?? []), name]) };
 }
 
