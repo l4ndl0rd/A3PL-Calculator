@@ -5926,3 +5926,20 @@ body.admin-locked .floating-add {
     min-height: 260px;
   }
 }
+
+
+/* v86: Dropdowns dürfen nicht durch CLS-Containment abgeschnitten werden. */
+.tabs,
+.tabs > #tabs.tab-row,
+#tabs > .primary-tab-row,
+.primary-tab-row,
+.nav-dropdown,
+.tabs > .data-actions {
+  contain: none !important;
+  overflow: visible !important;
+}
+
+.factory-menu,
+.tabs > .data-actions .data-actions-menu {
+  z-index: 200 !important;
+}

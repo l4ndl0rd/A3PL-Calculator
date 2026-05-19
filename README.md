@@ -177,3 +177,8 @@ Das große Gesamturteil wird dadurch nicht mehr prominent dargestellt; relevant 
 ## Layout-Stabilität
 
 Die Oberfläche reserviert für Header, Navigation, Karten und dynamisch gerenderte Tabellen feste Mindestbereiche. Dadurch sollen Layoutverschiebungen beim ersten Laden und beim Nachrendern der JSON-Daten reduziert werden, ohne die Berechnungslogik zu verändern.
+
+
+## Layout-Stabilität
+
+Die Navigation reserviert stabilen Platz, ohne Dropdown-Menüs durch CSS-Containment abzuschneiden. Dropdown-Menüs bleiben sichtbar und werden nicht durch den Navbar-Container geclippt.
