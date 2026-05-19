@@ -166,9 +166,9 @@ Lokale Änderungen werden im Browser gespeichert. Für eine zentrale Datenhaltun
 
 Die Wirtschaftlichkeit zeigt die konkrete Beschaffung pro Planposition als farbige Tags:
 
-- Grün: Farmen
-- Gelb: Crafting / Zerlegung
-- Rot: Kaufen / Import
+- Grün: Farm
+- Gelb: Craft / Zerlegung
+- Rot: Import
 - Grau: Inventar oder manueller Wert
 
-Das große Gesamturteil wird dadurch nicht mehr prominent dargestellt; relevant sind die Einzelaktionen innerhalb des Rezeptbaums.
+Das große Gesamturteil wird dadurch nicht mehr prominent dargestellt; relevant sind die Einzelaktionen innerhalb des Rezeptbaums. Die Bezeichnungen der Beschaffungsarten werden zentral in `app.js` gepflegt, damit Tags, Sortierung und spätere Ausgaben konsistent bleiben.

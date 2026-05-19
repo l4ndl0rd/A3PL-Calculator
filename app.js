@@ -33,6 +33,16 @@ const DEFAULT_RAW_MATERIALS = [
   "Vivianiterz"
 ];
 
+const TEXT_COLLATOR = new Intl.Collator("de", { sensitivity: "base" });
+const PROCUREMENT_LABELS = {
+  inventory: "Inventar",
+  import: "Import",
+  farm: "Farm",
+  craft: "Craft",
+  provide: "Wert"
+};
+const PROCUREMENT_ORDER = { inventory: 0, farm: 1, import: 2, craft: 3, provide: 4 };
+
 let state = loadState();
 let adminUnlocked = localStorage.getItem(ADMIN_FLAG_KEY) === "1";
 let materialSearchQuery = "";
@@ -418,7 +428,7 @@ function renderProductListForFactory(panel, factory) {
   const searchCount = panel.querySelector(".product-search-count");
   if (!container) return;
 
-  const allProducts = (state.products[factory] ?? []).slice().sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }));
+  const allProducts = (state.products[factory] ?? []).slice().sort(compareByName);
   const query = productSearchQueries[factory] || "";
   const visibleProducts = adminUnlocked && query ? allProducts.filter((product) => productMatchesSearch(factory, product, query)) : allProducts;
 
@@ -470,7 +480,7 @@ function createProductCard(factory, product) {
   } else {
     product.recipe
       .slice()
-      .sort((a, b) => cleanText(a.material).localeCompare(cleanText(b.material), "de", { sensitivity: "base" }))
+      .sort((a, b) => compareText(a.material, b.material))
       .forEach((recipeItem) => {
         const row = document.createElement("tr");
         row.innerHTML = `<td>${escapeHtml(recipeItem.material)}</td><td>${positiveInteger(recipeItem.amount, 0).toLocaleString("de-DE")}</td>`;
@@ -560,7 +570,7 @@ function renderMaterials() {
       const body = table.querySelector("tbody");
       recipeDef.recipe
         .slice()
-        .sort((a, b) => cleanText(a.material).localeCompare(cleanText(b.material), "de", { sensitivity: "base" }))
+        .sort((a, b) => compareText(a.material, b.material))
         .forEach((recipeItem) => {
           const itemRow = document.createElement("tr");
           itemRow.innerHTML = `<td>${escapeHtml(recipeItem.material)}</td><td>${positiveInteger(recipeItem.amount, 0).toLocaleString("de-DE")}</td>`;
@@ -627,7 +637,7 @@ function renderTrade() {
   const rows = [...Object.entries(state.tradePrices ?? {})]
     .map(([name, record]) => ({ name, record }))
     .filter((item) => item.name)
-    .sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }));
+    .sort(compareByName);
 
   const query = cleanText(tradeSearchQuery).toLocaleLowerCase("de-DE");
   const visibleRows = query
@@ -793,7 +803,7 @@ function getTradableItemNames() {
         || optionalNumber(record.marketValue) !== null;
     })
     .map(([name]) => cleanText(name))
-    .sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+    .sort(compareText);
 }
 
 function getAllItemNames() {
@@ -801,7 +811,7 @@ function getAllItemNames() {
     ...(state.materials ?? []),
     ...Object.values(state.products ?? {}).flat().map((product) => product.name),
     ...Object.keys(state.tradePrices ?? {})
-  ].map(cleanText).filter(Boolean)).sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+  ].map(cleanText).filter(Boolean)).sort(compareText);
 }
 
 
@@ -819,7 +829,7 @@ function renderFarmRates() {
       const aCreated = positiveNumber(a.profile?.createdAt, 0);
       const bCreated = positiveNumber(b.profile?.createdAt, 0);
       if (aCreated || bCreated) return bCreated - aCreated;
-      return a.name.localeCompare(b.name, "de", { sensitivity: "base" });
+      return compareText(a.name, b.name);
     });
 
   const query = cleanText(farmSearchQuery).toLocaleLowerCase("de-DE");
@@ -1189,7 +1199,7 @@ function calculatePlanMaterialCostAllocation(useInventory = true) {
   const missing = [];
   const actions = [];
 
-  for (const [material, amount] of Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" }))) {
+  for (const [material, amount] of Object.entries(requirements).sort(compareEntryName)) {
     const required = positiveInteger(amount, 0);
     if (!material || required <= 0) continue;
     const result = calculateMaterialBatchCostWithInventory(material, required, inventoryPool, new Set());
@@ -1406,19 +1416,17 @@ function mergeProcurementActions(actions) {
     current.amount += amount;
     merged.set(key, current);
   }
-  return [...merged.values()].sort((a, b) => {
-    const order = { inventory: 0, farm: 1, import: 2, craft: 3, provide: 4 };
-    const delta = (order[a.type] ?? 99) - (order[b.type] ?? 99);
-    return delta || a.item.localeCompare(b.item, "de", { sensitivity: "base" });
-  });
+  return [...merged.values()].sort(compareProcurementActions);
 }
 
-function summarizeProcurementActions(actions) {
-  const merged = mergeProcurementActions(actions);
-  if (!merged.length) return "";
-  const labels = { inventory: "Inventar", import: "Kaufen", farm: "Farmen", craft: "Craft", provide: "Wert" };
-  const parts = merged.map((action) => `${labels[action.type] ?? action.type}: ${formatProcurementAmount(action.amount)}× ${action.item}`);
-  return parts.join(" · ");
+function compareProcurementActions(a, b) {
+  const delta = (PROCUREMENT_ORDER[a.type] ?? 99) - (PROCUREMENT_ORDER[b.type] ?? 99);
+  return delta || compareText(a.item, b.item);
+}
+
+function getProcurementLabel(type) {
+  const key = cleanText(type);
+  return PROCUREMENT_LABELS[key] ?? key;
 }
 
 function renderProcurementActions(actions) {
@@ -1429,9 +1437,26 @@ function renderProcurementActions(actions) {
 
 function renderProcurementActionTag(action) {
   const type = cleanText(action?.type);
-  const labels = { inventory: "Inventar", import: "Kaufen", farm: "Farmen", craft: "Craft", provide: "Wert" };
   const className = `procurement-tag procurement-tag-${type || "neutral"}`;
-  return `<span class="${escapeHtml(className)}"><strong>${escapeHtml(labels[type] ?? type)}</strong><span>${escapeHtml(formatProcurementAmount(action?.amount))}× ${escapeHtml(action?.item)}</span></span>`;
+  const amount = formatProcurementAmount(action?.amount);
+  const item = cleanText(action?.item);
+  return `<span class="${escapeHtml(className)}"><strong>${escapeHtml(getProcurementLabel(type))}</strong><span>${escapeHtml(amount)}× ${escapeHtml(item)}</span></span>`;
+}
+
+function compareText(a, b) {
+  return TEXT_COLLATOR.compare(cleanText(a), cleanText(b));
+}
+
+function compareByName(a, b) {
+  return compareText(a?.name, b?.name);
+}
+
+function compareByLabel(a, b) {
+  return compareText(a?.label, b?.label);
+}
+
+function compareEntryName(a, b) {
+  return compareText(a?.[0], b?.[0]);
 }
 
 function formatProcurementAmount(value) {
@@ -1448,7 +1473,7 @@ function renderInventory() {
 
   const entries = Object.entries(state.inventory)
     .filter(([, amount]) => positiveInteger(amount, 0) > 0)
-    .sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" }));
+    .sort(compareEntryName);
 
   const hasRows = entries.length || inventoryDraftRows.length;
   if (!hasRows) {
@@ -1536,7 +1561,7 @@ function createInventoryRow(config) {
 
 function renderRequirementTable(tbody, requirements, emptyText) {
   tbody.innerHTML = "";
-  const entries = Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" }));
+  const entries = Object.entries(requirements).sort(compareEntryName);
   if (!entries.length) {
     const row = document.createElement("tr");
     row.innerHTML = `<td colspan="4" class="empty-state">${escapeHtml(emptyText)}</td>`;
@@ -2011,15 +2036,15 @@ function sortPlanAlphabetically() {
     const productB = findProduct(b.productId);
     const nameA = productA?.name || "";
     const nameB = productB?.name || "";
-    const productCompare = nameA.localeCompare(nameB, "de", { sensitivity: "base" });
+    const productCompare = compareText(nameA, nameB);
     if (productCompare !== 0) return productCompare;
-    return (FACTORIES[a.factory] || a.factory).localeCompare(FACTORIES[b.factory] || b.factory, "de", { sensitivity: "base" });
+    return compareText(FACTORIES[a.factory] || a.factory, FACTORIES[b.factory] || b.factory);
   });
 }
 
 async function copyRequirementsTable() {
   const requirements = calculateRequirements();
-  const lines = [["Material", "Gesamtbedarf", "Aus Inventar", "Zukaufbedarf"], ...Object.entries(requirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" })).map(([material, amount]) => {
+  const lines = [["Material", "Gesamtbedarf", "Aus Inventar", "Zukaufbedarf"], ...Object.entries(requirements).sort(compareEntryName).map(([material, amount]) => {
     const inventoryAmount = Math.min(getInventoryAmount(material), positiveInteger(amount, 0));
     return [material, amount, inventoryAmount, Math.max(positiveInteger(amount, 0) - inventoryAmount, 0)];
   })].map((row) => row.join("\t"));
@@ -2033,7 +2058,7 @@ async function copyRequirementsTable() {
 
 async function copyRawRequirementsTable() {
   const rawRequirements = calculateRawRequirements().totals;
-  const lines = [["Rohmaterial", "Gesamtbedarf", "Aus Inventar", "Zukaufbedarf"], ...Object.entries(rawRequirements).sort((a, b) => a[0].localeCompare(b[0], "de", { sensitivity: "base" })).map(([material, amount]) => {
+  const lines = [["Rohmaterial", "Gesamtbedarf", "Aus Inventar", "Zukaufbedarf"], ...Object.entries(rawRequirements).sort(compareEntryName).map(([material, amount]) => {
     const inventoryAmount = Math.min(getInventoryAmount(material), positiveInteger(amount, 0));
     return [material, amount, inventoryAmount, Math.max(positiveInteger(amount, 0) - inventoryAmount, 0)];
   })].map((row) => row.join("\t"));
@@ -2201,7 +2226,7 @@ function updateBackToTopVisibility() {
 }
 
 function updatePlanProductOptions(select, factory, selectedProductId) {
-  const products = (state.products[factory] ?? []).slice().sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }));
+  const products = (state.products[factory] ?? []).slice().sort(compareByName);
   const options = products.length ? products.map((product) => ({ value: product.id, label: product.name })) : [{ value: "", label: "Keine Ware vorhanden" }];
   fillSelect(select, options, selectedProductId);
 }
@@ -2210,7 +2235,7 @@ function fillSelect(select, options, selectedValue) {
   select.innerHTML = "";
   options
     .slice()
-    .sort((a, b) => a.label.localeCompare(b.label, "de", { sensitivity: "base" }))
+    .sort(compareByLabel)
     .forEach((option) => {
       const node = document.createElement("option");
       node.value = option.value;
@@ -2222,7 +2247,7 @@ function fillSelect(select, options, selectedValue) {
 function getManualMaterials() {
   return state.materials
     .filter((material) => !getExistingMaterialRecipe(material)?.autoProductId)
-    .sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+    .sort(compareText);
 }
 
 function getMaterialOptionsForDialog(excludeMaterial = null) {
@@ -2235,7 +2260,7 @@ function getMaterialOptionsForDialog(excludeMaterial = null) {
         label: origin ? `${material} — Ware aus ${origin.factoryLabel}` : material
       };
     })
-    .sort((a, b) => a.label.localeCompare(b.label, "de", { sensitivity: "base" }));
+    .sort(compareByLabel);
 }
 
 function getAutoMaterialOrigin(materialName) {
@@ -2417,7 +2442,7 @@ function removeAutoRecipeForProduct(productId) {
 }
 
 function sortMaterials() {
-  state.materials = unique(state.materials).sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+  state.materials = unique(state.materials).sort(compareText);
 }
 
 function normalizeTradePricesFromState() {
@@ -2449,7 +2474,7 @@ function normalizeTradePricesFromState() {
     delete product.marketValue;
   }
 
-  return Object.fromEntries(Object.entries(normalized).sort(([a], [b]) => a.localeCompare(b, "de", { sensitivity: "base" })));
+  return Object.fromEntries(Object.entries(normalized).sort(([a], [b]) => compareText(a, b)));
 }
 
 
@@ -2469,7 +2494,7 @@ function normalizeTradeAliasesFromState() {
     normalized[item] = alias;
   }
 
-  return Object.fromEntries(Object.entries(normalized).sort(([a], [b]) => a.localeCompare(b, "de", { sensitivity: "base" })));
+  return Object.fromEntries(Object.entries(normalized).sort(([a], [b]) => compareText(a, b)));
 }
 
 function mergeTradeRecord(base, extra) {
@@ -2566,7 +2591,7 @@ function normalizeState() {
     const aCreated = positiveNumber(av?.createdAt, 0);
     const bCreated = positiveNumber(bv?.createdAt, 0);
     if (aCreated || bCreated) return bCreated - aCreated;
-    return a.localeCompare(b, "de", { sensitivity: "base" });
+    return compareText(a, b);
   }));
   delete state.materialImportPrices;
   delete state.materialExportPrices;
@@ -3024,7 +3049,7 @@ function getSalePrice(product, unitCost) {
 function getProcurementAssessment(craftUnitCost, buyUnitCost) {
   if (craftUnitCost === null && buyUnitCost === null) return { text: "Keine Daten", className: "assessment-neutral" };
   if (craftUnitCost === null) return { text: "Einkaufen", className: "assessment-warning" };
-  if (buyUnitCost === null) return { text: "Farmen/Craften", className: "assessment-good" };
+  if (buyUnitCost === null) return { text: "Farm/Craft", className: "assessment-good" };
 
   const delta = buyUnitCost - craftUnitCost;
   if (Math.abs(delta) <= 0.01) return { text: "Gleichstand", className: "assessment-neutral" };
