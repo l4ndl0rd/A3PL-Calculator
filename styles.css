@@ -4768,3 +4768,35 @@ body.admin-locked #trade .trade-table td:nth-child(4) {
     grid-template-columns: 1fr;
   }
 }
+
+/* v67: Handelswerte linksbündig innerhalb ihrer Spalten ausrichten. */
+#trade .trade-table th:nth-child(2),
+#trade .trade-table td:nth-child(2),
+#trade .trade-table th:nth-child(3),
+#trade .trade-table td:nth-child(3),
+#trade .trade-table th:nth-child(4),
+#trade .trade-table td:nth-child(4),
+body.admin-locked #trade .trade-table th:nth-child(2),
+body.admin-locked #trade .trade-table td:nth-child(2),
+body.admin-locked #trade .trade-table th:nth-child(3),
+body.admin-locked #trade .trade-table td:nth-child(3),
+body.admin-locked #trade .trade-table th:nth-child(4),
+body.admin-locked #trade .trade-table td:nth-child(4),
+body:not(.admin-locked) #trade .trade-table th:nth-child(2),
+body:not(.admin-locked) #trade .trade-table td:nth-child(2),
+body:not(.admin-locked) #trade .trade-table th:nth-child(3),
+body:not(.admin-locked) #trade .trade-table td:nth-child(3),
+body:not(.admin-locked) #trade .trade-table th:nth-child(4),
+body:not(.admin-locked) #trade .trade-table td:nth-child(4) {
+  text-align: left !important;
+  font-variant-numeric: tabular-nums;
+}
+
+#trade .trade-table td:nth-child(2) input,
+#trade .trade-table td:nth-child(3) input,
+#trade .trade-table td:nth-child(4) input,
+#trade .trade-table td:nth-child(2) .field-input,
+#trade .trade-table td:nth-child(3) .field-input,
+#trade .trade-table td:nth-child(4) .field-input {
+  text-align: left !important;
+}
