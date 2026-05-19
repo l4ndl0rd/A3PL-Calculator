@@ -29,11 +29,12 @@ Der Calculator läuft vollständig statisch und ist für GitHub Pages geeignet. 
 
 Für Material- und Zwischenproduktkosten prüft der Calculator rekursiv die günstigste verfügbare Beschaffungsart:
 
-1. vorhandenes Inventar wird in der aktuellen Kalkulation zuerst als kostenloser Eigenbestand verrechnet
-2. kaufbare Materialien oder Zwischenprodukte werden nur über ihren eigenen konkreten Importpreis aus `tradePrices` berücksichtigt
-3. herstellbare Zwischenprodukte werden rekursiv aus ihren Rezepten berechnet
-4. gleichwertige Ausgaben, zum Beispiel `Amethystbarren` und `Amethystbarren (aus Palette)`, können als alternative Herstellungswege verglichen werden
-5. bei mehreren möglichen Wegen wird der günstigere vollständige Weg verwendet
+1. für die angezeigten `Kosten/Stück` wird ohne eigenes Inventar kalkuliert
+2. vorhandenes Inventar wird separat für Bedarf, Zukaufbedarf und Beschaffungsempfehlung berücksichtigt
+3. kaufbare Materialien oder Zwischenprodukte werden nur über ihren eigenen konkreten Importpreis aus `tradePrices` berücksichtigt
+4. herstellbare Zwischenprodukte werden rekursiv aus ihren Rezepten berechnet
+5. gleichwertige Ausgaben, zum Beispiel `Amethystbarren` und `Amethystbarren (aus Palette)`, können als alternative Herstellungswege verglichen werden
+6. bei mehreren möglichen Wegen wird der günstigere vollständige Weg verwendet
 
 Für Verkaufspreise gilt:
 
@@ -41,9 +42,9 @@ Für Verkaufspreise gilt:
 2. sonst zentraler Marktwert des Artikels
 3. sonst Herstellungskosten plus Standardmarge
 
-Inventar senkt die persönlichen Herstellungskosten für die aktuelle Kalkulation. Die Preisempfehlung auf Basis von `Kosten + Marge` verwendet weiterhin die normalen Herstellungskosten, damit auch bei vollständig vorhandenem Inventar ein sinnvoller Verkaufspreis angezeigt wird.
+Inventar senkt nicht die angezeigten `Kosten/Stück` und nicht die Preisempfehlung. Es wird nur in der Bedarfs-/Zukaufanzeige und in der Beschaffungsempfehlung berücksichtigt. Dadurch bleibt `Kosten + Marge` eine stabile Preisbasis, auch wenn du Materialien bereits erfarmt hast.
 
-Bei planweiten Sammelproduktionen mit gemeinsamen Zwischenprodukt-Läufen verwendet `Kosten + Marge` dieselbe Kostenbasis wie die angezeigten `Kosten/Stück`, damit die Marge nicht durch Rundungs- oder Überschussmengen negativ ausfällt.
+Bei planweiten Sammelproduktionen mit gemeinsamen Zwischenprodukt-Läufen verwendet `Kosten + Marge` dieselbe inventarbereinigte Kostenbasis wie die angezeigten `Kosten/Stück`, damit die Marge nicht durch Rundungs- oder Überschussmengen negativ ausfällt.
 
 Wenn derselbe Warenname in mehreren Fabriken existiert, behandelt der Produktionsplan die konkrete Ware weiterhin über ihre interne ID. Bei Materialbedarf und Preisberechnung werden gleichnamige Herstellungswege als Alternativen betrachtet; der Calculator verwendet dabei den günstigsten berechenbaren Weg. So können beispielsweise `Stahlplatten` sowohl hergestellt als auch aus einer Palette zerlegt werden, ohne unterschiedliche Handelsartikel pflegen zu müssen.
 
@@ -72,7 +73,7 @@ Die Formel lautet:
 Farmkosten pro Einheit = Arbeitswert pro Stunde / Farmmenge pro Stunde
 ```
 
-Crafting selbst hat weiterhin keine Kosten. Bewertet werden nur die benötigten Inputs, also Inventar, Farmzeit, Importpreise, manuelle Materialwerte und rekursive Herstellungswege.
+Crafting selbst hat weiterhin keine Kosten. Bewertet werden für `Kosten/Stück` nur Farmzeit, Importpreise, manuelle Materialwerte und rekursive Herstellungswege. Inventar erscheint nur in der konkreten Beschaffungsempfehlung und in den Bedarfstabellen.
 
 Bei mehreren Produktionsplan-Positionen wird der direkte Materialbedarf zuerst aggregiert. Dadurch werden gemeinsame Zwischenprodukt-Läufe nur einmal bewertet. Beispiel: Zwei Waren mit je 11 Stahlplatten Bedarf ergeben zusammen 22 Stahlplatten; daraus wird ein Stahlplatten-Lauf berechnet, nicht zwei getrennte Läufe.
 

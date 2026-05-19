@@ -1114,7 +1114,10 @@ function renderEconomy() {
   els.economyTableBody.innerHTML = "";
   const rows = [];
   const warnings = [];
-  const planCosting = calculatePlanMaterialCostAllocation();
+  // Wirtschaftliche Kostenbasis ohne eigenes Inventar: Inventar darf Preisempfehlung und Kosten/Stück nicht drücken.
+  const planCosting = calculatePlanMaterialCostAllocation(false);
+  // Beschaffungs-/Handlungsempfehlung mit Inventar: hier ist eigenes Inventar relevant.
+  const procurementPlanCosting = calculatePlanMaterialCostAllocation(true);
 
   for (const item of state.plan) {
     const product = findProduct(item.productId);
@@ -1126,12 +1129,13 @@ function renderEconomy() {
     if (!runs || !produced) continue;
 
     const cost = calculateProductAllocatedPlanCost(product, runs, planCosting);
+    const procurementCost = calculateProductAllocatedPlanCost(product, runs, procurementPlanCosting);
     const unitCost = cost.complete ? cost.totalCost / produced : null;
     const baseCost = calculateProductUnitCostWithOptimalInputs(product, new Set());
     const craftUnitCost = baseCost.complete ? baseCost.unitCost : null;
     const buyUnitCost = getProductBuyUnitCost(product);
-    // For fallback prices based on "Kosten + Marge", use the same cost basis that is shown as Kosten/Stück.
-    // Otherwise shared production runs with unavoidable surplus can show negative profit even though the source says Kosten + Marge.
+    // Für "Kosten + Marge" wird die sichtbare Kostenbasis ohne eigenes Inventar verwendet.
+    // Eigenes Inventar beeinflusst nur Bedarf/Zukauf und die Beschaffungsempfehlung.
     const recommendationCost = unitCost ?? craftUnitCost;
     const sale = getSalePrice(product, recommendationCost);
     const unitProfit = unitCost !== null && sale.price !== null ? sale.price - unitCost : null;
@@ -1139,9 +1143,9 @@ function renderEconomy() {
     const totalCost = unitCost !== null ? unitCost * produced : null;
     const totalRevenue = sale.price !== null ? sale.price * produced : null;
     const assessment = getProcurementAssessment(craftUnitCost, buyUnitCost);
-    const procurementSummary = summarizeProcurementActions(cost.actions ?? []);
+    const procurementSummary = summarizeProcurementActions(procurementCost.actions ?? cost.actions ?? []);
 
-    if (!cost.complete) warnings.push(`${product.name}: ${cost.missing.length ? `fehlende Materialpreise für persönliche Kosten (${cost.missing.join(", ")})` : "Kosten unvollständig"}.`);
+    if (!cost.complete) warnings.push(`${product.name}: ${cost.missing.length ? `fehlende Materialpreise für Kostenbasis (${cost.missing.join(", ")})` : "Kosten unvollständig"}.`);
     if (sale.price === null && !baseCost.complete) warnings.push(`${product.name}: keine Preisempfehlung möglich, da Produktionskosten unvollständig sind (${baseCost.missing.join(", ")}).`);
 
     rows.push({ product, quantity, produced, runs, unitCost, craftUnitCost, buyUnitCost, sale, unitProfit, totalProfit, totalCost, totalRevenue, assessment, procurementSummary });
@@ -1178,9 +1182,9 @@ function renderEconomy() {
   }
 }
 
-function calculatePlanMaterialCostAllocation() {
+function calculatePlanMaterialCostAllocation(useInventory = true) {
   const requirements = calculateRequirements();
-  const inventoryPool = createInventoryPool();
+  const inventoryPool = useInventory ? createInventoryPool() : {};
   const materialCosts = {};
   const missing = [];
   const actions = [];
