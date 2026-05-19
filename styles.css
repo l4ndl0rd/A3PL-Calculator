@@ -5023,3 +5023,122 @@ body.admin-locked #laborHourlyValueInput {
     grid-template-columns: 1fr;
   }
 }
+
+/* v77: Farmraten-Tabelle optisch an Materialien/Handel angleichen. */
+#farmrates .table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+#farmrates .farm-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#farmrates .farm-table th,
+#farmrates .farm-table td {
+  box-sizing: border-box !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  vertical-align: middle !important;
+  line-height: 1.25 !important;
+}
+
+#farmrates .farm-table th {
+  line-height: 1.25 !important;
+}
+
+body.admin-locked #farmrates .farm-table th:nth-child(5),
+body.admin-locked #farmrates .farm-table td:nth-child(5) {
+  display: none !important;
+}
+
+body.admin-locked #farmrates .farm-table th:nth-child(1),
+body.admin-locked #farmrates .farm-table td:nth-child(1) {
+  width: 34% !important;
+}
+
+body.admin-locked #farmrates .farm-table th:nth-child(2),
+body.admin-locked #farmrates .farm-table td:nth-child(2) {
+  width: 16% !important;
+}
+
+body.admin-locked #farmrates .farm-table th:nth-child(3),
+body.admin-locked #farmrates .farm-table td:nth-child(3),
+body.admin-locked #farmrates .farm-table th:nth-child(4),
+body.admin-locked #farmrates .farm-table td:nth-child(4) {
+  width: 25% !important;
+  text-align: left !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body:not(.admin-locked) #farmrates .farm-table th:nth-child(1),
+body:not(.admin-locked) #farmrates .farm-table td:nth-child(1) {
+  width: 28% !important;
+}
+
+body:not(.admin-locked) #farmrates .farm-table th:nth-child(2),
+body:not(.admin-locked) #farmrates .farm-table td:nth-child(2) {
+  width: 14% !important;
+}
+
+body:not(.admin-locked) #farmrates .farm-table th:nth-child(3),
+body:not(.admin-locked) #farmrates .farm-table td:nth-child(3),
+body:not(.admin-locked) #farmrates .farm-table th:nth-child(4),
+body:not(.admin-locked) #farmrates .farm-table td:nth-child(4) {
+  width: 20% !important;
+  text-align: left !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body:not(.admin-locked) #farmrates .farm-table th:nth-child(5),
+body:not(.admin-locked) #farmrates .farm-table td:nth-child(5) {
+  width: 18% !important;
+}
+
+#farmrates .farm-table td.row-actions {
+  display: table-cell !important;
+  text-align: right !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+
+#farmrates .farm-table td.row-actions .button {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 78px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 10px !important;
+  margin-left: 6px;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+#farmrates .farm-table td.row-actions .remove-farm-profile {
+  min-width: 82px;
+}
+
+#farmrates .source-badge {
+  white-space: nowrap;
+}
+
+#farmrates .labor-settings {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 0 14px !important;
+}
+
+@media (max-width: 760px) {
+  #farmrates .table-wrap { overflow-x: auto !important; }
+  #farmrates .farm-table { min-width: 820px !important; }
+}
