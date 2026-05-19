@@ -25,6 +25,7 @@ Der Calculator läuft vollständig statisch und ist für GitHub Pages geeignet. 
 - Responsive Tabellenlayouts nach Materialien-Layout als Referenz
 - JSON Import, Export und Zurücksetzen
 - Standarddatenbestand über `waren-daten.json`
+- Konsistentes responsives Tabellenlayout nach Materialien-Referenz
 
 ## Preislogik
 
