@@ -4246,3 +4246,147 @@ body.admin-locked .trade-table td:nth-child(4) { width: 20%; }
     min-width: 760px !important;
   }
 }
+
+/* v63: Handel-Layout an Materialien angeglichen und Navbar einzeilig gehalten. */
+.tabs {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+
+#tabs > .primary-tab-row,
+.primary-tab-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.primary-tab-row .tab,
+.nav-dropdown > .factory-menu-toggle,
+.tabs > .data-actions > summary {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  font-size: clamp(0.68rem, 0.70vw, 0.92rem) !important;
+  padding-inline: clamp(6px, 0.85vw, 14px) !important;
+}
+
+.tabs > .data-actions > summary::after {
+  flex: 0 0 auto;
+  margin-left: 6px;
+}
+
+#trade .table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  overflow-y: visible;
+}
+
+#trade .trade-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#trade .trade-table th,
+#trade .trade-table td {
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  line-height: 1.25 !important;
+}
+
+#trade .trade-table th:nth-child(1),
+#trade .trade-table td:nth-child(1) { width: 36% !important; }
+#trade .trade-table th:nth-child(2),
+#trade .trade-table td:nth-child(2),
+#trade .trade-table th:nth-child(3),
+#trade .trade-table td:nth-child(3),
+#trade .trade-table th:nth-child(4),
+#trade .trade-table td:nth-child(4) {
+  width: 15% !important;
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+#trade .trade-table th:nth-child(5),
+#trade .trade-table td:nth-child(5) {
+  width: 19% !important;
+  text-align: right !important;
+}
+
+body.admin-locked #trade .trade-table th:nth-child(5),
+body.admin-locked #trade .trade-table td:nth-child(5) {
+  display: none !important;
+}
+body.admin-locked #trade .trade-table th:nth-child(1),
+body.admin-locked #trade .trade-table td:nth-child(1) { width: 40% !important; }
+body.admin-locked #trade .trade-table th:nth-child(2),
+body.admin-locked #trade .trade-table td:nth-child(2),
+body.admin-locked #trade .trade-table th:nth-child(3),
+body.admin-locked #trade .trade-table td:nth-child(3),
+body.admin-locked #trade .trade-table th:nth-child(4),
+body.admin-locked #trade .trade-table td:nth-child(4) { width: 20% !important; }
+
+#trade .trade-table input {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+#trade .trade-table td.row-actions {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-align: right !important;
+}
+
+#trade .trade-table td.row-actions .button,
+#trade .trade-table .remove-trade-row {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 94px !important;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+}
+
+@media (max-width: 760px) {
+  .tabs {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+  }
+
+  #tabs > .primary-tab-row,
+  .primary-tab-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .primary-tab-row .tab,
+  .nav-dropdown > .factory-menu-toggle,
+  .tabs > .data-actions > summary {
+    font-size: clamp(0.58rem, 2.15vw, 0.74rem) !important;
+    padding: 8px 4px !important;
+  }
+
+  #trade .table-wrap {
+    overflow-x: hidden !important;
+  }
+
+  #trade .trade-table {
+    min-width: 0 !important;
+  }
+
+  #trade .trade-table th:nth-child(1),
+  #trade .trade-table td:nth-child(1) { width: 32% !important; }
+  #trade .trade-table th:nth-child(2),
+  #trade .trade-table td:nth-child(2),
+  #trade .trade-table th:nth-child(3),
+  #trade .trade-table td:nth-child(3),
+  #trade .trade-table th:nth-child(4),
+  #trade .trade-table td:nth-child(4) { width: 14% !important; }
+  #trade .trade-table th:nth-child(5),
+  #trade .trade-table td:nth-child(5) { width: 26% !important; }
+}
