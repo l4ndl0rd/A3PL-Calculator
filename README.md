@@ -161,3 +161,14 @@ favicon.png
 ```
 
 Lokale Änderungen werden im Browser gespeichert. Für eine zentrale Datenhaltung wäre später ein Backend mit API und Datenbank erforderlich, zum Beispiel SQLite.
+
+## Beschaffungsempfehlung
+
+Die Wirtschaftlichkeit zeigt die konkrete Beschaffung pro Planposition als farbige Tags:
+
+- Grün: Farmen
+- Gelb: Crafting / Zerlegung
+- Rot: Kaufen / Import
+- Grau: Inventar oder manueller Wert
+
+Das große Gesamturteil wird dadurch nicht mehr prominent dargestellt; relevant sind die Einzelaktionen innerhalb des Rezeptbaums.

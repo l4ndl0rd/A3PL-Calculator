@@ -1143,12 +1143,12 @@ function renderEconomy() {
     const totalCost = unitCost !== null ? unitCost * produced : null;
     const totalRevenue = sale.price !== null ? sale.price * produced : null;
     const assessment = getProcurementAssessment(craftUnitCost, buyUnitCost);
-    const procurementSummary = summarizeProcurementActions(procurementCost.actions ?? cost.actions ?? []);
+    const procurementActions = mergeProcurementActions(procurementCost.actions ?? cost.actions ?? []);
 
     if (!cost.complete) warnings.push(`${product.name}: ${cost.missing.length ? `fehlende Materialpreise für Kostenbasis (${cost.missing.join(", ")})` : "Kosten unvollständig"}.`);
     if (sale.price === null && !baseCost.complete) warnings.push(`${product.name}: keine Preisempfehlung möglich, da Produktionskosten unvollständig sind (${baseCost.missing.join(", ")}).`);
 
-    rows.push({ product, quantity, produced, runs, unitCost, craftUnitCost, buyUnitCost, sale, unitProfit, totalProfit, totalCost, totalRevenue, assessment, procurementSummary });
+    rows.push({ product, quantity, produced, runs, unitCost, craftUnitCost, buyUnitCost, sale, unitProfit, totalProfit, totalCost, totalRevenue, assessment, procurementActions });
   }
 
   if (!rows.length) {
@@ -1169,7 +1169,7 @@ function renderEconomy() {
       <td><span class="source-badge">${escapeHtml(item.sale.source)}</span></td>
       <td>${formatProfit(item.unitProfit)}</td>
       <td>${formatProfit(item.totalProfit)}</td>
-      <td><span class="assessment-badge ${item.assessment.className}">${escapeHtml(item.assessment.text)}</span>${item.procurementSummary ? `<br><span class="muted-inline procurement-summary">${escapeHtml(item.procurementSummary)}</span>` : ""}</td>
+      <td>${renderProcurementActions(item.procurementActions)}</td>
     `;
     els.economyTableBody.appendChild(row);
   }
@@ -1416,10 +1416,27 @@ function mergeProcurementActions(actions) {
 function summarizeProcurementActions(actions) {
   const merged = mergeProcurementActions(actions);
   if (!merged.length) return "";
-  const labels = { inventory: "Inventar", import: "Import", farm: "Farmen", craft: "Craft", provide: "Wert" };
-  const parts = merged.slice(0, 4).map((action) => `${labels[action.type] ?? action.type}: ${action.amount.toLocaleString("de-DE")}× ${action.item}`);
-  const remaining = merged.length - parts.length;
-  return remaining > 0 ? `${parts.join(" · ")} · +${remaining} weitere` : parts.join(" · ");
+  const labels = { inventory: "Inventar", import: "Kaufen", farm: "Farmen", craft: "Craft", provide: "Wert" };
+  const parts = merged.map((action) => `${labels[action.type] ?? action.type}: ${formatProcurementAmount(action.amount)}× ${action.item}`);
+  return parts.join(" · ");
+}
+
+function renderProcurementActions(actions) {
+  const merged = mergeProcurementActions(actions);
+  if (!merged.length) return `<span class="muted-inline">—</span>`;
+  return `<div class="procurement-tags">${merged.map(renderProcurementActionTag).join("")}</div>`;
+}
+
+function renderProcurementActionTag(action) {
+  const type = cleanText(action?.type);
+  const labels = { inventory: "Inventar", import: "Kaufen", farm: "Farmen", craft: "Craft", provide: "Wert" };
+  const className = `procurement-tag procurement-tag-${type || "neutral"}`;
+  return `<span class="${escapeHtml(className)}"><strong>${escapeHtml(labels[type] ?? type)}</strong><span>${escapeHtml(formatProcurementAmount(action?.amount))}× ${escapeHtml(action?.item)}</span></span>`;
+}
+
+function formatProcurementAmount(value) {
+  const number = positiveNumber(value, 0);
+  return number.toLocaleString("de-DE", { minimumFractionDigits: number % 1 ? 2 : 0, maximumFractionDigits: 2 });
 }
 
 

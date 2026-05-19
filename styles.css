@@ -5142,3 +5142,67 @@ body:not(.admin-locked) #farmrates .farm-table td:nth-child(5) {
   #farmrates .table-wrap { overflow-x: auto !important; }
   #farmrates .farm-table { min-width: 820px !important; }
 }
+
+
+/* v81: Beschaffungsempfehlung als kompakte Einzel-Tags statt großem Gesamt-Badge. */
+.economy-table .assessment-badge {
+  display: none;
+}
+
+.procurement-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  max-width: 100%;
+}
+
+.procurement-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.procurement-tag span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.procurement-tag-farm {
+  color: #dff7e5;
+  border: 1px solid rgba(76, 175, 80, 0.34);
+  background: rgba(76, 175, 80, 0.17);
+}
+
+.procurement-tag-craft {
+  color: #fff0c8;
+  border: 1px solid rgba(255, 178, 64, 0.38);
+  background: rgba(255, 178, 64, 0.17);
+}
+
+.procurement-tag-import {
+  color: #ffe0dd;
+  border: 1px solid rgba(224, 82, 66, 0.38);
+  background: rgba(224, 82, 66, 0.18);
+}
+
+.procurement-tag-inventory {
+  color: rgba(244, 238, 232, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.procurement-tag-provide,
+.procurement-tag-neutral {
+  color: rgba(244, 238, 232, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+}
