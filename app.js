@@ -1130,7 +1130,9 @@ function renderEconomy() {
     const baseCost = calculateProductUnitCostWithOptimalInputs(product, new Set());
     const craftUnitCost = baseCost.complete ? baseCost.unitCost : null;
     const buyUnitCost = getProductBuyUnitCost(product);
-    const recommendationCost = craftUnitCost ?? (unitCost !== null && unitCost > 0 ? unitCost : null);
+    // For fallback prices based on "Kosten + Marge", use the same cost basis that is shown as Kosten/Stück.
+    // Otherwise shared production runs with unavoidable surplus can show negative profit even though the source says Kosten + Marge.
+    const recommendationCost = unitCost ?? craftUnitCost;
     const sale = getSalePrice(product, recommendationCost);
     const unitProfit = unitCost !== null && sale.price !== null ? sale.price - unitCost : null;
     const totalProfit = unitProfit !== null ? unitProfit * produced : null;

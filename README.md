@@ -43,6 +43,8 @@ Für Verkaufspreise gilt:
 
 Inventar senkt die persönlichen Herstellungskosten für die aktuelle Kalkulation. Die Preisempfehlung auf Basis von `Kosten + Marge` verwendet weiterhin die normalen Herstellungskosten, damit auch bei vollständig vorhandenem Inventar ein sinnvoller Verkaufspreis angezeigt wird.
 
+Bei planweiten Sammelproduktionen mit gemeinsamen Zwischenprodukt-Läufen verwendet `Kosten + Marge` dieselbe Kostenbasis wie die angezeigten `Kosten/Stück`, damit die Marge nicht durch Rundungs- oder Überschussmengen negativ ausfällt.
+
 Wenn derselbe Warenname in mehreren Fabriken existiert, behandelt der Produktionsplan die konkrete Ware weiterhin über ihre interne ID. Bei Materialbedarf und Preisberechnung werden gleichnamige Herstellungswege als Alternativen betrachtet; der Calculator verwendet dabei den günstigsten berechenbaren Weg. So können beispielsweise `Stahlplatten` sowohl hergestellt als auch aus einer Palette zerlegt werden, ohne unterschiedliche Handelsartikel pflegen zu müssen.
 
 ## Farmraten und Arbeitszeit
