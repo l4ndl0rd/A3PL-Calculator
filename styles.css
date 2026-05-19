@@ -4514,3 +4514,133 @@ body:not(.admin-locked) #trade .trade-table td:nth-child(5) {
     padding-inline: 8px !important;
   }
 }
+
+
+/* v65: Handel-Bearbeitungsmodus wirklich an die Materialtabelle angleichen. */
+#trade .table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+#trade .trade-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#trade .trade-table th,
+#trade .trade-table td {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  padding-block: 9px !important;
+  vertical-align: middle !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  line-height: 1.25 !important;
+}
+
+body.admin-locked #trade .trade-table th:nth-child(5),
+body.admin-locked #trade .trade-table td:nth-child(5) {
+  display: none !important;
+}
+
+body.admin-locked #trade .trade-table th:nth-child(1),
+body.admin-locked #trade .trade-table td:nth-child(1) {
+  width: 40% !important;
+}
+
+body.admin-locked #trade .trade-table th:nth-child(2),
+body.admin-locked #trade .trade-table td:nth-child(2),
+body.admin-locked #trade .trade-table th:nth-child(3),
+body.admin-locked #trade .trade-table td:nth-child(3),
+body.admin-locked #trade .trade-table th:nth-child(4),
+body.admin-locked #trade .trade-table td:nth-child(4) {
+  width: 20% !important;
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body:not(.admin-locked) #trade .trade-table th:nth-child(1),
+body:not(.admin-locked) #trade .trade-table td:nth-child(1) {
+  width: 33% !important;
+}
+
+body:not(.admin-locked) #trade .trade-table th:nth-child(2),
+body:not(.admin-locked) #trade .trade-table td:nth-child(2),
+body:not(.admin-locked) #trade .trade-table th:nth-child(3),
+body:not(.admin-locked) #trade .trade-table td:nth-child(3),
+body:not(.admin-locked) #trade .trade-table th:nth-child(4),
+body:not(.admin-locked) #trade .trade-table td:nth-child(4) {
+  width: 16% !important;
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+body:not(.admin-locked) #trade .trade-table th:nth-child(5),
+body:not(.admin-locked) #trade .trade-table td:nth-child(5) {
+  width: 19% !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+#trade .trade-table input {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#trade .trade-table td.row-actions {
+  display: table-cell !important;
+}
+
+#trade .trade-table td.row-actions .button,
+#trade .trade-table .remove-trade-row {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 112px !important;
+  max-width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 760px) {
+  body:not(.admin-locked) #trade .trade-table th:nth-child(1),
+  body:not(.admin-locked) #trade .trade-table td:nth-child(1) {
+    width: 30% !important;
+  }
+
+  body:not(.admin-locked) #trade .trade-table th:nth-child(2),
+  body:not(.admin-locked) #trade .trade-table td:nth-child(2),
+  body:not(.admin-locked) #trade .trade-table th:nth-child(3),
+  body:not(.admin-locked) #trade .trade-table td:nth-child(3),
+  body:not(.admin-locked) #trade .trade-table th:nth-child(4),
+  body:not(.admin-locked) #trade .trade-table td:nth-child(4) {
+    width: 14% !important;
+  }
+
+  body:not(.admin-locked) #trade .trade-table th:nth-child(5),
+  body:not(.admin-locked) #trade .trade-table td:nth-child(5) {
+    width: 28% !important;
+  }
+
+  #trade .trade-table td.row-actions .button,
+  #trade .trade-table .remove-trade-row {
+    min-width: 92px !important;
+    padding-inline: 8px !important;
+  }
+}
