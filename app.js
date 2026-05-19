@@ -1039,8 +1039,8 @@ function createInventoryRow(config) {
   const row = document.createElement("tr");
   if (isDraft) row.classList.add("draft-row");
   row.innerHTML = `
-    <td><input class="inventory-material" type="text" list="inventoryItemOptions" autocomplete="off" placeholder="Item auswählen oder suchen" value="${escapeHtml(material)}" /></td>
-    <td><input class="inventory-amount" type="number" min="0" step="1" placeholder="0" value="${isDraft && (amount === "" || amount === null || amount === undefined) ? "" : positiveInteger(amount, 0)}" /></td>
+    <td><input class="inventory-material" name="inventoryMaterial" type="text" list="inventoryItemOptions" autocomplete="off" placeholder="Item auswählen oder suchen" value="${escapeHtml(material)}" /></td>
+    <td><input class="inventory-amount" name="inventoryAmount" type="number" min="0" step="1" placeholder="0" value="${isDraft && (amount === "" || amount === null || amount === undefined) ? "" : positiveInteger(amount, 0)}" /></td>
     <td><button class="icon-button remove-inventory-row" type="button" aria-label="Inventarzeile entfernen">×</button></td>
   `;
 

@@ -31,7 +31,7 @@
           <button id="exportDataBtn" class="button button-secondary" type="button">Daten exportieren</button>
           <label class="button button-secondary file-button admin-only">
             Daten importieren
-            <input id="importDataInput" type="file" accept="application/json" />
+            <input id="importDataInput" name="importDataInput" type="file" accept="application/json" />
           </label>
           <button id="loadBundledDataBtn" class="button button-secondary admin-only" type="button">Standarddaten laden</button>
           <button id="adminAccessBtn" class="button button-secondary" type="button">Bearbeitung aktivieren</button>
@@ -174,7 +174,7 @@
           </div>
           <label class="inline-setting">
             Standardmarge %
-            <input id="standardMarginInput" type="number" min="0" step="1" value="30" />
+            <input id="standardMarginInput" name="standardMarginInput" type="number" min="0" step="1" value="30" />
           </label>
         </div>
         <p id="economyHint" class="hint warning-hint" hidden></p>
@@ -211,7 +211,7 @@
         <div class="edit-search-bar admin-only">
           <label>
             Material suchen
-            <input id="materialSearchInput" type="search" placeholder="Name, Preis oder Rezeptmaterial eingeben" autocomplete="off" />
+            <input id="materialSearchInput" name="materialSearchInput" type="search" placeholder="Name, Preis oder Rezeptmaterial eingeben" autocomplete="off" />
           </label>
           <span id="materialSearchCount" class="search-count">0 Materialien</span>
         </div>
@@ -247,7 +247,7 @@
         <div class="edit-search-bar">
           <label>
             Handelsartikel suchen
-            <input id="tradeSearchInput" type="search" placeholder="Artikel oder Preis eingeben" autocomplete="off" />
+            <input id="tradeSearchInput" name="tradeSearchInput" type="search" placeholder="Artikel oder Preis eingeben" autocomplete="off" />
           </label>
           <span id="tradeSearchCount" class="search-count">0 Handelseinträge</span>
         </div>
@@ -294,7 +294,7 @@
         <div class="edit-search-bar admin-only">
           <label>
             Ware suchen
-            <input class="product-search-input" type="search" placeholder="Name, Preis oder Rezeptmaterial eingeben" autocomplete="off" />
+            <input class="product-search-input" name="productSearchInput" type="search" placeholder="Name, Preis oder Rezeptmaterial eingeben" autocomplete="off" />
           </label>
           <span class="search-count product-search-count">0 Waren</span>
         </div>
@@ -339,9 +339,9 @@
 
   <template id="planRowTemplate">
     <tr>
-      <td><select class="plan-factory"></select></td>
-      <td><select class="plan-product"></select></td>
-      <td><input class="plan-quantity" type="number" min="0" step="1" value="1" /></td>
+      <td><select class="plan-factory" name="planFactory"></select></td>
+      <td><select class="plan-product" name="planProduct"></select></td>
+      <td><input class="plan-quantity" name="planQuantity" type="number" min="0" step="1" value="1" /></td>
       <td class="plan-output">1</td>
       <td class="plan-runs">1</td>
       <td><button class="icon-button remove-plan-row" type="button" aria-label="Position entfernen">×</button></td>
@@ -364,19 +364,19 @@
       <div class="modal-fields trade-price-fields">
         <label>
           Artikel
-          <input id="tradeDialogName" list="tradeItemOptions" type="text" placeholder="z. B. Eisenerz" autocomplete="off" />
+          <input id="tradeDialogName" name="tradeDialogName" list="tradeItemOptions" type="text" placeholder="z. B. Eisenerz" autocomplete="off" />
         </label>
         <label>
           Importpreis <span class="optional-label">optional</span>
-          <input id="tradeDialogImport" type="number" min="0" step="0.01" placeholder="—" />
+          <input id="tradeDialogImport" name="tradeDialogImport" type="number" min="0" step="0.01" placeholder="—" />
         </label>
         <label>
           Exportpreis <span class="optional-label">optional</span>
-          <input id="tradeDialogExport" type="number" min="0" step="0.01" placeholder="—" />
+          <input id="tradeDialogExport" name="tradeDialogExport" type="number" min="0" step="0.01" placeholder="—" />
         </label>
         <label>
           Marktwert <span class="optional-label">optional</span>
-          <input id="tradeDialogMarket" type="number" min="0" step="0.01" placeholder="—" />
+          <input id="tradeDialogMarket" name="tradeDialogMarket" type="number" min="0" step="0.01" placeholder="—" />
         </label>
       </div>
 
@@ -401,21 +401,21 @@
       <div class="modal-fields material-price-fields">
         <label>
           Materialname
-          <input id="newMaterialName" type="text" placeholder="z. B. Eisenerz" autocomplete="off" />
+          <input id="newMaterialName" name="newMaterialName" type="text" placeholder="z. B. Eisenerz" autocomplete="off" />
         </label>
         <label>
           Ausstoß pro Produktionszyklus
-          <input id="newMaterialOutput" type="number" min="1" step="1" value="1" />
+          <input id="newMaterialOutput" name="newMaterialOutput" type="number" min="1" step="1" value="1" />
         </label>
         <label>
           Wert pro Einheit <span class="optional-label">optional</span>
-          <input id="newMaterialUnitPrice" type="number" min="0" step="0.01" placeholder="0" />
+          <input id="newMaterialUnitPrice" name="newMaterialUnitPrice" type="number" min="0" step="0.01" placeholder="0" />
         </label>
       </div>
 
       <div class="modal-section">
         <label class="checkbox-row">
-          <input id="materialHasRecipeCheckbox" type="checkbox" />
+          <input id="materialHasRecipeCheckbox" name="materialHasRecipeCheckbox" type="checkbox" />
           <span>
             <strong>Verarbeitetes Material</strong>
             <small>Aktivieren, wenn dieses Material aus anderen Materialien hergestellt wird. Ohne Haken gilt es als Rohmaterial.</small>
@@ -467,15 +467,15 @@
       <div class="modal-fields three-fields">
         <label>
           Fabrik
-          <input id="productFactoryLabel" type="text" readonly />
+          <input id="productFactoryLabel" name="productFactoryLabel" type="text" readonly />
         </label>
         <label>
           Warenname
-          <input id="newProductName" type="text" placeholder="z. B. Stahlträger" autocomplete="off" />
+          <input id="newProductName" name="newProductName" type="text" placeholder="z. B. Stahlträger" autocomplete="off" />
         </label>
         <label>
           Ausstoß pro Produktionslauf
-          <input id="newProductOutput" type="number" min="1" step="1" value="1" />
+          <input id="newProductOutput" name="newProductOutput" type="number" min="1" step="1" value="1" />
         </label>
       </div>
 
@@ -510,16 +510,16 @@
 
   <template id="productDialogRecipeRowTemplate">
     <tr>
-      <td><select class="product-dialog-recipe-material"></select></td>
-      <td><input class="product-dialog-recipe-amount" type="number" min="0" step="1" value="1" /></td>
+      <td><select class="product-dialog-recipe-material" name="productDialogRecipeMaterial"></select></td>
+      <td><input class="product-dialog-recipe-amount" name="productDialogRecipeAmount" type="number" min="0" step="1" value="1" /></td>
       <td><button class="icon-button remove-product-dialog-recipe-row" type="button" aria-label="Rezeptzeile entfernen">×</button></td>
     </tr>
   </template>
 
   <template id="materialDialogRecipeRowTemplate">
     <tr>
-      <td><select class="material-dialog-recipe-material"></select></td>
-      <td><input class="material-dialog-recipe-amount" type="number" min="0" step="1" value="1" /></td>
+      <td><select class="material-dialog-recipe-material" name="materialDialogRecipeMaterial"></select></td>
+      <td><input class="material-dialog-recipe-amount" name="materialDialogRecipeAmount" type="number" min="0" step="1" value="1" /></td>
       <td><button class="icon-button remove-material-dialog-recipe-row" type="button" aria-label="Unterrezept-Zeile entfernen">×</button></td>
     </tr>
   </template>
