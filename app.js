@@ -185,7 +185,7 @@ function bindStaticEvents() {
       applyResponsiveTableLabels();
     });
   }
-  if (els.addTradeItemBtn) els.addTradeItemBtn.addEventListener("click", addTradeItemRow);
+  if (els.addTradeItemBtn) els.addTradeItemBtn.addEventListener("click", openTradeDialogCreate);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
   els.copyRawMaterialsBtn.addEventListener("click", copyRawRequirementsTable);
   els.exportDataBtn.addEventListener("click", exportData);
@@ -1730,7 +1730,7 @@ function handleFloatingAdd() {
     return;
   }
   if (target === "trade") {
-    addTradeItemRow();
+    openTradeDialogCreate();
     activateTab("trade");
     return;
   }
