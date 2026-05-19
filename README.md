@@ -51,6 +51,8 @@ Ein Handelseintrag wird über den Artikelnamen zugeordnet. Wenn ein Material ode
 - Calculator-Wirtschaftlichkeit
 - Kaufen-vs-Craften-Bewertung
 
+Für abweichende Namen kann eine Ware zusätzlich einen Handelsartikel als Preisalias verwenden. Dadurch können Varianten wie `Goldbarren` und `Goldbarren (aus Palette)` denselben zentralen Handelspreis nutzen. Für Namen mit dem Muster `Name (aus Palette)` wird automatisch `Name` als Fallback-Handelsartikel verwendet, sofern dazu ein Handelseintrag existiert.
+
 ## Datenmodell
 
 Die Standarddaten liegen in:
@@ -70,6 +72,7 @@ Wichtige Felder:
   "inventory": {},
   "materialPrices": {},
   "tradePrices": {},
+  "tradeAliases": {},
   "pricing": {
     "standardMarginPercent": 30
   }
@@ -86,6 +89,17 @@ Wichtige Felder:
       "exportPrice": 5,
       "marketValue": null
     }
+  }
+}
+```
+
+
+`tradeAliases` verbindet abweichende Anzeigenamen mit einem zentralen Handelsartikel:
+
+```json
+{
+  "tradeAliases": {
+    "Goldbarren (aus Palette)": "Goldbarren"
   }
 }
 ```

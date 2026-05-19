@@ -1988,5 +1988,19 @@
       "exportPrice": 50,
       "marketValue": null
     }
+  },
+  "tradeAliases": {
+    "Aluminiumbarren (aus Palette)": "Aluminiumbarren",
+    "Aluminiumplatten (aus Palette)": "Aluminiumplatten",
+    "Amethystbarren (aus Palette)": "Amethystbarren",
+    "Eisenbarren (aus Palette)": "Eisenbarren",
+    "Goldbarren (aus Palette)": "Goldbarren",
+    "Kohlebarren (aus Palette)": "Kohlebarren",
+    "Saphirbarren (aus Palette)": "Saphirbarren",
+    "Smaragdbarren (aus Palette)": "Smaragdbarren",
+    "Stahlplatten (aus Palette)": "Stahlplatten",
+    "Titanbarren (aus Palette)": "Titanbarren",
+    "Titanplatten (aus Palette)": "Titanplatten",
+    "Vivianitbarren (aus Palette)": "Vivianitbarren"
   }
 }

@@ -121,6 +121,7 @@ const els = {
   productFactoryLabel: document.querySelector("#productFactoryLabel"),
   newProductName: document.querySelector("#newProductName"),
   newProductOutput: document.querySelector("#newProductOutput"),
+  productTradeAlias: document.querySelector("#productTradeAlias"),
   addProductDialogRecipeRowBtn: document.querySelector("#addProductDialogRecipeRowBtn"),
   productDialogRecipeTableBody: document.querySelector("#productDialogRecipeTable tbody"),
   kpiPositions: document.querySelector("#kpiPositions"),
@@ -390,6 +391,8 @@ function productMatchesSearch(factory, product, query) {
     getTradeImportPrice(product.name),
     getTradeExportPrice(product.name),
     getTradeMarketValue(product.name),
+    getExplicitTradeAlias(product.name),
+    resolveTradeKey(product.name),
     ...(product.recipe ?? []).flatMap((item) => [item.material, item.amount])
   ].map((value) => cleanText(value)).join(" ").toLocaleLowerCase("de-DE");
   return haystack.includes(cleanText(query).toLocaleLowerCase("de-DE"));
@@ -432,6 +435,7 @@ function createProductCard(factory, product) {
     state.products[factory] = state.products[factory].filter((item) => item.id !== product.id);
     state.plan = state.plan.filter((item) => item.productId !== product.id);
     removeAutoRecipeForProduct(product.id);
+    deleteTradeAlias(product.name);
     renderAll();
     activateTab(factory);
   });
@@ -527,6 +531,7 @@ function renderMaterials() {
       delete state.materialRecipes[material];
       delete state.materialPrices[material];
       deleteTradePrice(material);
+      deleteTradeAlias(material);
       delete state.inventory?.[material];
       renderAll();
       activateTab("materials");
@@ -544,6 +549,8 @@ function materialMatchesSearch(material, query) {
     getMaterialManualPrice(material),
     getMaterialImportPrice(material),
     getMaterialExportPrice(material),
+    getExplicitTradeAlias(material),
+    resolveTradeKey(material),
     ...(recipeDef.recipe ?? []).flatMap((item) => [item.material, item.amount])
   ].map((value) => cleanText(value)).join(" ").toLocaleLowerCase("de-DE");
   return haystack.includes(cleanText(query).toLocaleLowerCase("de-DE"));
@@ -1396,6 +1403,8 @@ function openProductDialogCreate(factory) {
   els.productFactoryLabel.value = FACTORIES[factory];
   els.newProductName.value = "";
   els.newProductOutput.value = 1;
+  if (els.productTradeAlias) els.productTradeAlias.value = "";
+  renderTradeDatalist();
   renderProductDialogRecipeRows();
   showDialog(els.productDialog, "#newProductName");
 }
@@ -1415,6 +1424,8 @@ function openProductDialogEdit(factory, productId) {
   els.productFactoryLabel.value = FACTORIES[factory];
   els.newProductName.value = product.name;
   els.newProductOutput.value = positiveInteger(product.output, 1);
+  if (els.productTradeAlias) els.productTradeAlias.value = getExplicitTradeAlias(product.name) ?? "";
+  renderTradeDatalist();
   renderProductDialogRecipeRows();
   showDialog(els.productDialog, "#newProductName");
 }
@@ -1428,6 +1439,7 @@ function saveProductFromDialog(event) {
   if (!requireAdminAccess()) return;
   const name = cleanText(els.newProductName.value);
   const output = positiveInteger(els.newProductOutput.value, 1);
+  const tradeAlias = cleanText(els.productTradeAlias?.value ?? "");
   const recipe = productDialogRecipe
     .map((item) => ({ material: cleanText(item.material), amount: positiveInteger(item.amount, 0) }))
     .filter((item) => item.material && item.amount > 0);
@@ -1462,6 +1474,7 @@ function saveProductFromDialog(event) {
     factoryProducts.unshift(product);
     ensureMaterial(name);
     recipe.forEach((item) => ensureMaterial(item.material));
+    setTradeAlias(name, tradeAlias);
     syncSingleProductRecipeToMaterial(product);
     closeProductDialog();
     renderAll();
@@ -1479,6 +1492,7 @@ function saveProductFromDialog(event) {
   ensureMaterial(name);
   recipe.forEach((item) => ensureMaterial(item.material));
   if (oldName !== name) replaceProductMaterialName(oldName, name, product.id);
+  setTradeAlias(name, tradeAlias);
   syncSingleProductRecipeToMaterial(product);
   closeProductDialog();
   renderAll();
@@ -1822,6 +1836,7 @@ function getMaterialRecipe(materialName) {
   state.materialRecipes ??= {};
   state.materialPrices ??= {};
   state.tradePrices ??= {};
+  state.tradeAliases ??= {};
   state.inventory ??= {};
   state.pricing ??= {};
   state.pricing.standardMarginPercent = positiveNumber(state.pricing.standardMarginPercent, 30);
@@ -1860,6 +1875,7 @@ function renameMaterial(oldName, newName, shouldRender = true) {
     state.materialPrices[newName] = state.materialPrices[oldName];
     delete state.materialPrices[oldName];
   }
+  renameTradeAliasKey(oldName, newName);
   renameTradePrice(oldName, newName);
   if (state.inventory?.[oldName] !== undefined) {
     state.inventory[newName] = (positiveInteger(state.inventory[newName], 0) || 0) + positiveInteger(state.inventory[oldName], 0);
@@ -1967,6 +1983,26 @@ function normalizeTradePricesFromState() {
   return Object.fromEntries(Object.entries(normalized).sort(([a], [b]) => a.localeCompare(b, "de", { sensitivity: "base" })));
 }
 
+
+function normalizeTradeAliasesFromState() {
+  const normalized = {};
+  const knownNames = new Set([
+    ...(state.materials ?? []),
+    ...Object.values(state.products ?? {}).flat().map((product) => product.name),
+    ...Object.keys(state.tradePrices ?? {})
+  ].map(cleanText).filter(Boolean));
+
+  for (const [itemName, aliasName] of Object.entries(state.tradeAliases ?? {})) {
+    const item = cleanText(itemName);
+    const alias = cleanText(aliasName);
+    if (!item || !alias || item === alias) continue;
+    if (!knownNames.has(item)) continue;
+    normalized[item] = alias;
+  }
+
+  return Object.fromEntries(Object.entries(normalized).sort(([a], [b]) => a.localeCompare(b, "de", { sensitivity: "base" })));
+}
+
 function mergeTradeRecord(base, extra) {
   return {
     importPrice: optionalNumber(extra?.importPrice) ?? optionalNumber(base?.importPrice),
@@ -1982,6 +2018,7 @@ function normalizeState() {
   state.materialRecipes ??= {};
   state.materialPrices ??= {};
   state.tradePrices ??= {};
+  state.tradeAliases ??= {};
   state.inventory ??= {};
   state.pricing ??= {};
   state.pricing.standardMarginPercent = positiveNumber(state.pricing.standardMarginPercent, 30);
@@ -2028,6 +2065,8 @@ function normalizeState() {
     if (name && value !== null) normalizedMaterialPrices[name] = value;
   }
   const normalizedTradePrices = normalizeTradePricesFromState();
+  state.tradePrices = normalizedTradePrices;
+  const normalizedTradeAliases = normalizeTradeAliasesFromState();
   const normalizedInventory = {};
   for (const [materialName, amount] of Object.entries(state.inventory ?? {})) {
     const name = cleanText(materialName);
@@ -2040,6 +2079,7 @@ function normalizeState() {
   state.materialRecipes = normalizedMaterialRecipes;
   state.materialPrices = normalizedMaterialPrices;
   state.tradePrices = normalizedTradePrices;
+  state.tradeAliases = normalizedTradeAliases;
   delete state.materialImportPrices;
   delete state.materialExportPrices;
   state.inventory = normalizedInventory;
@@ -2071,6 +2111,7 @@ function validateImportedState(value) {
   if (value.materialImportPrices !== undefined && (typeof value.materialImportPrices !== "object" || Array.isArray(value.materialImportPrices))) throw new Error("Feld 'materialImportPrices' ist ungültig.");
   if (value.materialExportPrices !== undefined && (typeof value.materialExportPrices !== "object" || Array.isArray(value.materialExportPrices))) throw new Error("Feld 'materialExportPrices' ist ungültig.");
   if (value.tradePrices !== undefined && (typeof value.tradePrices !== "object" || Array.isArray(value.tradePrices))) throw new Error("Feld 'tradePrices' ist ungültig.");
+  if (value.tradeAliases !== undefined && (typeof value.tradeAliases !== "object" || Array.isArray(value.tradeAliases))) throw new Error("Feld 'tradeAliases' ist ungültig.");
   if (value.inventory !== undefined && (typeof value.inventory !== "object" || Array.isArray(value.inventory))) throw new Error("Feld 'inventory' ist ungültig.");
   if (value.pricing !== undefined && (typeof value.pricing !== "object" || Array.isArray(value.pricing))) throw new Error("Feld 'pricing' ist ungültig.");
 }
@@ -2098,7 +2139,7 @@ function firstFactoryWithProduct() {
 function createDefaultState() {
   const products = {};
   for (const factory of Object.keys(FACTORIES)) products[factory] = [];
-  return { materials: [], materialRecipes: {}, materialPrices: {}, tradePrices: {}, inventory: {}, pricing: { standardMarginPercent: 30 }, products, plan: [] };
+  return { materials: [], materialRecipes: {}, materialPrices: {}, tradePrices: {}, tradeAliases: {}, inventory: {}, pricing: { standardMarginPercent: 30 }, products, plan: [] };
 }
 
 
@@ -2135,11 +2176,75 @@ function setMaterialManualPrice(materialName, value) {
 }
 
 function getTradeRecord(itemName) {
-  const name = cleanText(itemName);
-  if (!name) return null;
-  const record = state.tradePrices?.[name];
+  const key = resolveTradeKey(itemName);
+  const record = key ? state.tradePrices?.[key] : null;
   if (!record || typeof record !== "object") return null;
   return record;
+}
+
+function resolveTradeKey(itemName) {
+  const name = cleanText(itemName);
+  if (!name) return null;
+
+  const explicitAlias = getExplicitTradeAlias(name);
+  if (explicitAlias && state.tradePrices?.[explicitAlias]) return explicitAlias;
+
+  if (state.tradePrices?.[name]) return name;
+
+  const automaticAlias = inferAutomaticTradeAlias(name);
+  if (automaticAlias && state.tradePrices?.[automaticAlias]) return automaticAlias;
+
+  return explicitAlias || name;
+}
+
+function getExplicitTradeAlias(itemName) {
+  const name = cleanText(itemName);
+  const alias = cleanText(state.tradeAliases?.[name]);
+  return alias && alias !== name ? alias : null;
+}
+
+function inferAutomaticTradeAlias(itemName) {
+  const name = cleanText(itemName);
+  const paletteSuffix = " (aus Palette)";
+  if (name.endsWith(paletteSuffix)) return cleanText(name.slice(0, -paletteSuffix.length));
+  return null;
+}
+
+function getTradeSourceLabel(source, itemName) {
+  const name = cleanText(itemName);
+  const key = resolveTradeKey(name);
+  return key && key !== name ? `${source} (${key})` : source;
+}
+
+function setTradeAlias(itemName, aliasName) {
+  state.tradeAliases ??= {};
+  const name = cleanText(itemName);
+  const alias = cleanText(aliasName);
+  if (!name) return;
+  if (!alias || alias === name) delete state.tradeAliases[name];
+  else state.tradeAliases[name] = alias;
+}
+
+function deleteTradeAlias(itemName) {
+  const name = cleanText(itemName);
+  if (name && state.tradeAliases) delete state.tradeAliases[name];
+}
+
+function renameTradeAliasKey(oldName, newName) {
+  const oldKey = cleanText(oldName);
+  const newKey = cleanText(newName);
+  if (!oldKey || !newKey || oldKey === newKey || !state.tradeAliases?.[oldKey]) return;
+  state.tradeAliases[newKey] = state.tradeAliases[oldKey];
+  delete state.tradeAliases[oldKey];
+}
+
+function renameTradeAliasTargets(oldName, newName) {
+  const oldKey = cleanText(oldName);
+  const newKey = cleanText(newName);
+  if (!oldKey || !newKey || oldKey === newKey || !state.tradeAliases) return;
+  for (const [item, alias] of Object.entries(state.tradeAliases)) {
+    if (cleanText(alias) === oldKey) state.tradeAliases[item] = newKey;
+  }
 }
 
 function setTradePrice(itemName, values) {
@@ -2169,6 +2274,7 @@ function renameTradePrice(oldName, newName) {
   if (!oldKey || !newKey || oldKey === newKey || !state.tradePrices?.[oldKey]) return;
   state.tradePrices[newKey] = mergeTradeRecord(state.tradePrices[newKey], state.tradePrices[oldKey]);
   delete state.tradePrices[oldKey];
+  renameTradeAliasTargets(oldKey, newKey);
 }
 
 function getTradeImportPrice(itemName) {
@@ -2327,9 +2433,9 @@ function chooseCheapestUnitOption(buyOption, craftOption, fallbackName) {
 
 function getSalePrice(product, unitCost) {
   const exportPrice = getTradeExportPrice(product?.name);
-  if (exportPrice !== null) return { price: exportPrice, source: "Exportpreis" };
+  if (exportPrice !== null) return { price: exportPrice, source: getTradeSourceLabel("Exportpreis", product?.name) };
   const marketValue = getTradeMarketValue(product?.name);
-  if (marketValue !== null) return { price: marketValue, source: "Marktwert" };
+  if (marketValue !== null) return { price: marketValue, source: getTradeSourceLabel("Marktwert", product?.name) };
   if (unitCost !== null) {
     const margin = positiveNumber(state.pricing?.standardMarginPercent, 30);
     return { price: unitCost * (1 + margin / 100), source: "Kosten + Marge" };

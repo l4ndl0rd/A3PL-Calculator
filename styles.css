@@ -4800,3 +4800,14 @@ body:not(.admin-locked) #trade .trade-table td:nth-child(4) {
 #trade .trade-table td:nth-child(4) .field-input {
   text-align: left !important;
 }
+
+/* v71: product trade alias field keeps product dialog compact. */
+.product-dialog-fields {
+  grid-template-columns: 190px minmax(0, 1fr) 150px minmax(210px, 0.8fr);
+}
+
+@media (max-width: 980px) {
+  .product-dialog-fields {
+    grid-template-columns: 1fr;
+  }
+}

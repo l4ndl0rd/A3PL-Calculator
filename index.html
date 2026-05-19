@@ -464,7 +464,7 @@
         <button id="closeProductDialogBtn" class="icon-button" type="button" aria-label="Fenster schließen">×</button>
       </div>
 
-      <div class="modal-fields three-fields">
+      <div class="modal-fields product-dialog-fields">
         <label>
           Fabrik
           <input id="productFactoryLabel" name="productFactoryLabel" type="text" readonly />
@@ -474,8 +474,12 @@
           <input id="newProductName" name="newProductName" type="text" placeholder="z. B. Stahlträger" autocomplete="off" />
         </label>
         <label>
-          Ausstoß pro Produktionslauf
+          Produktion
           <input id="newProductOutput" name="newProductOutput" type="number" min="1" step="1" value="1" />
+        </label>
+        <label>
+          Handelsartikel <span class="optional-label">optional</span>
+          <input id="productTradeAlias" name="productTradeAlias" list="tradeItemOptions" type="text" placeholder="leer = Warenname" autocomplete="off" />
         </label>
       </div>
 
