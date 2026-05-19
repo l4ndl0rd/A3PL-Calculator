@@ -5514,197 +5514,233 @@ body:not(.admin-locked) #farmrates .farm-table td:nth-child(5) {
   }
 }
 
-/* v84: finaler Mobile-Fix für Materialien/Handel/Farmraten.
-   Verhindert schmale Desktop-Spalten im Card-Modus und damit vertikale Header-/Button-Texte. */
-@media (max-width: 860px) {
-  #materials .material-recipe-table,
-  #trade .trade-table,
-  #farmrates .farm-table {
+/* v84: echter Mobile-/Tablet-Fix für Materialien, Handel und Farmraten.
+   Diese drei Verwaltungslisten verwenden auf schmalen Viewports dieselbe Card-Logik
+   und ignorieren alle alten Desktop-Spaltenbreiten. */
+@media (max-width: 1024px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  #materials .table-wrap,
+  #trade .table-wrap,
+  #farmrates .table-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  html body #materials table#materialsTable.material-recipe-table,
+  html body #trade table#tradeTable.trade-table,
+  html body #farmrates table#farmTable.farm-table {
     display: block !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
     table-layout: auto !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
   }
 
-  #materials .material-recipe-table thead,
-  #trade .trade-table thead,
-  #farmrates .farm-table thead {
+  html body #materials table#materialsTable.material-recipe-table thead,
+  html body #trade table#tradeTable.trade-table thead,
+  html body #farmrates table#farmTable.farm-table thead {
     display: none !important;
   }
 
-  #materials .material-recipe-table tbody,
-  #trade .trade-table tbody,
-  #farmrates .farm-table tbody,
-  #materials .material-recipe-table tr,
-  #trade .trade-table tr,
-  #farmrates .farm-table tr {
-    display: block !important;
+  html body #materials table#materialsTable.material-recipe-table tbody,
+  html body #trade table#tradeTable.trade-table tbody,
+  html body #farmrates table#farmTable.farm-table tbody {
+    display: grid !important;
     width: 100% !important;
-    min-width: 0 !important;
     max-width: 100% !important;
+    gap: 12px !important;
   }
 
-  #materials .material-recipe-table th,
-  #materials .material-recipe-table td,
-  #materials .material-recipe-table th:nth-child(n),
-  #materials .material-recipe-table td:nth-child(n),
-  #trade .trade-table th,
-  #trade .trade-table td,
-  #trade .trade-table th:nth-child(n),
-  #trade .trade-table td:nth-child(n),
-  #farmrates .farm-table th,
-  #farmrates .farm-table td,
-  #farmrates .farm-table th:nth-child(n),
-  #farmrates .farm-table td:nth-child(n) {
+  html body #materials table#materialsTable.material-recipe-table tbody > tr,
+  html body #trade table#tradeTable.trade-table tbody > tr,
+  html body #farmrates table#farmTable.farm-table tbody > tr {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
-    text-align: left !important;
-    white-space: normal !important;
-    word-break: normal !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  #materials .material-recipe-table tbody tr,
-  #trade .trade-table tbody tr,
-  #farmrates .farm-table tbody tr {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    margin: 0 0 12px !important;
+    margin: 0 !important;
     border: 1px solid var(--line) !important;
     border-radius: 14px !important;
     overflow: hidden !important;
-    background: rgba(20, 20, 20, 0.9) !important;
+    background: rgba(20, 20, 20, 0.92) !important;
   }
 
-  #materials .material-recipe-table td,
-  #trade .trade-table td,
-  #farmrates .farm-table td {
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > th,
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td,
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td:nth-child(n),
+  html body #trade table#tradeTable.trade-table tbody > tr > th,
+  html body #trade table#tradeTable.trade-table tbody > tr > td,
+  html body #trade table#tradeTable.trade-table tbody > tr > td:nth-child(n),
+  html body #farmrates table#farmTable.farm-table tbody > tr > th,
+  html body #farmrates table#farmTable.farm-table tbody > tr > td,
+  html body #farmrates table#farmTable.farm-table tbody > tr > td:nth-child(n) {
     display: grid !important;
-    grid-template-columns: minmax(9.5rem, 34%) minmax(0, 1fr) !important;
+    grid-template-columns: minmax(140px, 34%) minmax(0, 1fr) !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 46px !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
     gap: 10px !important;
     align-items: center !important;
-    min-height: 46px !important;
-    padding: 10px 12px !important;
     border-bottom: 1px solid var(--line) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    font-variant-numeric: normal !important;
   }
 
-  #materials .material-recipe-table td::before,
-  #trade .trade-table td::before,
-  #farmrates .farm-table td::before {
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td:last-child,
+  html body #trade table#tradeTable.trade-table tbody > tr > td:last-child,
+  html body #farmrates table#farmTable.farm-table tbody > tr > td:last-child {
+    border-bottom: 0 !important;
+  }
+
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td::before,
+  html body #trade table#tradeTable.trade-table tbody > tr > td::before,
+  html body #farmrates table#farmTable.farm-table tbody > tr > td::before {
     content: attr(data-label) !important;
     display: block !important;
+    width: auto !important;
     min-width: 0 !important;
+    max-width: 100% !important;
     margin: 0 !important;
     color: var(--muted) !important;
     font-size: 0.72rem !important;
     font-weight: 900 !important;
-    line-height: 1.18 !important;
-    text-transform: uppercase !important;
+    line-height: 1.2 !important;
     letter-spacing: 0.055em !important;
+    text-transform: uppercase !important;
+    text-align: left !important;
     white-space: normal !important;
-    word-break: normal !important;
     overflow-wrap: normal !important;
+    word-break: keep-all !important;
     hyphens: none !important;
+    writing-mode: horizontal-tb !important;
   }
 
-  #materials .material-recipe-table td > *,
-  #trade .trade-table td > *,
-  #farmrates .farm-table td > * {
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td > *,
+  html body #trade table#tradeTable.trade-table tbody > tr > td > *,
+  html body #farmrates table#farmTable.farm-table tbody > tr > td > * {
     min-width: 0 !important;
     max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    writing-mode: horizontal-tb !important;
   }
 
-  #materials .material-recipe-table td:last-child,
-  #trade .trade-table td:last-child,
-  #farmrates .farm-table td:last-child {
-    border-bottom: 0 !important;
-  }
-
-  body.admin-locked #materials .material-recipe-table td:nth-child(7),
-  body.admin-locked #trade .trade-table td:nth-child(5),
-  body.admin-locked #farmrates .farm-table td:nth-child(5),
-  #materials .material-recipe-table td[hidden],
-  #trade .trade-table td[hidden],
-  #farmrates .farm-table td[hidden] {
+  body.admin-locked #materials table#materialsTable.material-recipe-table tbody > tr > td:nth-child(7),
+  body.admin-locked #trade table#tradeTable.trade-table tbody > tr > td:nth-child(5),
+  body.admin-locked #farmrates table#farmTable.farm-table tbody > tr > td:nth-child(5),
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td[hidden],
+  html body #trade table#tradeTable.trade-table tbody > tr > td[hidden],
+  html body #farmrates table#farmTable.farm-table tbody > tr > td[hidden] {
     display: none !important;
   }
 
-  #materials .material-recipe-table td.row-actions,
-  #trade .trade-table td.row-actions,
-  #farmrates .farm-table td.row-actions {
+  html body #materials table#materialsTable.material-recipe-table td.row-actions,
+  html body #trade table#tradeTable.trade-table td.row-actions,
+  html body #farmrates table#farmTable.farm-table td.row-actions {
     display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 8px !important;
     align-items: stretch !important;
+    padding: 10px 12px !important;
   }
 
-  #materials .material-recipe-table td.row-actions::before,
-  #trade .trade-table td.row-actions::before,
-  #farmrates .farm-table td.row-actions::before {
+  html body #materials table#materialsTable.material-recipe-table td.row-actions::before,
+  html body #trade table#tradeTable.trade-table td.row-actions::before,
+  html body #farmrates table#farmTable.farm-table td.row-actions::before {
     content: none !important;
   }
 
-  #materials .material-recipe-table td.row-actions .button,
-  #trade .trade-table td.row-actions .button,
-  #farmrates .farm-table td.row-actions .button {
+  html body #materials table#materialsTable.material-recipe-table td.row-actions .button,
+  html body #trade table#tradeTable.trade-table td.row-actions .button,
+  html body #farmrates table#farmTable.farm-table td.row-actions .button {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
+    padding-inline: 10px !important;
+    text-align: center !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    word-break: keep-all !important;
+    writing-mode: horizontal-tb !important;
   }
 
-  #materials .raw-material-badge,
-  #farmrates .source-badge,
-  #trade .source-badge {
+  html body #materials .nested-recipe-table,
+  html body #materials .nested-recipe-table tbody,
+  html body #materials .nested-recipe-table tr {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
     max-width: 100% !important;
+  }
+
+  html body #materials .nested-recipe-table thead {
+    display: none !important;
+  }
+
+  html body #materials .nested-recipe-table td,
+  html body #materials .nested-recipe-table td:nth-child(n) {
+    display: grid !important;
+    grid-template-columns: minmax(120px, 34%) minmax(0, 1fr) !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    text-align: left !important;
     white-space: normal !important;
     overflow-wrap: anywhere !important;
   }
 
-  #materials .nested-recipe-table td {
-    display: grid !important;
-    grid-template-columns: minmax(8rem, 38%) minmax(0, 1fr) !important;
-    width: 100% !important;
+  html body #materials .raw-material-badge,
+  html body #farmrates .source-badge,
+  html body #trade .source-badge {
+    display: inline-flex !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    writing-mode: horizontal-tb !important;
   }
 }
 
 @media (max-width: 520px) {
-  #materials .material-recipe-table td,
-  #trade .trade-table td,
-  #farmrates .farm-table td,
-  #materials .nested-recipe-table td {
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td,
+  html body #materials table#materialsTable.material-recipe-table tbody > tr > td:nth-child(n),
+  html body #trade table#tradeTable.trade-table tbody > tr > td,
+  html body #trade table#tradeTable.trade-table tbody > tr > td:nth-child(n),
+  html body #farmrates table#farmTable.farm-table tbody > tr > td,
+  html body #farmrates table#farmTable.farm-table tbody > tr > td:nth-child(n),
+  html body #materials .nested-recipe-table td,
+  html body #materials .nested-recipe-table td:nth-child(n) {
     grid-template-columns: 1fr !important;
     gap: 6px !important;
     align-items: start !important;
   }
 
-  #materials .material-recipe-table td::before,
-  #trade .trade-table td::before,
-  #farmrates .farm-table td::before,
-  #materials .nested-recipe-table td::before {
-    max-width: 100% !important;
-    overflow-wrap: normal !important;
-  }
-
-  #materials .material-recipe-table td.row-actions,
-  #trade .trade-table td.row-actions,
-  #farmrates .farm-table td.row-actions {
+  html body #materials table#materialsTable.material-recipe-table td.row-actions,
+  html body #trade table#tradeTable.trade-table td.row-actions,
+  html body #farmrates table#farmTable.farm-table td.row-actions {
     grid-template-columns: 1fr !important;
-  }
-
-  #materials .raw-material-badge,
-  #farmrates .source-badge,
-  #trade .source-badge {
-    width: fit-content !important;
-    max-width: 100% !important;
   }
 }
