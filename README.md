@@ -44,7 +44,9 @@ Inventar senkt die persönlichen Herstellungskosten für die aktuelle Kalkulatio
 
 Import-, Export- und Marktpreise werden nicht mehr direkt an Materialien oder Waren gespeichert. Stattdessen gibt es den Bereich **Handel**.
 
-Ein Handelseintrag wird über den Artikelnamen zugeordnet. Wenn ein Material oder eine Ware denselben Namen trägt, übernimmt der Calculator die Werte automatisch in:
+Ein Handelseintrag wird über den Artikelnamen zugeordnet. Wenn ein Material oder eine Ware denselben Namen trägt, übernimmt der Calculator die Werte automatisch. Waren können optional einen Handelsalias verwenden; die Auswahl zeigt nur Artikel, die in den zentralen Handelsdaten tatsächlich als handelbar eingetragen sind.
+
+Die Werte werden automatisch verwendet in:
 
 - Materialienliste
 - Fabrik-Warenkarten

@@ -122,6 +122,7 @@ const els = {
   newProductName: document.querySelector("#newProductName"),
   newProductOutput: document.querySelector("#newProductOutput"),
   productTradeAlias: document.querySelector("#productTradeAlias"),
+  productTradeAliasOptions: document.querySelector("#productTradeAliasOptions"),
   addProductDialogRecipeRowBtn: document.querySelector("#addProductDialogRecipeRowBtn"),
   productDialogRecipeTableBody: document.querySelector("#productDialogRecipeTable tbody"),
   kpiPositions: document.querySelector("#kpiPositions"),
@@ -716,6 +717,29 @@ function renderTradeDatalist() {
     node.value = option;
     els.tradeItemOptions.appendChild(node);
   }
+}
+
+function renderProductTradeAliasDatalist() {
+  if (!els.productTradeAliasOptions) return;
+  els.productTradeAliasOptions.innerHTML = "";
+  for (const option of getTradableItemNames()) {
+    const node = document.createElement("option");
+    node.value = option;
+    els.productTradeAliasOptions.appendChild(node);
+  }
+}
+
+function getTradableItemNames() {
+  return Object.entries(state.tradePrices ?? {})
+    .filter(([name, record]) => {
+      const itemName = cleanText(name);
+      if (!itemName || !record || typeof record !== "object") return false;
+      return optionalNumber(record.importPrice) !== null
+        || optionalNumber(record.exportPrice) !== null
+        || optionalNumber(record.marketValue) !== null;
+    })
+    .map(([name]) => cleanText(name))
+    .sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
 }
 
 function getAllItemNames() {
@@ -1405,6 +1429,7 @@ function openProductDialogCreate(factory) {
   els.newProductOutput.value = 1;
   if (els.productTradeAlias) els.productTradeAlias.value = "";
   renderTradeDatalist();
+  renderProductTradeAliasDatalist();
   renderProductDialogRecipeRows();
   showDialog(els.productDialog, "#newProductName");
 }
@@ -1426,6 +1451,7 @@ function openProductDialogEdit(factory, productId) {
   els.newProductOutput.value = positiveInteger(product.output, 1);
   if (els.productTradeAlias) els.productTradeAlias.value = getExplicitTradeAlias(product.name) ?? "";
   renderTradeDatalist();
+  renderProductTradeAliasDatalist();
   renderProductDialogRecipeRows();
   showDialog(els.productDialog, "#newProductName");
 }
