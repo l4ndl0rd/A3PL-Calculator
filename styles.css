@@ -4644,3 +4644,127 @@ body:not(.admin-locked) #trade .trade-table td:nth-child(5) {
     padding-inline: 8px !important;
   }
 }
+
+/* v66: Handel-Bearbeitungsmodus an Materialien-Bearbeitungsmodus angeglichen.
+   Handelsdaten werden nicht mehr inline in der Tabelle editiert, sondern wie Materialien
+   über Bearbeiten/Entfernen-Aktionen und einen Dialog. */
+#trade .table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+#trade .trade-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+#trade .trade-table th,
+#trade .trade-table td {
+  box-sizing: border-box !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+  vertical-align: middle !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  line-height: 1.25 !important;
+}
+
+#trade .trade-table th:nth-child(1),
+#trade .trade-table td:nth-child(1) {
+  width: 36% !important;
+}
+
+#trade .trade-table th:nth-child(2),
+#trade .trade-table td:nth-child(2),
+#trade .trade-table th:nth-child(3),
+#trade .trade-table td:nth-child(3),
+#trade .trade-table th:nth-child(4),
+#trade .trade-table td:nth-child(4) {
+  width: 16% !important;
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+#trade .trade-table th:nth-child(5),
+#trade .trade-table td:nth-child(5) {
+  width: 16% !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+
+body.admin-locked #trade .trade-table th:nth-child(5),
+body.admin-locked #trade .trade-table td:nth-child(5) {
+  display: none !important;
+}
+
+body.admin-locked #trade .trade-table th:nth-child(1),
+body.admin-locked #trade .trade-table td:nth-child(1) {
+  width: 40% !important;
+}
+
+body.admin-locked #trade .trade-table th:nth-child(2),
+body.admin-locked #trade .trade-table td:nth-child(2),
+body.admin-locked #trade .trade-table th:nth-child(3),
+body.admin-locked #trade .trade-table td:nth-child(3),
+body.admin-locked #trade .trade-table th:nth-child(4),
+body.admin-locked #trade .trade-table td:nth-child(4) {
+  width: 20% !important;
+}
+
+#trade .trade-table td.row-actions {
+  display: table-cell !important;
+  text-align: right !important;
+  vertical-align: middle !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+
+#trade .trade-table td.row-actions[hidden] {
+  display: none !important;
+}
+
+#trade .trade-table td.row-actions .button,
+#trade .trade-table .remove-trade-row,
+#trade .trade-table .edit-trade-row {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 78px !important;
+  max-width: none !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 8px 10px !important;
+  margin-left: 6px !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  line-height: 1 !important;
+}
+
+#trade .trade-table .remove-trade-row {
+  min-width: 82px !important;
+}
+
+.trade-price-fields {
+  grid-template-columns: minmax(220px, 1.45fr) repeat(3, minmax(130px, 1fr));
+}
+
+@media (max-width: 760px) {
+  #trade .table-wrap {
+    overflow-x: auto !important;
+  }
+
+  #trade .trade-table {
+    min-width: 760px !important;
+  }
+
+  .trade-price-fields {
+    grid-template-columns: 1fr;
+  }
+}

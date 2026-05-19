@@ -47,6 +47,8 @@ let productDialogFactory = null;
 let productDialogProductId = null;
 let productDialogRecipe = [];
 let tradeDraftRows = [];
+let tradeDialogMode = "create";
+let tradeDialogOriginalName = null;
 
 const els = {
   tabs: document.querySelector("#tabs"),
@@ -72,6 +74,18 @@ const els = {
   tradeSearchCount: document.querySelector("#tradeSearchCount"),
   addTradeItemBtn: document.querySelector("#addTradeItemBtn"),
   tradeItemOptions: document.querySelector("#tradeItemOptions"),
+  tradeDialog: document.querySelector("#tradeDialog"),
+  tradeForm: document.querySelector("#tradeForm"),
+  tradeDialogEyebrow: document.querySelector("#tradeDialogEyebrow"),
+  tradeDialogTitle: document.querySelector("#tradeDialogTitle"),
+  tradeDialogIntro: document.querySelector("#tradeDialogIntro"),
+  tradeDialogSubmitBtn: document.querySelector("#tradeDialogSubmitBtn"),
+  tradeDialogName: document.querySelector("#tradeDialogName"),
+  tradeDialogImport: document.querySelector("#tradeDialogImport"),
+  tradeDialogExport: document.querySelector("#tradeDialogExport"),
+  tradeDialogMarket: document.querySelector("#tradeDialogMarket"),
+  closeTradeDialogBtn: document.querySelector("#closeTradeDialogBtn"),
+  cancelTradeDialogBtn: document.querySelector("#cancelTradeDialogBtn"),
   copyMaterialsBtn: document.querySelector("#copyMaterialsBtn"),
   copyRawMaterialsBtn: document.querySelector("#copyRawMaterialsBtn"),
   exportDataBtn: document.querySelector("#exportDataBtn"),
@@ -555,7 +569,7 @@ function renderTrade() {
       : `${rows.length.toLocaleString("de-DE")} Handelseinträge`;
   }
 
-  if (!rows.length && !tradeDraftRows.length) {
+  if (!rows.length) {
     const row = document.createElement("tr");
     row.innerHTML = `<td colspan="5" class="empty-state">Noch keine zentralen Handelsdaten vorhanden.</td>`;
     els.tradeTableBody.appendChild(row);
@@ -563,95 +577,119 @@ function renderTrade() {
   }
 
   for (const { name, record } of visibleRows) {
-    els.tradeTableBody.appendChild(createTradeRow(name, record, false));
-  }
-  if (adminUnlocked) {
-    for (const draft of tradeDraftRows) els.tradeTableBody.appendChild(createTradeRow(draft.name, draft, true));
+    els.tradeTableBody.appendChild(createTradeRow(name, record));
   }
 }
 
-function createTradeRow(name, record, isDraft) {
+function createTradeRow(name, record) {
   const row = document.createElement("tr");
-  row.className = isDraft ? "trade-row trade-draft-row" : "trade-row";
+  row.className = "trade-row";
   const currentName = cleanText(name);
   const importPrice = optionalNumber(record?.importPrice);
   const exportPrice = optionalNumber(record?.exportPrice);
   const marketValue = optionalNumber(record?.marketValue);
 
-  if (!adminUnlocked) {
-    row.innerHTML = `
-      <td><strong>${escapeHtml(currentName)}</strong></td>
-      <td>${formatOptionalMoney(importPrice)}</td>
-      <td>${formatOptionalMoney(exportPrice)}</td>
-      <td>${formatOptionalMoney(marketValue)}</td>
-      <td class="row-actions"></td>
-    `;
-    return row;
-  }
-
   row.innerHTML = `
-    <td><input class="trade-name" list="tradeItemOptions" type="text" autocomplete="off" value="${escapeAttribute(currentName)}" placeholder="Artikel auswählen oder eingeben" /></td>
-    <td><input class="trade-import" type="number" min="0" step="0.01" value="${formatInputNumber(importPrice)}" placeholder="—" /></td>
-    <td><input class="trade-export" type="number" min="0" step="0.01" value="${formatInputNumber(exportPrice)}" placeholder="—" /></td>
-    <td><input class="trade-market" type="number" min="0" step="0.01" value="${formatInputNumber(marketValue)}" placeholder="—" /></td>
-    <td class="row-actions"><button class="button button-danger remove-trade-row" type="button">Entfernen</button></td>
+    <td><strong>${escapeHtml(currentName)}</strong></td>
+    <td>${formatOptionalMoney(importPrice)}</td>
+    <td>${formatOptionalMoney(exportPrice)}</td>
+    <td>${formatOptionalMoney(marketValue)}</td>
+    <td class="row-actions">
+      <button class="button button-secondary edit-trade-row" type="button">Bearbeiten</button>
+      <button class="button button-danger remove-trade-row" type="button">Entfernen</button>
+    </td>
   `;
 
-  const nameInput = row.querySelector(".trade-name");
-  const importInput = row.querySelector(".trade-import");
-  const exportInput = row.querySelector(".trade-export");
-  const marketInput = row.querySelector(".trade-market");
+  const rowActions = row.querySelector(".row-actions");
+  if (rowActions) rowActions.hidden = !adminUnlocked;
 
-  const commit = () => {
-    const nextName = cleanText(nameInput.value);
-    const nextValues = {
-      importPrice: optionalNumber(importInput.value),
-      exportPrice: optionalNumber(exportInput.value),
-      marketValue: optionalNumber(marketInput.value)
-    };
+  row.querySelector(".edit-trade-row")?.addEventListener("click", () => {
+    if (!requireAdminAccess()) return;
+    openTradeDialogEdit(currentName);
+  });
 
-    if (isDraft) {
-      record.name = nextName;
-      record.importPrice = nextValues.importPrice;
-      record.exportPrice = nextValues.exportPrice;
-      record.marketValue = nextValues.marketValue;
-      if (!nextName || (nextValues.importPrice === null && nextValues.exportPrice === null && nextValues.marketValue === null)) return;
-      tradeDraftRows = tradeDraftRows.filter((item) => item !== record);
-      setTradePrice(nextName, nextValues);
-      ensureMaterial(nextName);
-      renderAll();
-      activateTab("trade");
-      return;
-    }
-
-    if (!nextName) return;
-    if (nextName !== currentName) {
-      renameTradePrice(currentName, nextName);
-      if (!state.tradePrices?.[nextName]) setTradePrice(nextName, nextValues);
-    } else {
-      setTradePrice(nextName, nextValues);
-    }
-    ensureMaterial(nextName);
-    renderAll();
-    activateTab("trade");
-  };
-
-  [nameInput, importInput, exportInput, marketInput].forEach((input) => input.addEventListener("change", commit));
-  row.querySelector(".remove-trade-row").addEventListener("click", () => {
-    if (isDraft) tradeDraftRows = tradeDraftRows.filter((item) => item !== record);
-    else if (confirm(`Handelseintrag "${currentName}" wirklich entfernen?`)) deleteTradePrice(currentName);
+  row.querySelector(".remove-trade-row")?.addEventListener("click", () => {
+    if (!requireAdminAccess()) return;
+    if (!confirm(`Handelseintrag "${currentName}" wirklich entfernen?`)) return;
+    deleteTradePrice(currentName);
     renderAll();
     activateTab("trade");
   });
+
   return row;
 }
 
-function addTradeItemRow() {
+function openTradeDialogCreate() {
   if (!requireAdminAccess()) return;
-  tradeDraftRows.push({ name: "", importPrice: null, exportPrice: null, marketValue: null });
-  renderTrade();
+  tradeDialogMode = "create";
+  tradeDialogOriginalName = null;
+  renderTradeDatalist();
+  els.tradeDialogEyebrow.textContent = "Handel";
+  els.tradeDialogTitle.textContent = "Handelseintrag hinzufügen";
+  els.tradeDialogIntro.textContent = "Import-, Export- und Marktwerte werden zentral gespeichert.";
+  els.tradeDialogSubmitBtn.textContent = "Handelseintrag speichern";
+  els.tradeForm.reset();
+  els.tradeDialogName.value = "";
+  els.tradeDialogImport.value = "";
+  els.tradeDialogExport.value = "";
+  els.tradeDialogMarket.value = "";
+  els.tradeDialog.showModal();
+  setTimeout(() => els.tradeDialogName.focus(), 0);
+}
+
+function openTradeDialogEdit(name) {
+  if (!requireAdminAccess()) return;
+  const currentName = cleanText(name);
+  const record = state.tradePrices?.[currentName] ?? {};
+  tradeDialogMode = "edit";
+  tradeDialogOriginalName = currentName;
+  renderTradeDatalist();
+  els.tradeDialogEyebrow.textContent = "Handel bearbeiten";
+  els.tradeDialogTitle.textContent = currentName;
+  els.tradeDialogIntro.textContent = "Änderungen werden automatisch in Fabriken, Materialien und Calculator übernommen.";
+  els.tradeDialogSubmitBtn.textContent = "Änderungen speichern";
+  els.tradeDialogName.value = currentName;
+  els.tradeDialogImport.value = formatInputNumber(optionalNumber(record.importPrice));
+  els.tradeDialogExport.value = formatInputNumber(optionalNumber(record.exportPrice));
+  els.tradeDialogMarket.value = formatInputNumber(optionalNumber(record.marketValue));
+  els.tradeDialog.showModal();
+  setTimeout(() => els.tradeDialogName.focus(), 0);
+}
+
+function closeTradeDialog() {
+  els.tradeDialog?.close();
+}
+
+function handleTradeDialogSubmit(event) {
+  event.preventDefault();
+  if (!requireAdminAccess()) return;
+
+  const nextName = cleanText(els.tradeDialogName.value);
+  const nextValues = {
+    importPrice: optionalNumber(els.tradeDialogImport.value),
+    exportPrice: optionalNumber(els.tradeDialogExport.value),
+    marketValue: optionalNumber(els.tradeDialogMarket.value)
+  };
+
+  if (!nextName) {
+    alert("Bitte einen Artikelnamen angeben.");
+    return;
+  }
+
+  if (nextValues.importPrice === null && nextValues.exportPrice === null && nextValues.marketValue === null) {
+    alert("Bitte mindestens einen Importpreis, Exportpreis oder Marktwert eintragen.");
+    return;
+  }
+
+  if (tradeDialogMode === "edit" && tradeDialogOriginalName && tradeDialogOriginalName !== nextName) {
+    renameTradePrice(tradeDialogOriginalName, nextName);
+  }
+
+  setTradePrice(nextName, nextValues);
+  ensureMaterial(nextName);
+  closeTradeDialog();
+  renderAll();
   activateTab("trade");
-  setTimeout(() => document.querySelector(".trade-draft-row .trade-name")?.focus(), 0);
 }
 
 function renderTradeDatalist() {

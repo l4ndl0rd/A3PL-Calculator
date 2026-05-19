@@ -349,6 +349,44 @@
   </template>
 
 
+
+  <dialog id="tradeDialog" class="modal-dialog">
+    <form id="tradeForm" class="modal-card" method="dialog">
+      <div class="modal-header">
+        <div>
+          <p id="tradeDialogEyebrow" class="eyebrow modal-eyebrow">Handel</p>
+          <h2 id="tradeDialogTitle">Handelseintrag hinzufügen</h2>
+          <p id="tradeDialogIntro">Import-, Export- und Marktwerte werden zentral gespeichert und automatisch in Fabriken, Materialien und Calculator verwendet.</p>
+        </div>
+        <button id="closeTradeDialogBtn" class="icon-button" type="button" aria-label="Fenster schließen">×</button>
+      </div>
+
+      <div class="modal-fields trade-price-fields">
+        <label>
+          Artikel
+          <input id="tradeDialogName" list="tradeItemOptions" type="text" placeholder="z. B. Eisenerz" autocomplete="off" />
+        </label>
+        <label>
+          Importpreis <span class="optional-label">optional</span>
+          <input id="tradeDialogImport" type="number" min="0" step="0.01" placeholder="—" />
+        </label>
+        <label>
+          Exportpreis <span class="optional-label">optional</span>
+          <input id="tradeDialogExport" type="number" min="0" step="0.01" placeholder="—" />
+        </label>
+        <label>
+          Marktwert <span class="optional-label">optional</span>
+          <input id="tradeDialogMarket" type="number" min="0" step="0.01" placeholder="—" />
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="button button-secondary" type="button" id="cancelTradeDialogBtn">Abbrechen</button>
+        <button id="tradeDialogSubmitBtn" class="button" type="submit">Handelseintrag speichern</button>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="addMaterialDialog" class="modal-dialog">
     <form id="addMaterialForm" class="modal-card" method="dialog">
       <div class="modal-header">
