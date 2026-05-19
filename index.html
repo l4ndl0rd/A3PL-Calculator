@@ -269,6 +269,47 @@
       </section>
     </section>
 
+    <section id="farmrates" class="panel" aria-labelledby="farmrates-tab">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <h2>Farmraten und Arbeitszeit</h2>
+            <p>Bewerte selbst gefarmte Rohstoffe über deine persönliche Arbeitszeit. Crafting selbst bleibt kostenlos.</p>
+          </div>
+          <button id="addFarmProfileBtn" class="button" type="button">Farmprofil hinzufügen</button>
+        </div>
+        <div class="labor-settings">
+          <label>
+            Arbeitswert pro Stunde
+            <input id="laborHourlyValueInput" name="laborHourlyValueInput" type="number" min="0" step="1" value="0" />
+          </label>
+          <p class="hint">Farmkosten pro Einheit = Arbeitswert pro Stunde / Farmmenge pro Stunde. Bei 0 $ Arbeitswert wird Farmen als kostenlos bewertet.</p>
+        </div>
+        <div class="edit-search-bar">
+          <label>
+            Farmprofil suchen
+            <input id="farmSearchInput" name="farmSearchInput" type="search" placeholder="Material oder Rate eingeben" autocomplete="off" />
+          </label>
+          <span id="farmSearchCount" class="search-count">0 Farmprofile</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table farm-table" id="farmTable">
+            <thead>
+              <tr>
+                <th>Material / Rohstoff</th>
+                <th>Status</th>
+                <th>Menge pro Stunde</th>
+                <th>Farmkosten / Einheit</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <datalist id="farmItemOptions"></datalist>
+        </div>
+      </section>
+    </section>
+
 
     <div id="factoryPanels"></div>
 

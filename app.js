@@ -49,6 +49,7 @@ let productDialogRecipe = [];
 let tradeDraftRows = [];
 let tradeDialogMode = "create";
 let tradeDialogOriginalName = null;
+let farmSearchQuery = "";
 
 const els = {
   tabs: document.querySelector("#tabs"),
@@ -74,6 +75,12 @@ const els = {
   tradeSearchCount: document.querySelector("#tradeSearchCount"),
   addTradeItemBtn: document.querySelector("#addTradeItemBtn"),
   tradeItemOptions: document.querySelector("#tradeItemOptions"),
+  laborHourlyValueInput: document.querySelector("#laborHourlyValueInput"),
+  farmTableBody: document.querySelector("#farmTable tbody"),
+  farmItemOptions: document.querySelector("#farmItemOptions"),
+  farmSearchInput: document.querySelector("#farmSearchInput"),
+  farmSearchCount: document.querySelector("#farmSearchCount"),
+  addFarmProfileBtn: document.querySelector("#addFarmProfileBtn"),
   tradeDialog: document.querySelector("#tradeDialog"),
   tradeForm: document.querySelector("#tradeForm"),
   tradeDialogEyebrow: document.querySelector("#tradeDialogEyebrow"),
@@ -188,6 +195,22 @@ function bindStaticEvents() {
     });
   }
   if (els.addTradeItemBtn) els.addTradeItemBtn.addEventListener("click", openTradeDialogCreate);
+  if (els.laborHourlyValueInput) {
+    els.laborHourlyValueInput.addEventListener("change", () => {
+      state.labor ??= {};
+      state.labor.hourlyValue = positiveNumber(els.laborHourlyValueInput.value, 0);
+      renderAll();
+      activateTab("farmrates");
+    });
+  }
+  if (els.farmSearchInput) {
+    els.farmSearchInput.addEventListener("input", () => {
+      farmSearchQuery = cleanText(els.farmSearchInput.value);
+      renderFarmRates();
+      applyResponsiveTableLabels();
+    });
+  }
+  if (els.addFarmProfileBtn) els.addFarmProfileBtn.addEventListener("click", addFarmProfile);
   els.copyMaterialsBtn.addEventListener("click", copyRequirementsTable);
   els.copyRawMaterialsBtn.addEventListener("click", copyRawRequirementsTable);
   els.exportDataBtn.addEventListener("click", exportData);
@@ -247,6 +270,7 @@ function renderAll() {
   renderFactoryPanels();
   renderMaterials();
   renderTrade();
+  renderFarmRates();
   renderPlan();
   renderInventory();
   renderRequirements();
@@ -292,8 +316,9 @@ function renderFactoryNavigation() {
 
   const materialsButton = createPrimaryTab("materials", "Materialien", activeTarget === "materials");
   const tradeButton = createPrimaryTab("trade", "Handel", activeTarget === "trade");
+  const farmRatesButton = createPrimaryTab("farmrates", "Farmraten", activeTarget === "farmrates");
 
-  primaryRow.append(calculatorButton, factoryGroup, materialsButton, tradeButton);
+  primaryRow.append(calculatorButton, factoryGroup, materialsButton, tradeButton, farmRatesButton);
   els.tabs.append(primaryRow);
 }
 
@@ -405,7 +430,7 @@ function createProductCard(factory, product) {
   node.classList.toggle("locked-entry", !adminUnlocked);
   node.querySelector(".product-name-display").textContent = product.name;
   node.querySelector(".product-output-display").textContent = positiveInteger(product.output, 1).toLocaleString("de-DE");
-  const baseCost = calculateProductUnitCost(product, new Set());
+  const baseCost = calculateProductUnitCostWithOptimalInputs(product, new Set());
   const sale = getSalePrice(product, baseCost.complete ? baseCost.unitCost : null);
   const priceDisplay = node.querySelector(".product-price-display");
   if (priceDisplay) priceDisplay.textContent = sale.price > 0 ? `${formatMoney(sale.price)} · ${sale.source}` : "nicht gesetzt";
@@ -750,6 +775,113 @@ function getAllItemNames() {
   ].map(cleanText).filter(Boolean)).sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
 }
 
+
+function renderFarmRates() {
+  if (!els.farmTableBody) return;
+  state.labor ??= {};
+  state.farmProfiles ??= {};
+  renderFarmDatalist();
+  if (els.laborHourlyValueInput) els.laborHourlyValueInput.value = formatInputNumber(positiveNumber(state.labor.hourlyValue, 0));
+
+  const rows = Object.entries(state.farmProfiles)
+    .map(([name, profile]) => ({ name: cleanText(name), profile }))
+    .filter(({ name }) => name)
+    .sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }));
+
+  const query = cleanText(farmSearchQuery).toLocaleLowerCase("de-DE");
+  const visibleRows = query
+    ? rows.filter(({ name, profile }) => [name, profile?.amountPerHour, getFarmUnitCost(name)].map(cleanText).join(" ").toLocaleLowerCase("de-DE").includes(query))
+    : rows;
+
+  if (els.farmSearchCount) {
+    els.farmSearchCount.textContent = query
+      ? `${visibleRows.length.toLocaleString("de-DE")} von ${rows.length.toLocaleString("de-DE")} Farmprofilen`
+      : `${rows.length.toLocaleString("de-DE")} Farmprofile`;
+  }
+
+  els.farmTableBody.innerHTML = "";
+  if (!rows.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="5" class="empty-state">Noch keine Farmraten hinterlegt. Lege Rohstoffe an, die du selbst farmen kannst.</td>`;
+    els.farmTableBody.appendChild(row);
+    return;
+  }
+
+  if (!visibleRows.length) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td colspan="5" class="empty-state">Kein Farmprofil passend zur Suche gefunden.</td>`;
+    els.farmTableBody.appendChild(row);
+    return;
+  }
+
+  for (const { name, profile } of visibleRows) {
+    els.farmTableBody.appendChild(createFarmProfileRow(name, profile));
+  }
+}
+
+function renderFarmDatalist() {
+  if (!els.farmItemOptions) return;
+  els.farmItemOptions.innerHTML = "";
+  for (const option of getAllItemNames()) {
+    const node = document.createElement("option");
+    node.value = option;
+    els.farmItemOptions.appendChild(node);
+  }
+}
+
+function createFarmProfileRow(name, profile) {
+  const row = document.createElement("tr");
+  row.className = "farm-row";
+  const amountPerHour = positiveNumber(profile?.amountPerHour, 0);
+  const unitCost = getFarmUnitCost(name);
+  row.innerHTML = `
+    <td><input class="farm-profile-name" name="farmProfileName" type="text" list="farmItemOptions" autocomplete="off" value="${escapeHtml(name)}" /></td>
+    <td><label class="table-checkbox"><input class="farm-profile-enabled" name="farmProfileEnabled" type="checkbox" ${profile?.enabled === false ? "" : "checked"} /><span>Farmbar</span></label></td>
+    <td><input class="farm-profile-rate" name="farmProfileRate" type="number" min="0" step="1" placeholder="0" value="${amountPerHour > 0 ? formatInputNumber(amountPerHour) : ""}" /></td>
+    <td>${formatOptionalMoney(unitCost)}</td>
+    <td class="row-actions"><button class="button button-danger remove-farm-profile" type="button">Entfernen</button></td>
+  `;
+
+  const nameInput = row.querySelector(".farm-profile-name");
+  const enabledInput = row.querySelector(".farm-profile-enabled");
+  const rateInput = row.querySelector(".farm-profile-rate");
+
+  const commit = () => {
+    const oldName = cleanText(name);
+    const nextName = cleanText(nameInput.value);
+    const nextRate = positiveNumber(rateInput.value, 0);
+    const enabled = Boolean(enabledInput.checked);
+    if (!nextName) return;
+    ensureMaterial(nextName);
+    if (oldName && oldName !== nextName) delete state.farmProfiles[oldName];
+    state.farmProfiles[nextName] = { enabled, amountPerHour: nextRate };
+    renderAll();
+    activateTab("farmrates");
+  };
+
+  nameInput.addEventListener("change", commit);
+  nameInput.addEventListener("blur", commit);
+  enabledInput.addEventListener("change", commit);
+  rateInput.addEventListener("change", commit);
+  row.querySelector(".remove-farm-profile").addEventListener("click", () => {
+    if (!confirm(`Farmprofil für "${name}" wirklich entfernen?`)) return;
+    delete state.farmProfiles[name];
+    renderAll();
+    activateTab("farmrates");
+  });
+  return row;
+}
+
+function addFarmProfile() {
+  state.farmProfiles ??= {};
+  const existing = new Set(Object.keys(state.farmProfiles).map((name) => cleanText(name).toLocaleLowerCase("de-DE")));
+  const candidate = getAllItemNames().find((name) => !existing.has(cleanText(name).toLocaleLowerCase("de-DE"))) || "Neues Farmmaterial";
+  state.farmProfiles[candidate] = { enabled: true, amountPerHour: 0 };
+  renderAll();
+  activateTab("farmrates");
+  queueFocus(`#farmTable tbody tr:last-child .farm-profile-name`);
+}
+
 function renderPlan() {
   els.planTableBody.innerHTML = "";
 
@@ -979,9 +1111,13 @@ function calculateMaterialBatchCostWithInventory(materialName, requiredAmount, i
   const buyOption = buyUnitCost !== null
     ? { complete: true, totalCost: buyUnitCost * inventory.remaining, missing: [], actions: [createProcurementAction("import", name, inventory.remaining)] }
     : null;
+  const farmUnitCost = getFarmUnitCost(name);
+  const farmOption = farmUnitCost !== null
+    ? { complete: true, totalCost: farmUnitCost * inventory.remaining, missing: [], actions: [createProcurementAction("farm", name, inventory.remaining)] }
+    : null;
   const craftOption = calculateMaterialCraftBatchCostWithInventory(name, inventory.remaining, inventoryPool, stack);
 
-  const selected = chooseCheapestBatchOption(buyOption, craftOption, name);
+  const selected = chooseCheapestBatchOptionFromList([buyOption, farmOption, craftOption], name);
   return selected.complete ? { ...selected, actions: mergeProcurementActions([...inventoryActions, ...(selected.actions ?? [])]) } : selected;
 }
 
@@ -1087,7 +1223,7 @@ function mergeProcurementActions(actions) {
     merged.set(key, current);
   }
   return [...merged.values()].sort((a, b) => {
-    const order = { inventory: 0, import: 1, craft: 2, provide: 3 };
+    const order = { inventory: 0, farm: 1, import: 2, craft: 3, provide: 4 };
     const delta = (order[a.type] ?? 99) - (order[b.type] ?? 99);
     return delta || a.item.localeCompare(b.item, "de", { sensitivity: "base" });
   });
@@ -1096,7 +1232,7 @@ function mergeProcurementActions(actions) {
 function summarizeProcurementActions(actions) {
   const merged = mergeProcurementActions(actions);
   if (!merged.length) return "";
-  const labels = { inventory: "Inventar", import: "Import", craft: "Craft", provide: "Farmen" };
+  const labels = { inventory: "Inventar", import: "Import", farm: "Farmen", craft: "Craft", provide: "Wert" };
   const parts = merged.slice(0, 4).map((action) => `${labels[action.type] ?? action.type}: ${action.amount.toLocaleString("de-DE")}× ${action.item}`);
   const remaining = merged.length - parts.length;
   return remaining > 0 ? `${parts.join(" · ")} · +${remaining} weitere` : parts.join(" · ");
@@ -1969,8 +2105,11 @@ function getMaterialRecipe(materialName) {
   state.tradePrices ??= {};
   state.tradeAliases ??= {};
   state.inventory ??= {};
+  state.labor ??= {};
+  state.farmProfiles ??= {};
   state.pricing ??= {};
   state.pricing.standardMarginPercent = positiveNumber(state.pricing.standardMarginPercent, 30);
+  state.labor.hourlyValue = positiveNumber(state.labor.hourlyValue, 0);
   state.materialRecipes[name] ??= { output: 1, recipe: [] };
   state.materialRecipes[name].output = positiveInteger(state.materialRecipes[name].output, 1);
   state.materialRecipes[name].recipe = Array.isArray(state.materialRecipes[name].recipe) ? state.materialRecipes[name].recipe : [];
@@ -2152,8 +2291,11 @@ function normalizeState() {
   state.tradePrices ??= {};
   state.tradeAliases ??= {};
   state.inventory ??= {};
+  state.labor ??= {};
+  state.farmProfiles ??= {};
   state.pricing ??= {};
   state.pricing.standardMarginPercent = positiveNumber(state.pricing.standardMarginPercent, 30);
+  state.labor.hourlyValue = positiveNumber(state.labor.hourlyValue, 0);
   DEFAULT_RAW_MATERIALS.forEach(ensureMaterial);
 
   for (const factory of Object.keys(FACTORIES)) {
@@ -2212,6 +2354,16 @@ function normalizeState() {
   state.materialPrices = normalizedMaterialPrices;
   state.tradePrices = normalizedTradePrices;
   state.tradeAliases = normalizedTradeAliases;
+  const normalizedFarmProfiles = {};
+  for (const [materialName, profile] of Object.entries(state.farmProfiles ?? {})) {
+    const name = cleanText(materialName);
+    if (!name || !profile || typeof profile !== "object") continue;
+    const amountPerHour = positiveNumber(profile.amountPerHour, 0);
+    const enabled = profile.enabled !== false;
+    ensureMaterial(name);
+    normalizedFarmProfiles[name] = { enabled, amountPerHour };
+  }
+  state.farmProfiles = Object.fromEntries(Object.entries(normalizedFarmProfiles).sort(([a], [b]) => a.localeCompare(b, "de", { sensitivity: "base" })));
   delete state.materialImportPrices;
   delete state.materialExportPrices;
   state.inventory = normalizedInventory;
@@ -2245,6 +2397,8 @@ function validateImportedState(value) {
   if (value.tradePrices !== undefined && (typeof value.tradePrices !== "object" || Array.isArray(value.tradePrices))) throw new Error("Feld 'tradePrices' ist ungültig.");
   if (value.tradeAliases !== undefined && (typeof value.tradeAliases !== "object" || Array.isArray(value.tradeAliases))) throw new Error("Feld 'tradeAliases' ist ungültig.");
   if (value.inventory !== undefined && (typeof value.inventory !== "object" || Array.isArray(value.inventory))) throw new Error("Feld 'inventory' ist ungültig.");
+  if (value.labor !== undefined && (typeof value.labor !== "object" || Array.isArray(value.labor))) throw new Error("Feld 'labor' ist ungültig.");
+  if (value.farmProfiles !== undefined && (typeof value.farmProfiles !== "object" || Array.isArray(value.farmProfiles))) throw new Error("Feld 'farmProfiles' ist ungültig.");
   if (value.pricing !== undefined && (typeof value.pricing !== "object" || Array.isArray(value.pricing))) throw new Error("Feld 'pricing' ist ungültig.");
 }
 
@@ -2271,7 +2425,7 @@ function firstFactoryWithProduct() {
 function createDefaultState() {
   const products = {};
   for (const factory of Object.keys(FACTORIES)) products[factory] = [];
-  return { materials: [], materialRecipes: {}, materialPrices: {}, tradePrices: {}, tradeAliases: {}, inventory: {}, pricing: { standardMarginPercent: 30 }, products, plan: [] };
+  return { materials: [], materialRecipes: {}, materialPrices: {}, tradePrices: {}, tradeAliases: {}, inventory: {}, labor: { hourlyValue: 0 }, farmProfiles: {}, pricing: { standardMarginPercent: 30 }, products, plan: [] };
 }
 
 
@@ -2459,6 +2613,46 @@ function getMaterialBuyUnitCost(materialName) {
   return getExactTradeImportPrice(materialName);
 }
 
+
+function getLaborHourlyValue() {
+  state.labor ??= {};
+  return positiveNumber(state.labor.hourlyValue, 0);
+}
+
+function getFarmProfile(materialName) {
+  const name = cleanText(materialName);
+  const profile = state.farmProfiles?.[name];
+  if (!profile || typeof profile !== "object" || profile.enabled === false) return null;
+  const amountPerHour = positiveNumber(profile.amountPerHour, 0);
+  if (amountPerHour <= 0) return null;
+  return { amountPerHour };
+}
+
+function getFarmUnitCost(materialName) {
+  const profile = getFarmProfile(materialName);
+  if (!profile) return null;
+  return getLaborHourlyValue() / profile.amountPerHour;
+}
+
+function createFarmUnitOption(materialName) {
+  const unitCost = getFarmUnitCost(materialName);
+  return unitCost !== null ? { complete: true, unitCost, missing: [] } : null;
+}
+
+function chooseCheapestUnitOptionFromList(options, fallbackName) {
+  const complete = (options ?? []).filter((option) => option?.complete);
+  if (complete.length) return complete.reduce((best, current) => current.unitCost < best.unitCost ? current : best);
+  const missing = (options ?? []).flatMap((option) => option?.missing ?? []);
+  return { complete: false, unitCost: null, missing: unique([...(missing ?? []), fallbackName].filter(Boolean)) };
+}
+
+function chooseCheapestBatchOptionFromList(options, fallbackName) {
+  const complete = (options ?? []).filter((option) => option?.complete);
+  if (complete.length) return complete.reduce((best, current) => current.totalCost < best.totalCost ? current : best);
+  const missing = (options ?? []).flatMap((option) => option?.missing ?? []);
+  return { complete: false, totalCost: null, missing: unique([...(missing ?? []), fallbackName].filter(Boolean)), actions: [] };
+}
+
 function calculateMaterialUnitCost(materialName, stack = new Set()) {
   const name = cleanText(materialName);
   const materialKey = `material:${name.toLocaleLowerCase("de-DE")}`;
@@ -2470,8 +2664,9 @@ function calculateMaterialUnitCost(materialName, stack = new Set()) {
   if (craftOption.complete) return craftOption;
 
   const materialCost = getMaterialCostPrice(name);
-  if (materialCost !== null) return { complete: true, unitCost: materialCost, missing: [] };
-  return { complete: false, unitCost: null, missing: unique([...(craftOption.missing ?? []), name]) };
+  const materialOption = materialCost !== null ? { complete: true, unitCost: materialCost, missing: [] } : null;
+  const farmOption = createFarmUnitOption(name);
+  return chooseCheapestUnitOptionFromList([craftOption, materialOption, farmOption], name);
 }
 
 function calculateMaterialUnitCostWithOptimalInputs(materialName, stack = new Set()) {
@@ -2483,12 +2678,13 @@ function calculateMaterialUnitCostWithOptimalInputs(materialName, stack = new Se
   const buyOption = buyUnitCost !== null
     ? { complete: true, unitCost: buyUnitCost, missing: [] }
     : null;
+  const farmOption = createFarmUnitOption(name);
 
   const nextStack = new Set(stack);
   nextStack.add(materialKey);
   const craftOption = calculateMaterialCraftUnitCostWithOptimalInputs(name, nextStack);
 
-  return chooseCheapestUnitOption(buyOption, craftOption, name);
+  return chooseCheapestUnitOptionFromList([buyOption, farmOption, craftOption], name);
 }
 
 function calculateMaterialCraftUnitCostWithOptimalInputs(materialName, stack = new Set()) {

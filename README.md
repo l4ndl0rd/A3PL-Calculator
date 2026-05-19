@@ -14,8 +14,9 @@ Der Calculator läuft vollständig statisch und ist für GitHub Pages geeignet. 
 - Eigenes Inventar zur Verrechnung erfarmter Items
 - Direkter Materialbedarf und rekursiver Rohmaterialbedarf
 - Wirtschaftlichkeitsberechnung mit Preisempfehlung
-- Vergleich, ob direkte Beschaffung oder Produktion günstiger ist
+- Vergleich, ob direkte Beschaffung, Farmen oder Produktion günstiger ist
 - Zentrale Handelsdaten für Importpreis, Exportpreis und Marktwert
+- Farmraten mit persönlichem Arbeitswert pro Stunde
 - Materialien mit optionalem Wert pro Einheit und optionalem Unterrezept
 - Waren mit Produktionsmenge und Rezeptdaten pro Fabrik
 - Gleiche Warennamen können in unterschiedlichen Fabriken existieren
@@ -43,6 +44,32 @@ Für Verkaufspreise gilt:
 Inventar senkt die persönlichen Herstellungskosten für die aktuelle Kalkulation. Die Preisempfehlung auf Basis von `Kosten + Marge` verwendet weiterhin die normalen Herstellungskosten, damit auch bei vollständig vorhandenem Inventar ein sinnvoller Verkaufspreis angezeigt wird.
 
 Wenn derselbe Warenname in mehreren Fabriken existiert, behandelt der Produktionsplan die konkrete Ware weiterhin über ihre interne ID. Bei Materialbedarf und Preisberechnung werden gleichnamige Herstellungswege als Alternativen betrachtet; der Calculator verwendet dabei den günstigsten berechenbaren Weg. So können beispielsweise `Stahlplatten` sowohl hergestellt als auch aus einer Palette zerlegt werden, ohne unterschiedliche Handelsartikel pflegen zu müssen.
+
+## Farmraten und Arbeitszeit
+
+Farmen kann optional mit einem persönlichen Zeitwert bewertet werden. Dafür gibt es den Bereich **Farmraten**.
+
+```json
+{
+  "labor": {
+    "hourlyValue": 30000
+  },
+  "farmProfiles": {
+    "Eisenerz": {
+      "enabled": true,
+      "amountPerHour": 1200
+    }
+  }
+}
+```
+
+Die Formel lautet:
+
+```text
+Farmkosten pro Einheit = Arbeitswert pro Stunde / Farmmenge pro Stunde
+```
+
+Crafting selbst hat weiterhin keine Kosten. Bewertet werden nur die benötigten Inputs, also Inventar, Farmzeit, Importpreise, manuelle Materialwerte und rekursive Herstellungswege.
 
 ## Zentrale Handelsdaten
 

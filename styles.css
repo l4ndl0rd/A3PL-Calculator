@@ -4818,3 +4818,118 @@ body:not(.admin-locked) #trade .trade-table td:nth-child(4) {
   margin-top: 6px;
   line-height: 1.35;
 }
+
+/* v75: Farmraten und Arbeitszeitbewertung */
+.tabs {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+}
+
+#tabs > .primary-tab-row,
+.primary-tab-row {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+
+.labor-settings {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: end;
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.labor-settings .hint {
+  margin: 0;
+}
+
+#farmrates .table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  overflow-y: visible;
+}
+
+#farmrates .farm-table {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed;
+}
+
+#farmrates .farm-table th,
+#farmrates .farm-table td {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+#farmrates .farm-table th:nth-child(1),
+#farmrates .farm-table td:nth-child(1) {
+  width: 34%;
+}
+
+#farmrates .farm-table th:nth-child(2),
+#farmrates .farm-table td:nth-child(2) {
+  width: 150px;
+}
+
+#farmrates .farm-table th:nth-child(3),
+#farmrates .farm-table td:nth-child(3),
+#farmrates .farm-table th:nth-child(4),
+#farmrates .farm-table td:nth-child(4) {
+  width: 190px;
+}
+
+#farmrates .farm-table th:nth-child(5),
+#farmrates .farm-table td:nth-child(5) {
+  width: 140px;
+}
+
+.table-checkbox {
+  display: inline-flex;
+  grid-template-columns: none;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.table-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+#farmrates .row-actions .button {
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  #tabs > .primary-tab-row,
+  .primary-tab-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .labor-settings {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  #tabs > .primary-tab-row,
+  .primary-tab-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}

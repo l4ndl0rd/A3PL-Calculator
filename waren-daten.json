@@ -18,6 +18,8 @@
     "Bell 412 (Veteran Transport)",
     "Benzin",
     "Benzinkanister - leerer Kanister",
+    "Campinglampe",
+    "Dietrich",
     "Dünger",
     "Eisenbarren",
     "Eisenbarren (aus Palette)",
@@ -26,6 +28,7 @@
     "Eurocopter AS 350",
     "Fenster",
     "Fiberglas",
+    "Fischernetz",
     "Glas",
     "Glasfaser",
     "Goldbarren",
@@ -35,6 +38,7 @@
     "Goldplatten",
     "Grumman Goose",
     "Gummi",
+    "Kabelbinder",
     "Kerosin",
     "Kohlebarren",
     "Kohlebarren (aus Palette)",
@@ -42,15 +46,24 @@
     "Kohleerz",
     "Kunstfaser",
     "Kunststoff",
+    "LCM Transportschiff",
+    "Leere Tüte",
     "Leere Wasserflasche",
+    "Leerer Container",
+    "Leerer Eimer",
     "Leerer Spritkanister",
     "M-900",
-    "Ölkanister",
-    "Ölpumpe",
+    "Motorboat",
     "Pallet Lifter",
     "Polyester",
     "Presslufthammer (Bagger)",
+    "Raketen (blau)",
+    "Raketen (rot)",
+    "Rangefinder",
+    "Rebreather (NATO)",
     "Reifen",
+    "Reparaturschlüssel",
+    "RHIB",
     "Rohöl",
     "Sand",
     "Saphirbarren",
@@ -58,6 +71,8 @@
     "Saphirbarrenpalette",
     "Saphirerz",
     "Schießpulver",
+    "Schlauch (aufgerollt)",
+    "Schlauch Adapter",
     "Schwefelbarren",
     "Schwefelerz",
     "Smaragdbarren",
@@ -81,7 +96,12 @@
     "Vivianitbarren",
     "Vivianitbarren (aus Palette)",
     "Vivianitbarrenpalette",
-    "Vivianiterz"
+    "Vivianiterz",
+    "Wasserski",
+    "Water Scooter",
+    "Yacht",
+    "Ölkanister",
+    "Ölpumpe"
   ],
   "materialRecipes": {
     "Eisenerz": {
@@ -1561,7 +1581,109 @@
         ]
       }
     ],
-    "boat": [],
+    "boat": [
+      {
+        "id": "e6d58c06-404d-4a13-8898-a8b87d1d9793",
+        "name": "Yacht",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 200
+          },
+          {
+            "material": "Stahlpalette",
+            "amount": 200
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 100
+          }
+        ]
+      },
+      {
+        "id": "165a2264-05db-41d2-af46-5cf84931dd2b",
+        "name": "LCM Transportschiff",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 25
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "id": "92c6d63a-b859-47ea-b837-f0aec1793692",
+        "name": "RHIB",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "id": "d9f1ab6d-285d-4d8e-9ddd-398ce7f00b9e",
+        "name": "Wasserski",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "d30daafe-447f-4441-a10a-e8730163cf9c",
+        "name": "Motorboat",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 13
+          }
+        ]
+      },
+      {
+        "id": "fa529369-e008-46b4-9c97-f69bfe9dc927",
+        "name": "Water Scooter",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "04505bc6-12a4-416a-ad60-84cba051b6b7",
+        "name": "Rebreather (NATO)",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Gummi",
+            "amount": 2
+          },
+          {
+            "material": "Fiberglas",
+            "amount": 8
+          },
+          {
+            "material": "Kunststoff",
+            "amount": 10
+          }
+        ]
+      }
+    ],
     "oil": [
       {
         "id": "6e362003-5147-4871-a7b8-9d1baca299e5",
@@ -1674,7 +1796,179 @@
         "recipe": []
       }
     ],
-    "goods": [],
+    "goods": [
+      {
+        "id": "3f2b3a8a-25ab-461f-b80b-2f27f41f0a62",
+        "name": "Raketen (rot)",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          },
+          {
+            "material": "Schießpulver",
+            "amount": 2
+          },
+          {
+            "material": "Schwefelbarren",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "b213e8cc-3d1e-4da2-8e43-03ebca4777e5",
+        "name": "Raketen (blau)",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          },
+          {
+            "material": "Schießpulver",
+            "amount": 2
+          },
+          {
+            "material": "Schwefelbarren",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "ae85b56d-53bf-4434-8d20-b30dd990dd97",
+        "name": "Campinglampe",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 4
+          },
+          {
+            "material": "Ölkanister",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "c45d7555-7e76-4c07-8699-4f7bcabbb1fb",
+        "name": "Leerer Eimer",
+        "output": 5,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "dca10414-68eb-44ee-908d-bb644460db2f",
+        "name": "Fischernetz",
+        "output": 10,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "875c5cee-2702-4596-a286-de96366005a9",
+        "name": "Schlauch (aufgerollt)",
+        "output": 3,
+        "recipe": [
+          {
+            "material": "Gummi",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "cde99b18-71a4-4df7-9be9-32118c7b7b53",
+        "name": "Schlauch Adapter",
+        "output": 5,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "c65b0f00-40f0-453d-889b-af28280dd7f1",
+        "name": "Rangefinder",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 1
+          },
+          {
+            "material": "Glas",
+            "amount": 2
+          },
+          {
+            "material": "Kunststoff",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "ae57d2c7-fe7a-458d-bf31-1259abd11322",
+        "name": "Reparaturschlüssel",
+        "output": 3,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 11
+          }
+        ]
+      },
+      {
+        "id": "eafd0baf-d479-45c6-98b8-21d7c1cccb1f",
+        "name": "Kabelbinder",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "16072291-093b-4370-8bc4-06bda5bdd091",
+        "name": "Dietrich",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 33
+          }
+        ]
+      },
+      {
+        "id": "9f190b61-3eba-4ead-a292-538d5ed80714",
+        "name": "Leerer Container",
+        "output": 5,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "9ff0cac3-2eb9-4156-8049-14047e46cbef",
+        "name": "Leere Tüte",
+        "output": 5,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 2
+          }
+        ]
+      }
+    ],
     "chemistry": [
       {
         "id": "f95d2b40-2a26-4a82-b205-1a84fa2cc27b",
@@ -1924,9 +2218,13 @@
   "plan": [],
   "materialPrices": {},
   "pricing": {
-    "standardMarginPercent": 30
+    "standardMarginPercent": 0
   },
   "inventory": {},
+  "labor": {
+    "hourlyValue": 0
+  },
+  "farmProfiles": {},
   "tradePrices": {
     "Aluminiumerz": {
       "importPrice": 30,
@@ -1948,9 +2246,34 @@
       "exportPrice": 5,
       "marketValue": null
     },
+    "Fiberglas": {
+      "importPrice": 50,
+      "exportPrice": 12,
+      "marketValue": null
+    },
+    "Glas": {
+      "importPrice": 25,
+      "exportPrice": 5,
+      "marketValue": null
+    },
+    "Glasfaser": {
+      "importPrice": 45,
+      "exportPrice": 13,
+      "marketValue": null
+    },
     "Goldbarren": {
       "importPrice": 1000,
       "exportPrice": 70,
+      "marketValue": null
+    },
+    "Gummi": {
+      "importPrice": 30,
+      "exportPrice": 14,
+      "marketValue": null
+    },
+    "Kerosin": {
+      "importPrice": 50,
+      "exportPrice": 14,
       "marketValue": null
     },
     "Kohleerz": {
@@ -1958,14 +2281,39 @@
       "exportPrice": 7,
       "marketValue": null
     },
+    "Kunstfaser": {
+      "importPrice": 21,
+      "exportPrice": 16,
+      "marketValue": null
+    },
+    "Kunststoff": {
+      "importPrice": 20,
+      "exportPrice": 15,
+      "marketValue": null
+    },
+    "Polyester": {
+      "importPrice": 25,
+      "exportPrice": 18,
+      "marketValue": null
+    },
     "Rohöl": {
       "importPrice": 25,
       "exportPrice": 8,
       "marketValue": null
     },
+    "Saphirbarrenpalette": {
+      "importPrice": 100000,
+      "exportPrice": 50000,
+      "marketValue": null
+    },
     "Saphirerz": {
       "importPrice": 150,
       "exportPrice": 40,
+      "marketValue": null
+    },
+    "Schießpulver": {
+      "importPrice": 40,
+      "exportPrice": 15,
       "marketValue": null
     },
     "Smaragdbarrenpalette": {
@@ -1976,6 +2324,11 @@
     "Smaragderz": {
       "importPrice": 600,
       "exportPrice": 100,
+      "marketValue": null
+    },
+    "Titanerz": {
+      "importPrice": 60,
+      "exportPrice": 12,
       "marketValue": null
     },
     "Vivianitbarrenpalette": {
@@ -1990,17 +2343,6 @@
     }
   },
   "tradeAliases": {
-    "Aluminiumbarren (aus Palette)": "Aluminiumbarren",
-    "Aluminiumplatten (aus Palette)": "Aluminiumplatten",
-    "Amethystbarren (aus Palette)": "Amethystbarren",
-    "Eisenbarren (aus Palette)": "Eisenbarren",
-    "Goldbarren (aus Palette)": "Goldbarren",
-    "Kohlebarren (aus Palette)": "Kohlebarren",
-    "Saphirbarren (aus Palette)": "Saphirbarren",
-    "Smaragdbarren (aus Palette)": "Smaragdbarren",
-    "Stahlplatten (aus Palette)": "Stahlplatten",
-    "Titanbarren (aus Palette)": "Titanbarren",
-    "Titanplatten (aus Palette)": "Titanplatten",
-    "Vivianitbarren (aus Palette)": "Vivianitbarren"
+    "Goldbarren (aus Palette)": "Goldbarren"
   }
 }
