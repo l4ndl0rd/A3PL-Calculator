@@ -29,9 +29,10 @@ Der Calculator läuft vollständig statisch und ist für GitHub Pages geeignet. 
 Für Material- und Zwischenproduktkosten prüft der Calculator rekursiv die günstigste verfügbare Beschaffungsart:
 
 1. vorhandenes Inventar wird in der aktuellen Kalkulation zuerst als kostenloser Eigenbestand verrechnet
-2. kaufbare Materialien oder Zwischenprodukte werden über zentrale Importpreise aus `tradePrices` berücksichtigt
+2. kaufbare Materialien oder Zwischenprodukte werden nur über ihren eigenen konkreten Importpreis aus `tradePrices` berücksichtigt
 3. herstellbare Zwischenprodukte werden rekursiv aus ihren Rezepten berechnet
-4. bei mehreren möglichen Wegen wird der günstigere Wert verwendet
+4. gleichwertige Ausgaben, zum Beispiel `Amethystbarren` und `Amethystbarren (aus Palette)`, können als alternative Herstellungswege verglichen werden
+5. bei mehreren möglichen Wegen wird der günstigere vollständige Weg verwendet
 
 Für Verkaufspreise gilt:
 
@@ -77,6 +78,7 @@ Wichtige Felder:
   "inventory": {},
   "materialPrices": {},
   "tradePrices": {},
+  "tradeAliases": {},
   "tradeAliases": {},
   "pricing": {
     "standardMarginPercent": 30

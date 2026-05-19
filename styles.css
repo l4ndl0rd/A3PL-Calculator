@@ -4811,3 +4811,10 @@ body:not(.admin-locked) #trade .trade-table td:nth-child(4) {
     grid-template-columns: 1fr;
   }
 }
+
+/* v74: kompakte Beschaffungshinweise in der bestehenden Wirtschaftlichkeitsspalte. */
+.procurement-summary {
+  display: inline-block;
+  margin-top: 6px;
+  line-height: 1.35;
+}

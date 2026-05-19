@@ -886,11 +886,12 @@ function renderEconomy() {
     const totalCost = unitCost !== null ? unitCost * produced : null;
     const totalRevenue = sale.price !== null ? sale.price * produced : null;
     const assessment = getProcurementAssessment(craftUnitCost, buyUnitCost);
+    const procurementSummary = summarizeProcurementActions(cost.actions ?? []);
 
     if (!cost.complete) warnings.push(`${product.name}: ${cost.missing.length ? `fehlende Materialpreise für persönliche Kosten (${cost.missing.join(", ")})` : "Kosten unvollständig"}.`);
     if (sale.price === null && !baseCost.complete) warnings.push(`${product.name}: keine Preisempfehlung möglich, da Produktionskosten unvollständig sind (${baseCost.missing.join(", ")}).`);
 
-    rows.push({ product, quantity, produced, runs, unitCost, craftUnitCost, buyUnitCost, sale, unitProfit, totalProfit, totalCost, totalRevenue, assessment });
+    rows.push({ product, quantity, produced, runs, unitCost, craftUnitCost, buyUnitCost, sale, unitProfit, totalProfit, totalCost, totalRevenue, assessment, procurementSummary });
   }
 
   if (!rows.length) {
@@ -911,7 +912,7 @@ function renderEconomy() {
       <td><span class="source-badge">${escapeHtml(item.sale.source)}</span></td>
       <td>${formatProfit(item.unitProfit)}</td>
       <td>${formatProfit(item.totalProfit)}</td>
-      <td><span class="assessment-badge ${item.assessment.className}">${escapeHtml(item.assessment.text)}</span></td>
+      <td><span class="assessment-badge ${item.assessment.className}">${escapeHtml(item.assessment.text)}</span>${item.procurementSummary ? `<br><span class="muted-inline procurement-summary">${escapeHtml(item.procurementSummary)}</span>` : ""}</td>
     `;
     els.economyTableBody.appendChild(row);
   }
@@ -951,14 +952,18 @@ function calculateProductBatchCostWithInventory(product, runs, inventoryPool, st
 
   let totalCost = 0;
   const missing = [];
+  const actions = [];
   for (const item of product.recipe ?? []) {
     const requiredAmount = positiveInteger(item.amount, 0) * positiveInteger(runs, 0);
     const result = calculateMaterialBatchCostWithInventory(item.material, requiredAmount, inventoryPool, nextStack);
     if (!result.complete) missing.push(...result.missing);
-    else totalCost += result.totalCost;
+    else {
+      totalCost += result.totalCost;
+      actions.push(...(result.actions ?? []));
+    }
   }
-  if (missing.length) return { complete: false, totalCost: null, missing: unique(missing) };
-  return { complete: true, totalCost, missing: [] };
+  if (missing.length) return { complete: false, totalCost: null, missing: unique(missing), actions: [] };
+  return { complete: true, totalCost, missing: [], actions: mergeProcurementActions(actions) };
 }
 
 function calculateMaterialBatchCostWithInventory(materialName, requiredAmount, inventoryPool, stack = new Set()) {
@@ -967,15 +972,17 @@ function calculateMaterialBatchCostWithInventory(materialName, requiredAmount, i
   if (stack.has(materialKey)) return { complete: false, totalCost: null, missing: [name] };
 
   const inventory = consumeInventory(inventoryPool, name, requiredAmount);
-  if (inventory.remaining <= 0) return { complete: true, totalCost: 0, missing: [] };
+  const inventoryActions = inventory.consumed > 0 ? [createProcurementAction("inventory", name, inventory.consumed)] : [];
+  if (inventory.remaining <= 0) return { complete: true, totalCost: 0, missing: [], actions: inventoryActions };
 
   const buyUnitCost = getMaterialBuyUnitCost(name);
   const buyOption = buyUnitCost !== null
-    ? { complete: true, totalCost: buyUnitCost * inventory.remaining, missing: [] }
+    ? { complete: true, totalCost: buyUnitCost * inventory.remaining, missing: [], actions: [createProcurementAction("import", name, inventory.remaining)] }
     : null;
   const craftOption = calculateMaterialCraftBatchCostWithInventory(name, inventory.remaining, inventoryPool, stack);
 
-  return chooseCheapestBatchOption(buyOption, craftOption, name);
+  const selected = chooseCheapestBatchOption(buyOption, craftOption, name);
+  return selected.complete ? { ...selected, actions: mergeProcurementActions([...inventoryActions, ...(selected.actions ?? [])]) } : selected;
 }
 
 function calculateMaterialCraftBatchCostWithInventory(materialName, requiredAmount, inventoryPool, stack = new Set()) {
@@ -993,7 +1000,7 @@ function calculateMaterialCraftBatchCostWithInventory(materialName, requiredAmou
   const addBatchOption = (factory) => {
     const optionPool = cloneInventoryPool(inventoryPool);
     const result = factory(optionPool);
-    if (result.complete) options.push({ ...result, inventoryPool: optionPool });
+    if (result.complete) options.push({ ...result, actions: mergeProcurementActions(result.actions ?? []), inventoryPool: optionPool });
     else missing.push(...result.missing);
   };
 
@@ -1001,27 +1008,31 @@ function calculateMaterialCraftBatchCostWithInventory(materialName, requiredAmou
     addBatchOption((optionPool) => calculateRecipeDefinitionBatchCostWithInventory(recipeDef, required, optionPool, nextStack));
   }
 
-  for (const product of findProductsByName(name).filter((item) => item.recipe?.length)) {
+  for (const product of findProductsProvidingName(name).filter((item) => item.recipe?.length)) {
     const productKey = `product:${product.id}`;
     if (nextStack.has(productKey)) continue;
     const output = positiveInteger(product.output, 1);
     const runs = Math.ceil(required / output);
-    addBatchOption((optionPool) => calculateProductBatchCostWithInventory(product, runs, optionPool, nextStack));
+    addBatchOption((optionPool) => {
+      const result = calculateProductBatchCostWithInventory(product, runs, optionPool, nextStack);
+      if (result.complete) result.actions = [...(result.actions ?? []), createProcurementAction("craft", product.name, runs * output)];
+      return result;
+    });
   }
 
-  if (recipeDef?.recipe?.length && recipeDef.autoProductId && !findProductsByName(name).some((product) => product.id === recipeDef.autoProductId)) {
+  if (recipeDef?.recipe?.length && recipeDef.autoProductId && !findProductsProvidingName(name).some((product) => product.id === recipeDef.autoProductId)) {
     addBatchOption((optionPool) => calculateRecipeDefinitionBatchCostWithInventory(recipeDef, required, optionPool, nextStack));
   }
 
   if (options.length) {
     const best = options.reduce((currentBest, current) => current.totalCost < currentBest.totalCost ? current : currentBest);
     replaceInventoryPool(inventoryPool, best.inventoryPool);
-    return { complete: true, totalCost: best.totalCost, missing: [] };
+    return { complete: true, totalCost: best.totalCost, missing: [], actions: mergeProcurementActions(best.actions ?? []) };
   }
 
   const materialCost = getMaterialManualPrice(name);
-  if (materialCost !== null) return { complete: true, totalCost: materialCost * required, missing: [] };
-  return { complete: false, totalCost: null, missing: unique(missing.length ? missing : [name]) };
+  if (materialCost !== null) return { complete: true, totalCost: materialCost * required, missing: [], actions: [createProcurementAction("provide", name, required)] };
+  return { complete: false, totalCost: null, missing: unique(missing.length ? missing : [name]), actions: [] };
 }
 
 function cloneInventoryPool(pool) {
@@ -1037,13 +1048,17 @@ function calculateRecipeDefinitionBatchCostWithInventory(recipeDef, requiredAmou
   const runs = Math.ceil(positiveInteger(requiredAmount, 0) / positiveInteger(recipeDef.output, 1));
   let totalCost = 0;
   const missing = [];
+  const actions = [];
   for (const item of recipeDef.recipe ?? []) {
     const result = calculateMaterialBatchCostWithInventory(item.material, positiveInteger(item.amount, 0) * runs, inventoryPool, stack);
     if (!result.complete) missing.push(...result.missing);
-    else totalCost += result.totalCost;
+    else {
+      totalCost += result.totalCost;
+      actions.push(...(result.actions ?? []));
+    }
   }
-  if (missing.length) return { complete: false, totalCost: null, missing: unique(missing) };
-  return { complete: true, totalCost, missing: [] };
+  if (missing.length) return { complete: false, totalCost: null, missing: unique(missing), actions: [] };
+  return { complete: true, totalCost, missing: [], actions: mergeProcurementActions(actions) };
 }
 
 function chooseCheapestBatchOption(buyOption, craftOption, fallbackName) {
@@ -1052,7 +1067,39 @@ function chooseCheapestBatchOption(buyOption, craftOption, fallbackName) {
   }
   if (craftOption?.complete) return craftOption;
   if (buyOption?.complete) return buyOption;
-  return { complete: false, totalCost: null, missing: unique([...(craftOption?.missing ?? []), fallbackName].filter(Boolean)) };
+  return { complete: false, totalCost: null, missing: unique([...(craftOption?.missing ?? []), fallbackName].filter(Boolean)), actions: [] };
+}
+
+function createProcurementAction(type, itemName, amount) {
+  return { type, item: cleanText(itemName), amount: positiveInteger(amount, 0) };
+}
+
+function mergeProcurementActions(actions) {
+  const merged = new Map();
+  for (const action of actions ?? []) {
+    const amount = positiveInteger(action?.amount, 0);
+    const item = cleanText(action?.item);
+    const type = cleanText(action?.type);
+    if (!type || !item || amount <= 0) continue;
+    const key = `${type}::${item}`;
+    const current = merged.get(key) ?? { type, item, amount: 0 };
+    current.amount += amount;
+    merged.set(key, current);
+  }
+  return [...merged.values()].sort((a, b) => {
+    const order = { inventory: 0, import: 1, craft: 2, provide: 3 };
+    const delta = (order[a.type] ?? 99) - (order[b.type] ?? 99);
+    return delta || a.item.localeCompare(b.item, "de", { sensitivity: "base" });
+  });
+}
+
+function summarizeProcurementActions(actions) {
+  const merged = mergeProcurementActions(actions);
+  if (!merged.length) return "";
+  const labels = { inventory: "Inventar", import: "Import", craft: "Craft", provide: "Farmen" };
+  const parts = merged.slice(0, 4).map((action) => `${labels[action.type] ?? action.type}: ${action.amount.toLocaleString("de-DE")}× ${action.item}`);
+  const remaining = merged.length - parts.length;
+  return remaining > 0 ? `${parts.join(" · ")} · +${remaining} weitere` : parts.join(" · ");
 }
 
 
@@ -1887,6 +1934,16 @@ function findProductsByName(productName) {
   return Object.values(state.products ?? {}).flat().filter((product) => cleanText(product.name).toLocaleLowerCase("de-DE") === normalizedName);
 }
 
+function findProductsProvidingName(itemName) {
+  const normalizedName = cleanText(itemName).toLocaleLowerCase("de-DE");
+  if (!normalizedName) return [];
+  return Object.values(state.products ?? {}).flat().filter((product) => {
+    const productName = cleanText(product.name).toLocaleLowerCase("de-DE");
+    const outputIdentity = cleanText(getProductOutputIdentityName(product)).toLocaleLowerCase("de-DE");
+    return productName === normalizedName || outputIdentity === normalizedName;
+  });
+}
+
 function productNameIsUsedByAnotherProduct(name, excludedProductId = null) {
   const normalizedName = cleanText(name).toLocaleLowerCase("de-DE");
   if (!normalizedName) return false;
@@ -1894,7 +1951,7 @@ function productNameIsUsedByAnotherProduct(name, excludedProductId = null) {
 }
 
 function selectCraftableProductForExpansion(productName, stack = new Set()) {
-  const candidates = findProductsByName(productName).filter((product) => product.recipe?.length && !stack.has(`product:${product.id}`));
+  const candidates = findProductsProvidingName(productName).filter((product) => product.recipe?.length && !stack.has(`product:${product.id}`));
   if (!candidates.length) return null;
 
   const scored = candidates
@@ -2250,16 +2307,25 @@ function setMaterialManualPrice(materialName, value) {
   else state.materialPrices[name] = price;
 }
 
-function getTradeRecord(itemName) {
-  const key = resolveTradeKey(itemName);
+function getTradeRecord(itemName, options = {}) {
+  const key = resolveTradeKey(itemName, options);
   const record = key ? state.tradePrices?.[key] : null;
   if (!record || typeof record !== "object") return null;
   return record;
 }
 
-function resolveTradeKey(itemName) {
+function getExactTradeRecord(itemName) {
+  const key = cleanText(itemName);
+  const record = key ? state.tradePrices?.[key] : null;
+  if (!record || typeof record !== "object") return null;
+  return record;
+}
+
+function resolveTradeKey(itemName, options = {}) {
   const name = cleanText(itemName);
   if (!name) return null;
+
+  if (options.exact) return name;
 
   const explicitAlias = getExplicitTradeAlias(name);
   if (explicitAlias && state.tradePrices?.[explicitAlias]) return explicitAlias;
@@ -2289,6 +2355,11 @@ function getTradeSourceLabel(source, itemName) {
   const name = cleanText(itemName);
   const key = resolveTradeKey(name);
   return key && key !== name ? `${source} (${key})` : source;
+}
+
+function getProductOutputIdentityName(productOrName) {
+  const name = typeof productOrName === "object" ? cleanText(productOrName?.name) : cleanText(productOrName);
+  return getExplicitTradeAlias(name) || inferAutomaticTradeAlias(name) || name;
 }
 
 function setTradeAlias(itemName, aliasName) {
@@ -2356,6 +2427,10 @@ function getTradeImportPrice(itemName) {
   return optionalNumber(getTradeRecord(itemName)?.importPrice);
 }
 
+function getExactTradeImportPrice(itemName) {
+  return optionalNumber(getExactTradeRecord(itemName)?.importPrice);
+}
+
 function getTradeExportPrice(itemName) {
   return optionalNumber(getTradeRecord(itemName)?.exportPrice);
 }
@@ -2365,7 +2440,7 @@ function getTradeMarketValue(itemName) {
 }
 
 function getMaterialImportPrice(materialName) {
-  return getTradeImportPrice(materialName);
+  return getExactTradeImportPrice(materialName);
 }
 
 function getMaterialExportPrice(materialName) {
@@ -2373,15 +2448,15 @@ function getMaterialExportPrice(materialName) {
 }
 
 function getMaterialCostPrice(materialName) {
-  return getTradeImportPrice(materialName) ?? getMaterialManualPrice(materialName);
+  return getExactTradeImportPrice(materialName) ?? getMaterialManualPrice(materialName);
 }
 
 function getProductBuyUnitCost(product) {
-  return getTradeImportPrice(product?.name);
+  return getExactTradeImportPrice(product?.name);
 }
 
 function getMaterialBuyUnitCost(materialName) {
-  return getTradeImportPrice(materialName);
+  return getExactTradeImportPrice(materialName);
 }
 
 function calculateMaterialUnitCost(materialName, stack = new Set()) {
@@ -2443,7 +2518,7 @@ function calculateNamedMaterialCraftUnitCost(materialName, stack = new Set(), op
     else missing.push(...result.missing);
   }
 
-  for (const product of findProductsByName(name).filter((item) => item.recipe?.length)) {
+  for (const product of findProductsProvidingName(name).filter((item) => item.recipe?.length)) {
     const productKey = `${optimalInputs ? "product-optimal" : "product"}:${product.id}`;
     if (stack.has(productKey)) continue;
     const result = optimalInputs ? calculateProductUnitCostWithOptimalInputs(product, stack) : calculateProductUnitCost(product, stack);
@@ -2451,7 +2526,7 @@ function calculateNamedMaterialCraftUnitCost(materialName, stack = new Set(), op
     else missing.push(...result.missing);
   }
 
-  if (recipeDef?.recipe?.length && recipeDef.autoProductId && !findProductsByName(name).some((product) => product.id === recipeDef.autoProductId)) {
+  if (recipeDef?.recipe?.length && recipeDef.autoProductId && !findProductsProvidingName(name).some((product) => product.id === recipeDef.autoProductId)) {
     const result = calculateRecipeDefinitionUnitCost(recipeDef, stack, optimalInputs);
     if (result.complete) options.push(result);
     else missing.push(...result.missing);
