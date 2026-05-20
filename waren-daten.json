@@ -10,6 +10,52 @@
     "15Rnd 9x19mm P226 Mag",
     "17Rnd 9mm Glock17 Mag",
     "17Rnd 9mm Glock18 Mag",
+    "1959 Cadillac Eldorado",
+    "1969 Dodge Charger R/T",
+    "1971 Chevrolet Camaro SS",
+    "1984 Peterbilt 362",
+    "1984 Peterbilt 362 Tow Truck",
+    "1991 Honda CR-X",
+    "1995 Porsche 911 GT2",
+    "1998 Toyota Supra Mk.4",
+    "2001 Ford Crown Victoria",
+    "2001 Ford Crown Victoria Taxi",
+    "2008 Chevrolet Tahoe",
+    "2009 Chevrolet Corvette ZR1",
+    "2010 BMW M3 E92",
+    "2010 Chevrolet Silverado",
+    "2010 Chevrolet Silverado MarkerLights",
+    "2010 Nissan 370Z",
+    "2011 BMW X5",
+    "2011 Dodge Ram",
+    "2011 Dodge Ram MarkerLights",
+    "2011 Ford F150",
+    "2011 Ford F150 MarkerLights",
+    "2012 Cadillac Escalade",
+    "2012 Ferrari F12 Berlinetta",
+    "2012 Ford Mustang",
+    "2012 Jeep Wrangler",
+    "2012 Range Rover",
+    "2013 Audi RS7",
+    "2013 Ford Focus ST",
+    "2013 Mercedes Benz G65 AMG",
+    "2014 Dodge Charger",
+    "2015 Dodge Challenger Hellcat",
+    "2015 Dodge Charger",
+    "2015 Ford F450",
+    "2015 Ford Mustang GT",
+    "2016 Ford E350",
+    "2016 Ford E350 MarkerLights",
+    "2016 Ford E350 Passenger",
+    "2016 Ford Fiesta ST",
+    "2016 Rolls Royce Dawn",
+    "2018 Chevrolet Camaro ZL1",
+    "2018 Chevrolet Tahoe",
+    "2018 Ford F150",
+    "2018 Ford F150 MarkerLights",
+    "2018 Ford Taurus",
+    "2018 GMC Yukon",
+    "2020 Ford Explorer Platinum",
     "4-five .45 ACP",
     "6Rnd .357 Magnum",
     "7Rnd .50 Mag",
@@ -30,17 +76,33 @@
     "Apfel",
     "Apfelkekse",
     "Apfelsaft",
+    "Atemschutzmaske",
     "Baggerschaufel",
+    "Balaclava",
+    "Bandana",
+    "Bandana (Face)",
+    "Bandana Bauplan",
     "Bell 214 (Luxury)",
     "Bell 412 (Civil)",
     "Bell 412 (Ex-Military)",
     "Bell 412 (Veteran Transport)",
     "Benzin",
     "Benzinkanister - leerer Kanister",
+    "Beret",
     "Beretta 92",
+    "BMW M6",
+    "BMW M6 Tuned",
+    "BMW R1100R Street Fighter",
+    "Boat Trailer",
+    "Booniehat",
+    "Box Trailer",
+    "Brille",
     "Brot",
     "Burgerbrötchen",
     "Campinglampe",
+    "Cap",
+    "Car Trailer",
+    "Chevrolet Suburban",
     "Cola",
     "Colt Python .357",
     "Cornflakes",
@@ -49,17 +111,24 @@
     "Donut",
     "Donut (Schokolade)",
     "Donut (Zuckerguss)",
+    "Drill Trailer",
     "Dünger",
+    "Ear Protectors",
+    "Earpiece",
+    "Earpiece Black",
     "Eisenbarren",
     "Eisenbarren (aus Palette)",
     "Eisenbarrenpalette",
     "Eisenerz",
     "Eurocopter AS 350",
+    "Fedora",
     "Fenster",
     "Fiberglas",
     "Fischernetz",
     "Fleischpastete",
     "FN FNX .45",
+    "Ford Crown Victoria Rusty",
+    "Fuel Truck",
     "Gekochter Fisch (McFishers)",
     "Gekochter Fisch (TacoHell)",
     "Gekochter Fischburger",
@@ -80,18 +149,36 @@
     "Grumman Goose",
     "Gummi",
     "Ham & Cheese Sandwich",
+    "Hard Hat",
+    "Harley Davidson Fat Boy",
+    "Harley Davidson Knucklehead",
+    "Hat",
+    "Head Bandage",
+    "Headset",
     "Hoagie-Sandwich",
+    "Holster",
     "Kabelbinder",
+    "Karotten",
+    "Karottensamen",
+    "Kart",
+    "Kawasaki KX450",
     "Kekse",
+    "Kenworth T370 Box",
+    "Kenworth T440 Box",
+    "Kenworth T440 Gas Tanker",
+    "Kenworth T440 Tow Truck",
     "Kerosin",
+    "Kleidung",
     "Kleiner Kaffee",
     "Kohlebarren",
     "Kohlebarren (aus Palette)",
     "Kohlebarrenpalette",
     "Kohleerz",
     "Koka",
+    "Kokasamen",
     "Kunstfaser",
     "Kunststoff",
+    "Lamborghini Gallardo",
     "Lamington",
     "Lammeintopf",
     "LCM Transportschiff",
@@ -100,13 +187,19 @@
     "Leerer Container",
     "Leerer Eimer",
     "Leerer Spritkanister",
+    "Lowloader Trailer",
     "M-900",
+    "Mail Truck",
     "Mais",
+    "Maissamen",
     "Medium Kaffee",
+    "Mercedes Benz AMG C63",
+    "Mini Excavator",
     "Motorboat",
+    "Nissan GT-R",
+    "Nissan GT-R Liberty Walk",
     "Ölkanister",
     "Ölpumpe",
-    "P07 9 mm (Khaki)",
     "P07 9mm",
     "P07 9mm (Black)",
     "P07 9mm (Khaki)",
@@ -117,11 +210,15 @@
     "Polyester",
     "Popcorneimer",
     "Presslufthammer (Bagger)",
+    "Quad",
+    "Racing Helmet",
     "Raketen (blau)",
     "Raketen (gelb)",
     "Raketen (grün)",
     "Raketen (rot)",
     "Rangefinder",
+    "Rangemaster Belt",
+    "Rangemaster Belt Bauplan",
     "Rebreather (NATO)",
     "Reifen",
     "Reparaturschlüssel",
@@ -131,7 +228,10 @@
     "Roher Fischburger",
     "Rohöl",
     "Rook-40 9mm",
+    "Safari Hat",
+    "Safety Vest",
     "Salat",
+    "Salatsamen",
     "Sand",
     "Saphirbarren",
     "Saphirbarren (aus Palette)",
@@ -143,8 +243,13 @@
     "Schlauch Adapter",
     "Schwefelbarren",
     "Schwefelerz",
+    "Scooter",
+    "Shemag",
+    "Shemag Bauplan",
     "SIG P226",
     "SIG P227",
+    "Skate Helmet",
+    "Slash Bandolier",
     "Smaragdbarren",
     "Smaragdbarren (aus Palette)",
     "Smaragdbarrenpalette",
@@ -156,7 +261,9 @@
     "Stahlplatten",
     "Stahlplatten (aus Palette)",
     "Steerable Parachute",
+    "Sturmhaube Bauplan",
     "Taco Shell",
+    "Tanker Trailer",
     "Titanbarren",
     "Titanbarren (aus Palette)",
     "Titanbarrenpalette",
@@ -164,11 +271,14 @@
     "Titanpalette",
     "Titanplatten",
     "Titanplatten (aus Palette)",
+    "Tractor",
     "Trawlernetz",
     "Trawlernetz (gerissen)",
     "Trawlernetz (reparieren)",
     "Tüte Salat",
+    "Van Transport",
     "Veggie Sandwich",
+    "Vest (Press)",
     "Vivianitbarren",
     "Vivianitbarren (aus Palette)",
     "Vivianitbarrenpalette",
@@ -177,12 +287,14 @@
     "Wasserski",
     "Water Scooter",
     "Weizen",
+    "Weizensamen",
     "Wildschweinfleisch (markiert)",
     "Würstchen",
     "Yacht",
     "Ziegenfleisch (markiert)",
     "Zubr .45 ACP",
     "Zuckerrohr",
+    "Zuckerrohrsamen",
     "Zuckerstange"
   ],
   "materialRecipes": {
@@ -230,7 +342,12 @@
     },
     "Sand": {
       "output": 1,
-      "recipe": []
+      "recipe": [
+        {
+          "material": "Leerer Eimer",
+          "amount": 1
+        }
+      ]
     },
     "Titanerz": {
       "output": 4,
@@ -1412,27 +1529,7 @@
         }
       ]
     },
-    "Zuckerrohr": {
-      "output": 1,
-      "recipe": []
-    },
     "Apfel": {
-      "output": 1,
-      "recipe": []
-    },
-    "Koka": {
-      "output": 1,
-      "recipe": []
-    },
-    "Salat": {
-      "output": 1,
-      "recipe": []
-    },
-    "Weizen": {
-      "output": 1,
-      "recipe": []
-    },
-    "Mais": {
       "output": 1,
       "recipe": []
     },
@@ -1896,10 +1993,6 @@
         }
       ]
     },
-    "P07 9 mm (Khaki)": {
-      "output": 1,
-      "recipe": []
-    },
     "P07 9mm (Black)": {
       "output": 1,
       "autoProductId": "9656d0ea-e28a-48e9-ad5f-56e34bade875",
@@ -2283,6 +2376,2122 @@
           "amount": 45
         }
       ]
+    },
+    "Zuckerrohrsamen": {
+      "output": 1,
+      "recipe": []
+    },
+    "Weizensamen": {
+      "output": 1,
+      "recipe": []
+    },
+    "Salatsamen": {
+      "output": 1,
+      "recipe": []
+    },
+    "Maissamen": {
+      "output": 1,
+      "recipe": []
+    },
+    "Kokasamen": {
+      "output": 1,
+      "recipe": []
+    },
+    "Zuckerrohr": {
+      "output": 4,
+      "autoProductId": "76b65db4-aa95-44c6-8315-44476df85c5d",
+      "recipe": [
+        {
+          "material": "Zuckerrohrsamen",
+          "amount": 1
+        }
+      ]
+    },
+    "Weizen": {
+      "output": 20,
+      "autoProductId": "8474ce38-1c48-4f3f-9db9-99c9f68e004f",
+      "recipe": [
+        {
+          "material": "Weizensamen",
+          "amount": 1
+        }
+      ]
+    },
+    "Koka": {
+      "output": 2,
+      "autoProductId": "861f1cad-faa1-46ce-85f0-7ea50f8ade9d",
+      "recipe": [
+        {
+          "material": "Kokasamen",
+          "amount": 1
+        }
+      ]
+    },
+    "Karottensamen": {
+      "output": 1,
+      "recipe": []
+    },
+    "Karotten": {
+      "output": 2,
+      "autoProductId": "b19d9517-02e1-4ac6-8ca3-cbd0c1733c1b",
+      "recipe": [
+        {
+          "material": "Karottensamen",
+          "amount": 1
+        }
+      ]
+    },
+    "Mais": {
+      "output": 2,
+      "autoProductId": "a638ad87-193d-4517-837d-b8eb164d654d",
+      "recipe": [
+        {
+          "material": "Maissamen",
+          "amount": 1
+        }
+      ]
+    },
+    "Salat": {
+      "output": 4,
+      "autoProductId": "553b08a8-5cd7-4dce-97f0-05c7afc81933",
+      "recipe": [
+        {
+          "material": "Salatsamen",
+          "amount": 1
+        }
+      ]
+    },
+    "Kleidung": {
+      "output": 1,
+      "autoProductId": "3a0fcc0e-2d41-4531-8634-e44824b4a926",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Brille": {
+      "output": 1,
+      "autoProductId": "d7515e77-8369-4670-b0a5-08abb5a26723",
+      "recipe": [
+        {
+          "material": "Glas",
+          "amount": 1
+        }
+      ]
+    },
+    "Sturmhaube Bauplan": {
+      "output": 1,
+      "recipe": []
+    },
+    "Balaclava": {
+      "output": 1,
+      "autoProductId": "1cac774c-4192-41b8-8e08-b660f5c011e2",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        },
+        {
+          "material": "Sturmhaube Bauplan",
+          "amount": 1
+        }
+      ]
+    },
+    "Bandana Bauplan": {
+      "output": 1,
+      "recipe": []
+    },
+    "Atemschutzmaske": {
+      "output": 1,
+      "autoProductId": "1a4a5443-421b-4a90-aae9-bae670fcbad5",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Holster": {
+      "output": 1,
+      "autoProductId": "9fdf631d-a3a5-4979-bac2-10063a59f027",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Slash Bandolier": {
+      "output": 1,
+      "autoProductId": "74e6032f-ef97-46a3-b2a7-72284e23862b",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 3
+        }
+      ]
+    },
+    "Vest (Press)": {
+      "output": 1,
+      "autoProductId": "74ff2190-d959-4fc0-ac38-eae36f7da114",
+      "recipe": [
+        {
+          "material": "Stahlplatten",
+          "amount": 5
+        }
+      ]
+    },
+    "Rangemaster Belt": {
+      "output": 1,
+      "autoProductId": "ebff28bf-9da8-49ac-b64f-fc6a49ddbb0f",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        },
+        {
+          "material": "Rangemaster Belt Bauplan",
+          "amount": 1
+        }
+      ]
+    },
+    "Rangemaster Belt Bauplan": {
+      "output": 1,
+      "recipe": []
+    },
+    "Safety Vest": {
+      "output": 1,
+      "autoProductId": "98b5c29e-e922-48de-9567-cdc5d38d7f78",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Earpiece": {
+      "output": 1,
+      "autoProductId": "2b96df0e-c11c-4358-97d3-24fa9dc1ca63",
+      "recipe": [
+        {
+          "material": "Kunststoff",
+          "amount": 1
+        }
+      ]
+    },
+    "Earpiece Black": {
+      "output": 1,
+      "autoProductId": "5f529c3c-e821-422f-9600-0e037542fbae",
+      "recipe": [
+        {
+          "material": "Kunststoff",
+          "amount": 1
+        }
+      ]
+    },
+    "Hat": {
+      "output": 1,
+      "autoProductId": "bae9c7b1-aacf-4849-851f-d9dab16d895d",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Cap": {
+      "output": 1,
+      "autoProductId": "e3c36a87-bc9d-4a9f-9ceb-b46945b94895",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Fedora": {
+      "output": 1,
+      "autoProductId": "c1b1056b-b073-467d-8f95-eb5222254815",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Shemag Bauplan": {
+      "output": 1,
+      "recipe": []
+    },
+    "Shemag": {
+      "output": 1,
+      "autoProductId": "b858f8e6-b0bf-4727-8062-3d12c46c5a97",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        },
+        {
+          "material": "Shemag Bauplan",
+          "amount": 1
+        }
+      ]
+    },
+    "Skate Helmet": {
+      "output": 1,
+      "autoProductId": "80d9119d-2e40-4f79-882d-a2825f744fda",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Booniehat": {
+      "output": 1,
+      "autoProductId": "b2120092-b6a9-4e83-96c2-87af6f58a776",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Safari Hat": {
+      "output": 1,
+      "autoProductId": "b2794915-cf96-4343-86d5-fa9837ac64b0",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Racing Helmet": {
+      "output": 1,
+      "autoProductId": "71328561-57fc-419c-9744-406d9f73b484",
+      "recipe": [
+        {
+          "material": "Fiberglas",
+          "amount": 5
+        }
+      ]
+    },
+    "Beret": {
+      "output": 1,
+      "autoProductId": "549d70f9-5dbf-495f-9a99-4f767c9ad42e",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Bandana (Face)": {
+      "output": 1,
+      "autoProductId": "c5353709-0749-43d1-a543-0865e01b2eec",
+      "recipe": [
+        {
+          "material": "Glas",
+          "amount": 1
+        },
+        {
+          "material": "Bandana Bauplan",
+          "amount": 1
+        }
+      ]
+    },
+    "Bandana": {
+      "output": 1,
+      "autoProductId": "91709790-a1c7-4167-95e3-3575f661b240",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Ear Protectors": {
+      "output": 1,
+      "autoProductId": "57d4137e-06d2-4fa8-9925-08442c4cb54c",
+      "recipe": [
+        {
+          "material": "Kunststoff",
+          "amount": 1
+        }
+      ]
+    },
+    "Hard Hat": {
+      "output": 1,
+      "autoProductId": "d101e8b3-4082-480b-b0fe-7c0e9e63e03b",
+      "recipe": [
+        {
+          "material": "Kunststoff",
+          "amount": 1
+        }
+      ]
+    },
+    "Head Bandage": {
+      "output": 1,
+      "autoProductId": "865479f5-ee03-4731-b7a6-c2af04d11223",
+      "recipe": [
+        {
+          "material": "Polyester",
+          "amount": 1
+        }
+      ]
+    },
+    "Headset": {
+      "output": 1,
+      "autoProductId": "042ec851-65ce-4c1e-98b4-a049fac86dc5",
+      "recipe": [
+        {
+          "material": "Kunststoff",
+          "amount": 1
+        }
+      ]
+    },
+    "Kart": {
+      "output": 1,
+      "autoProductId": "336a19b8-27fd-4990-912c-4f72ba9b77f8",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 2
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Scooter": {
+      "output": 1,
+      "autoProductId": "a03ef94c-aa7b-42b6-9928-1972bb693536",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 1
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 1
+        }
+      ]
+    },
+    "Quad": {
+      "output": 1,
+      "autoProductId": "794d1b2b-0f99-41ae-acc6-45b38873bdc2",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 2
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 1
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Ford Crown Victoria Rusty": {
+      "output": 1,
+      "autoProductId": "f94e99aa-9c08-4e5b-a224-2f85da4f1b7e",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2001 Ford Crown Victoria Taxi": {
+      "output": 1,
+      "autoProductId": "fa913c37-60dd-405d-8380-c6974fb6a496",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 4
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 5
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2011 Dodge Ram": {
+      "output": 1,
+      "autoProductId": "476fdd8e-496c-45a8-9ea0-d94cc31bb448",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 5
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2011 Dodge Ram MarkerLights": {
+      "output": 1,
+      "autoProductId": "af236d09-03f1-490b-8eed-e0b5c0dc6e68",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 5
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "1991 Honda CR-X": {
+      "output": 1,
+      "autoProductId": "974783e5-5c11-4c6c-87f7-5937c76c217b",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 6
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2001 Ford Crown Victoria": {
+      "output": 1,
+      "autoProductId": "eeecbccd-e09b-4c28-8b4f-ce0568fcf24c",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 6
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 5
+        },
+        {
+          "material": "Fenster",
+          "amount": 5
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2012 Jeep Wrangler": {
+      "output": 1,
+      "autoProductId": "cb1739ef-a7f8-477f-8692-43d23e3960e6",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 10
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 3
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Mail Truck": {
+      "output": 1,
+      "autoProductId": "5a6f34cd-1be5-4e42-b00d-b8f35ad2c170",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 9
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2018 Ford Taurus": {
+      "output": 1,
+      "autoProductId": "a4467c87-49b2-40cd-877c-6433ceb67554",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 7
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "1971 Chevrolet Camaro SS": {
+      "output": 1,
+      "autoProductId": "0e452d78-f6a2-4aa9-b8bd-8c5a00c45f0d",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 13
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "1969 Dodge Charger R/T": {
+      "output": 1,
+      "autoProductId": "6c33f30e-ea63-42a2-bd3c-9905d914ba6c",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 11
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Kawasaki KX450": {
+      "output": 1,
+      "autoProductId": "0f5e3431-ef05-408a-b4d9-3985e6307d33",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 10
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        }
+      ]
+    },
+    "2008 Chevrolet Tahoe": {
+      "output": 1,
+      "autoProductId": "f7449f6d-31a3-471d-a279-c9e36b3391cb",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 9
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 9
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Chevrolet Suburban": {
+      "output": 1,
+      "autoProductId": "259cf8ba-8f18-41d8-9100-e76bb976dfe4",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 10
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 11
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2010 BMW M3 E92": {
+      "output": 1,
+      "autoProductId": "947fa98b-3aab-482f-a6e9-8de0d8cfd78f",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 8
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Van Transport": {
+      "output": 1,
+      "autoProductId": "f1c698e2-fb64-4a59-8571-eed707f2dcb2",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 10
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 10
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2011 Ford F150": {
+      "output": 1,
+      "autoProductId": "61484729-9b1e-4a26-b3de-2713cf395827",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 17
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 12
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2011 Ford F150 MarkerLights": {
+      "output": 1,
+      "autoProductId": "1b540e4e-6b2f-4471-9bb7-2393e4a1590f",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 17
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 12
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2010 Chevrolet Silverado": {
+      "output": 1,
+      "autoProductId": "53f329d8-0568-4d8e-a972-4c0004e88e61",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 20
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2010 Chevrolet Silverado MarkerLights": {
+      "output": 1,
+      "autoProductId": "60f1e965-24a6-483a-a080-3b68a46d3ca1",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 20
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2016 Ford E350": {
+      "output": 1,
+      "autoProductId": "1df69ea7-5c79-43de-b86c-9655c98f6296",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 26
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 10
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2016 Ford E350 MarkerLights": {
+      "output": 1,
+      "autoProductId": "52ebb8b3-d9de-4d2f-8dc8-af4732213da2",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 26
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 10
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2016 Ford E350 Passenger": {
+      "output": 1,
+      "autoProductId": "9fa37c31-31ae-4e68-a93c-73a3bc51d860",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 26
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 10
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2013 Ford Focus ST": {
+      "output": 1,
+      "autoProductId": "0288e961-41b7-43d2-a644-5f3e8ff85939",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 7
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 3
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2018 Ford F150": {
+      "output": 1,
+      "autoProductId": "d742387d-1c09-49e7-823b-7c4342a9f5ff",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 8
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2018 Ford F150 MarkerLights": {
+      "output": 1,
+      "autoProductId": "2259f654-1ab2-49f2-b77e-cfa40083aad5",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 8
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2011 BMW X5": {
+      "output": 1,
+      "autoProductId": "4ac1f108-fb3c-4c0c-b5e5-c18cd610857d",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 12
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 21
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 3
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "1959 Cadillac Eldorado": {
+      "output": 1,
+      "autoProductId": "e780921d-9005-4b97-aed5-aa0d118a41da",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 10
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 20
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 3
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Harley Davidson Fat Boy": {
+      "output": 1,
+      "autoProductId": "b36727dd-0053-46b9-bc1a-773c2a5a8725",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 6
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 16
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 5
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        }
+      ]
+    },
+    "2014 Dodge Charger": {
+      "output": 1,
+      "autoProductId": "8a6e3b2e-1ca8-44b0-b339-225820f007e8",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 10
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 22
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 5
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Harley Davidson Knucklehead": {
+      "output": 1,
+      "autoProductId": "a07dd4f3-f88e-4ba0-addf-057e95340da9",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 8
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 18
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 5
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        }
+      ]
+    },
+    "2015 Ford F450": {
+      "output": 1,
+      "autoProductId": "81265384-222d-4f8c-9555-a3aa00b4c844",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 11
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 21
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 5
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 6
+        }
+      ]
+    },
+    "Mercedes Benz AMG C63": {
+      "output": 1,
+      "autoProductId": "854dfb3c-ee97-4048-bf7e-4627db6879d3",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 14
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 26
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2015 Dodge Charger": {
+      "output": 1,
+      "autoProductId": "924aa1be-573b-474d-8756-7a8a84371e08",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 10
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 22
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2012 Range Rover": {
+      "output": 1,
+      "autoProductId": "557ae7c5-3459-4eeb-821c-44036d158b50",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 11
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 27
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 5
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Nissan GT-R": {
+      "output": 1,
+      "autoProductId": "f492970b-8148-4938-a36f-c739aee86d5b",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 13
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 29
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 5
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2015 Dodge Challenger Hellcat": {
+      "output": 1,
+      "autoProductId": "0c046851-73a8-4407-ad41-071d1ccaa986",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 12
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 23
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 7
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "BMW R1100R Street Fighter": {
+      "output": 1,
+      "autoProductId": "4b52d8e2-cdbc-4842-82af-cad26d97f5d9",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 7
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 17
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 7
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        }
+      ]
+    },
+    "2018 GMC Yukon": {
+      "output": 1,
+      "autoProductId": "6aa6ec99-59c9-4c16-b6f9-16d8b1e89713",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 18
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 18
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2018 Chevrolet Tahoe": {
+      "output": 1,
+      "autoProductId": "fef2f983-016f-4bac-b658-fd35983befa5",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 19
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 19
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2020 Ford Explorer Platinum": {
+      "output": 1,
+      "autoProductId": "5d55befa-028d-4aff-bc9e-d45a137d983e",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 19
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 22
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2012 Ford Mustang": {
+      "output": 1,
+      "autoProductId": "60cf9a50-56db-4fd6-ba09-03905ce62dec",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 13
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 24
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 9
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "BMW M6": {
+      "output": 1,
+      "autoProductId": "2b615da6-e5ca-497c-a718-8fde6158419f",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 35
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2012 Cadillac Escalade": {
+      "output": 1,
+      "autoProductId": "c282d592-0b09-4e5f-b9e2-8c1927e67aed",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 35
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 6
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "1998 Toyota Supra Mk.4": {
+      "output": 1,
+      "autoProductId": "3a86db68-587e-4154-a49a-7ebb833f2158",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 29
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 29
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 7
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Nissan GT-R Liberty Walk": {
+      "output": 1,
+      "autoProductId": "e02ada97-586c-4116-882c-8427bbaabaea",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 31
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 7
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2013 Audi RS7": {
+      "output": 1,
+      "autoProductId": "5c709fd2-16fc-49df-9cea-07b2a283001c",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 17
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 32
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 7
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2010 Nissan 370Z": {
+      "output": 1,
+      "autoProductId": "86a722e7-67ba-4b7f-bf9a-cdb11bba0136",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 17
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 32
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 7
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "BMW M6 Tuned": {
+      "output": 1,
+      "autoProductId": "f75e5072-e6da-4ea4-b557-284a2150b6a9",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 26
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 36
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 11
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2015 Ford Mustang GT": {
+      "output": 1,
+      "autoProductId": "ab79a542-9b70-45f0-8d4e-a684787d56a6",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 26
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 36
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 11
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2018 Chevrolet Camaro ZL1": {
+      "output": 1,
+      "autoProductId": "0b060654-57f8-4d1a-9fb4-b10e525aea21",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 17
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 39
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 13
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2013 Mercedes Benz G65 AMG": {
+      "output": 1,
+      "autoProductId": "86b8d06b-03fa-429c-ad50-742fd3f15e51",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 17
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 35
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2009 Chevrolet Corvette ZR1": {
+      "output": 1,
+      "autoProductId": "4cf8d7a9-ee52-4ec0-8e80-7db08125d369",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 17
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 35
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2016 Rolls Royce Dawn": {
+      "output": 1,
+      "autoProductId": "cec19c86-d215-4981-8ab5-7c25f19b3be6",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 17
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 35
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Lamborghini Gallardo": {
+      "output": 1,
+      "autoProductId": "8cd100c2-ebda-409b-a6ac-bb240ad70bfb",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 34
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 37
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "1995 Porsche 911 GT2": {
+      "output": 1,
+      "autoProductId": "d60d20d0-5f3e-40f1-9cbf-a616e46d0be8",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 35
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 40
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2012 Ferrari F12 Berlinetta": {
+      "output": 1,
+      "autoProductId": "1806f9a5-aaa4-47c3-a7f0-7c6eaae6c559",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 33
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 47
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Fuel Truck": {
+      "output": 1,
+      "autoProductId": "381e47e1-1379-4b2a-a18a-42285d83c374",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 6
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 5
+        },
+        {
+          "material": "Fenster",
+          "amount": 8
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "1984 Peterbilt 362 Tow Truck": {
+      "output": 1,
+      "autoProductId": "29403eef-be98-417f-8360-e4b60fa82661",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 19
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 8
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 6
+        }
+      ]
+    },
+    "Mini Excavator": {
+      "output": 1,
+      "autoProductId": "d0a5d394-38c2-4de7-9514-84f237c8b834",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 12
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 12
+        },
+        {
+          "material": "Fenster",
+          "amount": 4
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Tractor": {
+      "output": 1,
+      "autoProductId": "054dc481-d82c-4623-850f-1cdbed146ccf",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 15
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 13
+        },
+        {
+          "material": "Fenster",
+          "amount": 4
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Kenworth T440 Gas Tanker": {
+      "output": 1,
+      "autoProductId": "a41c2399-2f2f-4f17-8641-b8cabd71c5ee",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 25
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 10
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 10
+        }
+      ]
+    },
+    "Kenworth T440 Tow Truck": {
+      "output": 1,
+      "autoProductId": "c7139211-ee6a-45ba-b932-762d8c49ab1c",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 28
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 11
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 10
+        }
+      ]
+    },
+    "1984 Peterbilt 362": {
+      "output": 1,
+      "autoProductId": "a56195f1-53b8-480c-b24b-6dc4b5bc26dc",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 24
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 11
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 6
+        }
+      ]
+    },
+    "Kenworth T370 Box": {
+      "output": 1,
+      "autoProductId": "5e30958b-78a0-489d-a3bb-c8e7cf0d0aa8",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 16
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 7
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 4
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 6
+        }
+      ]
+    },
+    "Kenworth T440 Box": {
+      "output": 1,
+      "autoProductId": "d6eb69b0-0a55-451a-acaf-c9afe6892efa",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 17
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 17
+        },
+        {
+          "material": "Titanpalette",
+          "amount": 3
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 10
+        }
+      ]
+    },
+    "Drill Trailer": {
+      "output": 1,
+      "autoProductId": "05ae02d6-c0e4-4b16-9f3c-ca45e0e952ad",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 3
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        }
+      ]
+    },
+    "Boat Trailer": {
+      "output": 1,
+      "autoProductId": "5a8f2d1c-40ea-4a3e-9e3a-9a723f68b236",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 4
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        }
+      ]
+    },
+    "Box Trailer": {
+      "output": 1,
+      "autoProductId": "773623fc-11cd-45af-a017-5382f948d376",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 2
+        }
+      ]
+    },
+    "Car Trailer": {
+      "output": 1,
+      "autoProductId": "0c51af6c-f672-4819-8810-68e43765f70e",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 3
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 4
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "Lowloader Trailer": {
+      "output": 1,
+      "autoProductId": "7dc4061a-b4e5-42d8-980a-50b1952ad426",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 6
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 2
+        },
+        {
+          "material": "Reifen",
+          "amount": 8
+        }
+      ]
+    },
+    "Tanker Trailer": {
+      "output": 1,
+      "autoProductId": "6369d81f-5fe9-4663-b96a-80daf43787ad",
+      "recipe": [
+        {
+          "material": "Aluminiumpalette",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
+    },
+    "2016 Ford Fiesta ST": {
+      "output": 1,
+      "autoProductId": "3d7c37e4-8d23-48db-bf06-e3dc5c58ccae",
+      "recipe": [
+        {
+          "material": "Stahlpalette",
+          "amount": 9
+        },
+        {
+          "material": "Aluminiumpalette",
+          "amount": 12
+        },
+        {
+          "material": "Fenster",
+          "amount": 6
+        },
+        {
+          "material": "Reifen",
+          "amount": 4
+        }
+      ]
     }
   },
   "products": {
@@ -2629,6 +4838,1822 @@
     ],
     "vehicle": [
       {
+        "id": "3d7c37e4-8d23-48db-bf06-e3dc5c58ccae",
+        "name": "2016 Ford Fiesta ST",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 9
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 12
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "6369d81f-5fe9-4663-b96a-80daf43787ad",
+        "name": "Tanker Trailer",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "7dc4061a-b4e5-42d8-980a-50b1952ad426",
+        "name": "Lowloader Trailer",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 6
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 2
+          },
+          {
+            "material": "Reifen",
+            "amount": 8
+          }
+        ]
+      },
+      {
+        "id": "0c51af6c-f672-4819-8810-68e43765f70e",
+        "name": "Car Trailer",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 3
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 4
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "773623fc-11cd-45af-a017-5382f948d376",
+        "name": "Box Trailer",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Aluminiumpalette",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "5a8f2d1c-40ea-4a3e-9e3a-9a723f68b236",
+        "name": "Boat Trailer",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 4
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "05ae02d6-c0e4-4b16-9f3c-ca45e0e952ad",
+        "name": "Drill Trailer",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 3
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "d6eb69b0-0a55-451a-acaf-c9afe6892efa",
+        "name": "Kenworth T440 Box",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 17
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 17
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 3
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "id": "5e30958b-78a0-489d-a3bb-c8e7cf0d0aa8",
+        "name": "Kenworth T370 Box",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 7
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "a56195f1-53b8-480c-b24b-6dc4b5bc26dc",
+        "name": "1984 Peterbilt 362",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 24
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 11
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "c7139211-ee6a-45ba-b932-762d8c49ab1c",
+        "name": "Kenworth T440 Tow Truck",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 28
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 11
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "id": "a41c2399-2f2f-4f17-8641-b8cabd71c5ee",
+        "name": "Kenworth T440 Gas Tanker",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 25
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 10
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "id": "054dc481-d82c-4623-850f-1cdbed146ccf",
+        "name": "Tractor",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 13
+          },
+          {
+            "material": "Fenster",
+            "amount": 4
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "d0a5d394-38c2-4de7-9514-84f237c8b834",
+        "name": "Mini Excavator",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 12
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 12
+          },
+          {
+            "material": "Fenster",
+            "amount": 4
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "29403eef-be98-417f-8360-e4b60fa82661",
+        "name": "1984 Peterbilt 362 Tow Truck",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 19
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 8
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "381e47e1-1379-4b2a-a18a-42285d83c374",
+        "name": "Fuel Truck",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 6
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 5
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "1806f9a5-aaa4-47c3-a7f0-7c6eaae6c559",
+        "name": "2012 Ferrari F12 Berlinetta",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 33
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 47
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "d60d20d0-5f3e-40f1-9cbf-a616e46d0be8",
+        "name": "1995 Porsche 911 GT2",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 35
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 40
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "8cd100c2-ebda-409b-a6ac-bb240ad70bfb",
+        "name": "Lamborghini Gallardo",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 34
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 37
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "cec19c86-d215-4981-8ab5-7c25f19b3be6",
+        "name": "2016 Rolls Royce Dawn",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 17
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 35
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "4cf8d7a9-ee52-4ec0-8e80-7db08125d369",
+        "name": "2009 Chevrolet Corvette ZR1",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 17
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 35
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "86b8d06b-03fa-429c-ad50-742fd3f15e51",
+        "name": "2013 Mercedes Benz G65 AMG",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 17
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 35
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "0b060654-57f8-4d1a-9fb4-b10e525aea21",
+        "name": "2018 Chevrolet Camaro ZL1",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 17
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 39
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 13
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "ab79a542-9b70-45f0-8d4e-a684787d56a6",
+        "name": "2015 Ford Mustang GT",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 26
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 36
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 11
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "f75e5072-e6da-4ea4-b557-284a2150b6a9",
+        "name": "BMW M6 Tuned",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 26
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 36
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 11
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "86a722e7-67ba-4b7f-bf9a-cdb11bba0136",
+        "name": "2010 Nissan 370Z",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 17
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 32
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 7
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "5c709fd2-16fc-49df-9cea-07b2a283001c",
+        "name": "2013 Audi RS7",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 17
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 32
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 7
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "e02ada97-586c-4116-882c-8427bbaabaea",
+        "name": "Nissan GT-R Liberty Walk",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 31
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 7
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "3a86db68-587e-4154-a49a-7ebb833f2158",
+        "name": "1998 Toyota Supra Mk.4",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 29
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 29
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 7
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "c282d592-0b09-4e5f-b9e2-8c1927e67aed",
+        "name": "2012 Cadillac Escalade",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 35
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "2b615da6-e5ca-497c-a718-8fde6158419f",
+        "name": "BMW M6",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 35
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "60cf9a50-56db-4fd6-ba09-03905ce62dec",
+        "name": "2012 Ford Mustang",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 13
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 24
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 9
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "5d55befa-028d-4aff-bc9e-d45a137d983e",
+        "name": "2020 Ford Explorer Platinum",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 19
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 22
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "fef2f983-016f-4bac-b658-fd35983befa5",
+        "name": "2018 Chevrolet Tahoe",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 19
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 19
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "6aa6ec99-59c9-4c16-b6f9-16d8b1e89713",
+        "name": "2018 GMC Yukon",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 18
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 18
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "4b52d8e2-cdbc-4842-82af-cad26d97f5d9",
+        "name": "BMW R1100R Street Fighter",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 7
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 17
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 7
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "0c046851-73a8-4407-ad41-071d1ccaa986",
+        "name": "2015 Dodge Challenger Hellcat",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 12
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 23
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 7
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "f492970b-8148-4938-a36f-c739aee86d5b",
+        "name": "Nissan GT-R",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 13
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 29
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 5
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "557ae7c5-3459-4eeb-821c-44036d158b50",
+        "name": "2012 Range Rover",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 11
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 27
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 5
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "924aa1be-573b-474d-8756-7a8a84371e08",
+        "name": "2015 Dodge Charger",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 10
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 22
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "854dfb3c-ee97-4048-bf7e-4627db6879d3",
+        "name": "Mercedes Benz AMG C63",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 14
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 26
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "81265384-222d-4f8c-9555-a3aa00b4c844",
+        "name": "2015 Ford F450",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 11
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 21
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 5
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 6
+          }
+        ]
+      },
+      {
+        "id": "a07dd4f3-f88e-4ba0-addf-057e95340da9",
+        "name": "Harley Davidson Knucklehead",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 8
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 18
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 5
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "8a6e3b2e-1ca8-44b0-b339-225820f007e8",
+        "name": "2014 Dodge Charger",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 10
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 22
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 5
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "b36727dd-0053-46b9-bc1a-773c2a5a8725",
+        "name": "Harley Davidson Fat Boy",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 6
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 16
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 5
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "e780921d-9005-4b97-aed5-aa0d118a41da",
+        "name": "1959 Cadillac Eldorado",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 10
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 20
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 3
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "4ac1f108-fb3c-4c0c-b5e5-c18cd610857d",
+        "name": "2011 BMW X5",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 12
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 21
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 3
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "2259f654-1ab2-49f2-b77e-cfa40083aad5",
+        "name": "2018 Ford F150 MarkerLights",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 8
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "d742387d-1c09-49e7-823b-7c4342a9f5ff",
+        "name": "2018 Ford F150",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 8
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "0288e961-41b7-43d2-a644-5f3e8ff85939",
+        "name": "2013 Ford Focus ST",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 7
+          },
+          {
+            "material": "Titanpalette",
+            "amount": 3
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "9fa37c31-31ae-4e68-a93c-73a3bc51d860",
+        "name": "2016 Ford E350 Passenger",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 26
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 10
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "52ebb8b3-d9de-4d2f-8dc8-af4732213da2",
+        "name": "2016 Ford E350 MarkerLights",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 26
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 10
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "1df69ea7-5c79-43de-b86c-9655c98f6296",
+        "name": "2016 Ford E350",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 26
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 10
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "60f1e965-24a6-483a-a080-3b68a46d3ca1",
+        "name": "2010 Chevrolet Silverado MarkerLights",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 20
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "53f329d8-0568-4d8e-a972-4c0004e88e61",
+        "name": "2010 Chevrolet Silverado",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 16
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 20
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "1b540e4e-6b2f-4471-9bb7-2393e4a1590f",
+        "name": "2011 Ford F150 MarkerLights",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 17
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 12
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "61484729-9b1e-4a26-b3de-2713cf395827",
+        "name": "2011 Ford F150",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 17
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 12
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "f1c698e2-fb64-4a59-8571-eed707f2dcb2",
+        "name": "Van Transport",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 10
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 10
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "947fa98b-3aab-482f-a6e9-8de0d8cfd78f",
+        "name": "2010 BMW M3 E92",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 15
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 8
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "259cf8ba-8f18-41d8-9100-e76bb976dfe4",
+        "name": "Chevrolet Suburban",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 10
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 11
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "f7449f6d-31a3-471d-a279-c9e36b3391cb",
+        "name": "2008 Chevrolet Tahoe",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 9
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 9
+          },
+          {
+            "material": "Fenster",
+            "amount": 8
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "0f5e3431-ef05-408a-b4d9-3985e6307d33",
+        "name": "Kawasaki KX450",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 10
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "id": "6c33f30e-ea63-42a2-bd3c-9905d914ba6c",
+        "name": "1969 Dodge Charger R/T",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 11
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "0e452d78-f6a2-4aa9-b8bd-8c5a00c45f0d",
+        "name": "1971 Chevrolet Camaro SS",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 13
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "a4467c87-49b2-40cd-877c-6433ceb67554",
+        "name": "2018 Ford Taurus",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 7
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "5a6f34cd-1be5-4e42-b00d-b8f35ad2c170",
+        "name": "Mail Truck",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 9
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "cb1739ef-a7f8-477f-8692-43d23e3960e6",
+        "name": "2012 Jeep Wrangler",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 10
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 3
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "eeecbccd-e09b-4c28-8b4f-ce0568fcf24c",
+        "name": "2001 Ford Crown Victoria",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 6
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 5
+          },
+          {
+            "material": "Fenster",
+            "amount": 5
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "974783e5-5c11-4c6c-87f7-5937c76c217b",
+        "name": "1991 Honda CR-X",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 6
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "af236d09-03f1-490b-8eed-e0b5c0dc6e68",
+        "name": "2011 Dodge Ram MarkerLights",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 5
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "476fdd8e-496c-45a8-9ea0-d94cc31bb448",
+        "name": "2011 Dodge Ram",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 5
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 6
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "fa913c37-60dd-405d-8380-c6974fb6a496",
+        "name": "2001 Ford Crown Victoria Taxi",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 4
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 5
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "f94e99aa-9c08-4e5b-a224-2f85da4f1b7e",
+        "name": "Ford Crown Victoria Rusty",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 4
+          },
+          {
+            "material": "Fenster",
+            "amount": 6
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "794d1b2b-0f99-41ae-acc6-45b38873bdc2",
+        "name": "Quad",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 2
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 1
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "id": "a03ef94c-aa7b-42b6-9928-1972bb693536",
+        "name": "Scooter",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 1
+          },
+          {
+            "material": "Reifen",
+            "amount": 2
+          },
+          {
+            "material": "Aluminiumpalette",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "336a19b8-27fd-4990-912c-4f72ba9b77f8",
+        "name": "Kart",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlpalette",
+            "amount": 2
+          },
+          {
+            "material": "Reifen",
+            "amount": 4
+          }
+        ]
+      },
+      {
         "id": "795b10ed-f832-4a71-91c8-09f36dbe40ba",
         "name": "Reifen",
         "output": 8,
@@ -2651,7 +6676,310 @@
         ]
       }
     ],
-    "clothing": [],
+    "clothing": [
+      {
+        "id": "042ec851-65ce-4c1e-98b4-a049fac86dc5",
+        "name": "Headset",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "865479f5-ee03-4731-b7a6-c2af04d11223",
+        "name": "Head Bandage",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "d101e8b3-4082-480b-b0fe-7c0e9e63e03b",
+        "name": "Hard Hat",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "57d4137e-06d2-4fa8-9925-08442c4cb54c",
+        "name": "Ear Protectors",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "91709790-a1c7-4167-95e3-3575f661b240",
+        "name": "Bandana",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "549d70f9-5dbf-495f-9a99-4f767c9ad42e",
+        "name": "Beret",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "71328561-57fc-419c-9744-406d9f73b484",
+        "name": "Racing Helmet",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Fiberglas",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "b2794915-cf96-4343-86d5-fa9837ac64b0",
+        "name": "Safari Hat",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "b2120092-b6a9-4e83-96c2-87af6f58a776",
+        "name": "Booniehat",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "80d9119d-2e40-4f79-882d-a2825f744fda",
+        "name": "Skate Helmet",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "b858f8e6-b0bf-4727-8062-3d12c46c5a97",
+        "name": "Shemag",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          },
+          {
+            "material": "Shemag Bauplan",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "c1b1056b-b073-467d-8f95-eb5222254815",
+        "name": "Fedora",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "e3c36a87-bc9d-4a9f-9ceb-b46945b94895",
+        "name": "Cap",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "bae9c7b1-aacf-4849-851f-d9dab16d895d",
+        "name": "Hat",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "5f529c3c-e821-422f-9600-0e037542fbae",
+        "name": "Earpiece Black",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "2b96df0e-c11c-4358-97d3-24fa9dc1ca63",
+        "name": "Earpiece",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Kunststoff",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "98b5c29e-e922-48de-9567-cdc5d38d7f78",
+        "name": "Safety Vest",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "ebff28bf-9da8-49ac-b64f-fc6a49ddbb0f",
+        "name": "Rangemaster Belt",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          },
+          {
+            "material": "Rangemaster Belt Bauplan",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "74ff2190-d959-4fc0-ac38-eae36f7da114",
+        "name": "Vest (Press)",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Stahlplatten",
+            "amount": 5
+          }
+        ]
+      },
+      {
+        "id": "74e6032f-ef97-46a3-b2a7-72284e23862b",
+        "name": "Slash Bandolier",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 3
+          }
+        ]
+      },
+      {
+        "id": "9fdf631d-a3a5-4979-bac2-10063a59f027",
+        "name": "Holster",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "1a4a5443-421b-4a90-aae9-bae670fcbad5",
+        "name": "Atemschutzmaske",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "c5353709-0749-43d1-a543-0865e01b2eec",
+        "name": "Bandana (Face)",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Glas",
+            "amount": 1
+          },
+          {
+            "material": "Bandana Bauplan",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "1cac774c-4192-41b8-8e08-b660f5c011e2",
+        "name": "Balaclava",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          },
+          {
+            "material": "Sturmhaube Bauplan",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "d7515e77-8369-4670-b0a5-08abb5a26723",
+        "name": "Brille",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Glas",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "3a0fcc0e-2d41-4531-8634-e44824b4a926",
+        "name": "Kleidung",
+        "output": 1,
+        "recipe": [
+          {
+            "material": "Polyester",
+            "amount": 1
+          }
+        ]
+      }
+    ],
     "aircraft": [
       {
         "id": "feb13cf7-7a02-43da-a23b-453adb774ef8",
@@ -4466,7 +8794,76 @@
           }
         ]
       }
-    ]
+    ],
+    "agriculture": [
+      {
+        "id": "553b08a8-5cd7-4dce-97f0-05c7afc81933",
+        "name": "Salat",
+        "output": 4,
+        "recipe": [
+          {
+            "material": "Salatsamen",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "a638ad87-193d-4517-837d-b8eb164d654d",
+        "name": "Mais",
+        "output": 2,
+        "recipe": [
+          {
+            "material": "Maissamen",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "b19d9517-02e1-4ac6-8ca3-cbd0c1733c1b",
+        "name": "Karotten",
+        "output": 2,
+        "recipe": [
+          {
+            "material": "Karottensamen",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "861f1cad-faa1-46ce-85f0-7ea50f8ade9d",
+        "name": "Koka",
+        "output": 2,
+        "recipe": [
+          {
+            "material": "Kokasamen",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "8474ce38-1c48-4f3f-9db9-99c9f68e004f",
+        "name": "Weizen",
+        "output": 20,
+        "recipe": [
+          {
+            "material": "Weizensamen",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "id": "76b65db4-aa95-44c6-8315-44476df85c5d",
+        "name": "Zuckerrohr",
+        "output": 4,
+        "recipe": [
+          {
+            "material": "Zuckerrohrsamen",
+            "amount": 1
+          }
+        ]
+      }
+    ],
+    "fishery": []
   },
   "plan": [
     {
@@ -4476,13 +8873,32 @@
       "quantity": 1
     },
     {
+      "id": "19b0892f-0250-400e-b185-2b02b1d47a47",
+      "factory": "vehicle",
+      "productId": "c7139211-ee6a-45ba-b932-762d8c49ab1c",
+      "quantity": 1
+    },
+    {
+      "id": "f90637eb-a7d3-4b52-b398-a6a581897d27",
+      "factory": "vehicle",
+      "productId": "d0a5d394-38c2-4de7-9514-84f237c8b834",
+      "quantity": 1
+    },
+    {
       "id": "2c091733-a56d-4846-a8c5-defd8d1febcb",
       "factory": "steel",
       "productId": "98e50703-8788-4f8f-8ef2-7caa002af625",
       "quantity": 1
     }
   ],
-  "materialPrices": {},
+  "materialPrices": {
+    "Maissamen": 4,
+    "Weizensamen": 4,
+    "Salatsamen": 4,
+    "Kokasamen": 10,
+    "Zuckerrohrsamen": 4,
+    "Karottensamen": 4
+  },
   "pricing": {
     "standardMarginPercent": 0
   },

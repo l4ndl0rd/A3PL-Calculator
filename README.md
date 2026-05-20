@@ -182,3 +182,10 @@ Die Oberfläche reserviert für Header, Navigation, Karten und dynamisch gerende
 ## Layout-Stabilität
 
 Die Navigation reserviert stabilen Platz, ohne Dropdown-Menüs durch CSS-Containment abzuschneiden. Dropdown-Menüs bleiben sichtbar und werden nicht durch den Navbar-Container geclippt.
+
+## v89 Performance
+
+- Initiales Rendering entlastet: verdeckte Fabrik-, Material-, Handels- und Farmratenbereiche werden nicht mehr vollständig beim Seitenstart gerendert.
+- Fabriklisten werden erst beim Öffnen der jeweiligen Sektion aufgebaut.
+- Produkt-/Material-Kostenberechnungen nutzen Runtime-Caches und einen Provider-Index.
+- Der erste Paint wird nicht mehr durch das komplette Datenbank-Rendering blockiert.

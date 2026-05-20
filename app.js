@@ -64,6 +64,8 @@ let tradeDialogOriginalName = null;
 let farmSearchQuery = "";
 let farmDialogMode = "create";
 let farmDialogOriginalName = null;
+let unitCostCache = new Map();
+let productProviderIndex = new Map();
 
 const els = {
   tabs: document.querySelector("#tabs"),
@@ -172,8 +174,15 @@ init();
 
 async function init() {
   bindStaticEvents();
+  await afterFirstPaint();
   await bootstrapBundledData(false);
   renderAll();
+}
+
+function afterFirstPaint() {
+  return new Promise((resolve) => {
+    window.requestAnimationFrame(() => window.setTimeout(resolve, 0));
+  });
 }
 
 function bindStaticEvents() {
@@ -306,23 +315,74 @@ function bindStaticEvents() {
 
 function renderAll() {
   normalizeState();
+  rebuildRuntimeIndexes();
+  const activeTarget = getActivePanelId();
   updateAdminUi();
-  renderFactoryNavigation();
-  renderFactoryPanels();
-  renderMaterials();
-  renderTrade();
-  renderFarmRates();
-  renderPlan();
-  renderInventory();
-  renderRequirements();
-  renderEconomy();
+  renderFactoryNavigation(activeTarget);
+  renderFactoryPanels(activeTarget);
+  renderActivePanelContent(activeTarget);
   if (els.standardMarginInput) els.standardMarginInput.value = formatInputNumber(state.pricing.standardMarginPercent);
   applyResponsiveTableLabels();
   saveState();
 }
 
-function renderFactoryNavigation() {
-  const activeTarget = document.querySelector(".panel.active")?.id || "calculator";
+function getActivePanelId() {
+  return document.querySelector(".panel.active")?.id || "calculator";
+}
+
+function rebuildRuntimeIndexes() {
+  unitCostCache = new Map();
+  productProviderIndex = new Map();
+
+  for (const product of Object.values(state.products ?? {}).flat()) {
+    const names = unique([product.name, getProductOutputIdentityName(product)].map(cleanText).filter(Boolean));
+    for (const name of names) {
+      const key = name.toLocaleLowerCase("de-DE");
+      if (!productProviderIndex.has(key)) productProviderIndex.set(key, []);
+      productProviderIndex.get(key).push(product);
+    }
+  }
+}
+
+function getCachedUnitCost(key) {
+  return unitCostCache.get(key) ?? null;
+}
+
+function setCachedUnitCost(key, value) {
+  unitCostCache.set(key, value);
+  return value;
+}
+
+function renderActivePanelContent(targetId = getActivePanelId()) {
+  if (targetId === "calculator") {
+    renderPlan();
+    renderInventory();
+    renderRequirements();
+    renderEconomy();
+    return;
+  }
+
+  if (targetId === "materials") {
+    renderMaterials();
+    return;
+  }
+
+  if (targetId === "trade") {
+    renderTrade();
+    return;
+  }
+
+  if (targetId === "farmrates") {
+    renderFarmRates();
+    return;
+  }
+
+  if (Object.hasOwn(FACTORIES, targetId)) {
+    renderFactoryProductPanel(targetId);
+  }
+}
+
+function renderFactoryNavigation(activeTarget = getActivePanelId()) {
   els.tabs.innerHTML = "";
 
   const primaryRow = document.createElement("div");
@@ -2302,11 +2362,7 @@ function findProductsByName(productName) {
 function findProductsProvidingName(itemName) {
   const normalizedName = cleanText(itemName).toLocaleLowerCase("de-DE");
   if (!normalizedName) return [];
-  return Object.values(state.products ?? {}).flat().filter((product) => {
-    const productName = cleanText(product.name).toLocaleLowerCase("de-DE");
-    const outputIdentity = cleanText(getProductOutputIdentityName(product)).toLocaleLowerCase("de-DE");
-    return productName === normalizedName || outputIdentity === normalizedName;
-  });
+  return (productProviderIndex.get(normalizedName) ?? []).slice();
 }
 
 function productNameIsUsedByAnotherProduct(name, excludedProductId = null) {
@@ -2926,6 +2982,8 @@ function calculateMaterialUnitCostWithOptimalInputs(materialName, stack = new Se
   const name = cleanText(materialName);
   const materialKey = `material-optimal:${name.toLocaleLowerCase("de-DE")}`;
   if (stack.has(materialKey)) return { complete: false, unitCost: null, missing: [name] };
+  const cached = getCachedUnitCost(materialKey);
+  if (cached) return cached;
 
   const buyUnitCost = getMaterialBuyUnitCost(name);
   const buyOption = buyUnitCost !== null
@@ -2937,13 +2995,15 @@ function calculateMaterialUnitCostWithOptimalInputs(materialName, stack = new Se
   nextStack.add(materialKey);
   const craftOption = calculateMaterialCraftUnitCostWithOptimalInputs(name, nextStack);
 
-  return chooseCheapestUnitOptionFromList([buyOption, farmOption, craftOption], name);
+  return setCachedUnitCost(materialKey, chooseCheapestUnitOptionFromList([buyOption, farmOption, craftOption], name));
 }
 
 function calculateMaterialCraftUnitCostWithOptimalInputs(materialName, stack = new Set()) {
   const name = cleanText(materialName);
   const materialKey = `material-craft:${name.toLocaleLowerCase("de-DE")}`;
   if (stack.has(materialKey)) return { complete: false, unitCost: null, missing: [name] };
+  const cached = getCachedUnitCost(materialKey);
+  if (cached) return cached;
 
   const nextStack = new Set(stack);
   nextStack.add(materialKey);
@@ -2951,8 +3011,8 @@ function calculateMaterialCraftUnitCostWithOptimalInputs(materialName, stack = n
   if (craftOption.complete) return craftOption;
 
   const manualCost = getMaterialManualPrice(name);
-  if (manualCost !== null) return { complete: true, unitCost: manualCost, missing: [], kind: "material" };
-  return { complete: false, unitCost: null, missing: unique([...(craftOption.missing ?? []), name]) };
+  if (manualCost !== null) return setCachedUnitCost(materialKey, { complete: true, unitCost: manualCost, missing: [], kind: "material" });
+  return setCachedUnitCost(materialKey, { complete: false, unitCost: null, missing: unique([...(craftOption.missing ?? []), name]) });
 }
 
 function calculateNamedMaterialCraftUnitCost(materialName, stack = new Set(), optimalInputs = true) {
@@ -3017,6 +3077,8 @@ function calculateProductUnitCost(product, stack = new Set()) {
 function calculateProductUnitCostWithOptimalInputs(product, stack = new Set()) {
   const productKey = `product-optimal:${product.id}`;
   if (stack.has(productKey)) return { complete: false, unitCost: null, missing: [product.name] };
+  const cached = getCachedUnitCost(productKey);
+  if (cached) return cached;
   const nextStack = new Set(stack);
   nextStack.add(productKey);
 
@@ -3027,8 +3089,8 @@ function calculateProductUnitCostWithOptimalInputs(product, stack = new Set()) {
     if (!materialCost.complete) missing.push(...materialCost.missing);
     else totalCost += materialCost.unitCost * positiveInteger(item.amount, 0);
   }
-  if (missing.length) return { complete: false, unitCost: null, missing: unique(missing) };
-  return { complete: true, unitCost: totalCost / positiveInteger(product.output, 1), missing: [] };
+  if (missing.length) return setCachedUnitCost(productKey, { complete: false, unitCost: null, missing: unique(missing) });
+  return setCachedUnitCost(productKey, { complete: true, unitCost: totalCost / positiveInteger(product.output, 1), missing: [] });
 }
 
 function chooseCheapestUnitOption(buyOption, craftOption, fallbackName) {
