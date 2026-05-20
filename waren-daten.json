@@ -8865,32 +8865,7 @@
     ],
     "fishery": []
   },
-  "plan": [
-    {
-      "id": "4d7e0d31-8460-4923-8240-111fee4e87fa",
-      "factory": "steel",
-      "productId": "730239f0-b536-4b5c-9c32-7e59c7488415",
-      "quantity": 1
-    },
-    {
-      "id": "19b0892f-0250-400e-b185-2b02b1d47a47",
-      "factory": "vehicle",
-      "productId": "c7139211-ee6a-45ba-b932-762d8c49ab1c",
-      "quantity": 1
-    },
-    {
-      "id": "f90637eb-a7d3-4b52-b398-a6a581897d27",
-      "factory": "vehicle",
-      "productId": "d0a5d394-38c2-4de7-9514-84f237c8b834",
-      "quantity": 1
-    },
-    {
-      "id": "2c091733-a56d-4846-a8c5-defd8d1febcb",
-      "factory": "steel",
-      "productId": "98e50703-8788-4f8f-8ef2-7caa002af625",
-      "quantity": 1
-    }
-  ],
+  "plan": [],
   "materialPrices": {
     "Maissamen": 4,
     "Weizensamen": 4,
