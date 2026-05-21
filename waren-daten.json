@@ -8885,13 +8885,13 @@
       "marketValue": null
     },
     "Aluminiumpalette": {
-      "importPrice": 550,
-      "exportPrice": 4000,
+      "importPrice": 4000,
+      "exportPrice": 550,
       "marketValue": null
     },
     "Amethystbarrenpalette": {
-      "importPrice": 18400,
-      "exportPrice": 20000,
+      "importPrice": 20000,
+      "exportPrice": 18400,
       "marketValue": null
     },
     "Eisenerz": {
@@ -9002,6 +9002,11 @@
     "hourlyValue": 20000
   },
   "farmProfiles": {
+    "Sand": {
+      "enabled": true,
+      "amountPerHour": 450,
+      "createdAt": 1779390128858
+    },
     "Eisenerz": {
       "enabled": true,
       "amountPerHour": 1000,
